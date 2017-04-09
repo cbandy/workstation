@@ -17,5 +17,7 @@ silent stat --format '%a' "$HOME/.pgpass" | grep --silent '?00' || {
 	chmod 'go=' "$HOME/.pgpass"
 }
 
-install_package_repository "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
-install_packages 'postgresql-client-9.6' 'libpq-dev'
+silent command -v 'psql' || {
+	install_package_repository "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
+	install_packages 'postgresql-client-9.6' 'libpq-dev'
+}
