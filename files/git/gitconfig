@@ -1,0 +1,20 @@
+[alias]
+	co = checkout
+	diff-words = diff --color-words='[[:alnum:]_]+|[^[:space:]]'
+	explain = blame
+	ga = "!f() { git graph --all; }; f"
+	graph = log --decorate --graph --oneline
+	graph = log --graph --pretty='%C(auto)%h%d %C(cyan)%an%C(reset) %s'
+
+[color]
+	ui = true
+[commit]
+	template = ~/.gitmsg.txt
+[core]
+	excludesfile = ~/.gitignore
+[push]
+	default = simple
+
+[user]
+	name = Chris Bandy
+	email = bandy.chris@gmail.com
