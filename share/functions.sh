@@ -19,6 +19,11 @@ install_package_repository() {
 	local installed="$( grep --no-filename '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/* )"
 
 	if ! grep --silent "${target#*:}" <<< "$installed"; then
+		if [ "${target%%:*}" = 'ppa' ]; then
+			sudo add-apt-repository --yes --update "$target"
+			return
+		fi
+
 		local list="$target"
 		list="${list#*http://}"
 		list="${list#*https://}"
