@@ -14,6 +14,24 @@ install_packages() {
 	sudo apt-get install --yes "$@"
 }
 
+install_package_repository() {
+	local target="$1"
+	local installed="$( grep --no-filename '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/* )"
+
+	if ! grep --silent "${target#*:}" <<< "$installed"; then
+		local list="$target"
+		list="${list#*http://}"
+		list="${list#*https://}"
+		list="${list%%/*}.list"
+
+		file_content "/tmp/${list}" <<< "$target"
+		sudo mv --no-target-directory "/tmp/${list}" "/etc/apt/sources.list.d/${list}"
+
+		sudo rm --force /var/lib/apt/periodic/update-success-stamp
+		sudo apt-get update
+	fi
+}
+
 local_file() {
 	local target="$1" origin="$2"
 	local check="sha256sum --check"

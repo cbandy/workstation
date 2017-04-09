@@ -12,19 +12,10 @@ apt-key list | grep --silent '^uid *PostgreSQL' || {
 	sudo apt-key add  "/tmp/${pgdg_key}.asc"
 }
 
-grep --no-filename '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/* | grep --silent 'apt.postgresql.org' || {
-	pgdg_list='apt.postgresql.org.list'
-
-	file_content "/tmp/${pgdg_list}" <<< "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
-	sudo mv --no-target-directory "/tmp/${pgdg_list}" "/etc/apt/sources.list.d/${pgdg_list}"
-
-	sudo rm /var/lib/apt/periodic/update-success-stamp
-	sudo apt-get update
-}
-
 silent stat --format '%a' "$HOME/.pgpass" | grep --silent '?00' || {
 	touch       "$HOME/.pgpass"
 	chmod 'go=' "$HOME/.pgpass"
 }
 
+install_package_repository "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
 install_packages 'postgresql-client-9.6' 'libpq-dev'
