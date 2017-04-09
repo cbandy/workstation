@@ -4,10 +4,11 @@
 
 set -eu
 
-silent command -v go || {
-	go_checksum='53ab94104ee3923e228a2cb2116e5e462ad3ebaeea06ff04463479d7f12d27ca'
+go_version='1.8.1'
+
+test "go${go_version}" = "$( a=($(go version)); echo "${a[2]}" )" || {
+	go_checksum='a579ab19d5237e263254f1eac5352efcf1d70b9dacadb6d6bb12b0911ede8994'
 	go_machine='amd64'
-	go_version='1.8'
 
 	remote_file "/tmp/go-${go_version}.tgz" "https://storage.googleapis.com/golang/go${go_version}.linux-${go_machine}.tar.gz" "$go_checksum"
 	tar --file  "/tmp/go-${go_version}.tgz" --extract --directory '/tmp'
@@ -18,4 +19,4 @@ silent command -v go || {
 
 grep --silent '/usr/local/go/bin' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" $'export PATH="$PATH:/usr/local/go/bin"'
 
-mkdir -p ~/go
+mkdir -p "$HOME/go"
