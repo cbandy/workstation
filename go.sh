@@ -18,5 +18,6 @@ test "go${go_version}" = "$( a=($(go version)); echo "${a[2]}" )" || {
 }
 
 grep --silent '/usr/local/go/bin' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" $'export PATH="$PATH:/usr/local/go/bin"'
+grep --silent "$HOME/go/bin"      "$HOME/.bashrc" || echo >> "$HOME/.bashrc" $'export PATH="$PATH:$HOME/go/bin"'
 
 mkdir -p "$HOME/go"
