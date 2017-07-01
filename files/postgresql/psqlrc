@@ -1,0 +1,6 @@
+\pset null '∅'
+\set COMP_KEYWORD_CASE upper
+\set PROMPT1 '%n@%/%R%# '
+\setenv LESS '-iMSx4$FX'
+\setenv PAGER 'less'
+\x auto
