@@ -4,10 +4,10 @@
 
 set -eu
 
-go_version='1.8.3'
+go_version='1.10.2'
 
 test "go${go_version}" = "$( a=($(go version)); echo "${a[2]}" )" || {
-	go_checksum='1862f4c3d3907e59b04a757cfda0ea7aa9ef39274af99a784f5be843c80c6772'
+	go_checksum='4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff'
 	go_machine='amd64'
 
 	remote_file "/tmp/go-${go_version}.tgz" "https://storage.googleapis.com/golang/go${go_version}.linux-${go_machine}.tar.gz" "$go_checksum"
