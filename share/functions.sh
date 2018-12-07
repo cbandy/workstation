@@ -11,7 +11,7 @@ file_content() {
 }
 
 install_packages() {
-	sudo apt-get install --yes "$@"
+	sudo apt-get install --no-install-recommends --yes "$@"
 }
 
 install_package_repository() {

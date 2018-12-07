@@ -16,3 +16,5 @@ silent command -v 'docker' || {
 	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	install_packages 'docker-ce'
 }
+
+silent command -v 'docker-compose' || install_packages 'docker-compose'
