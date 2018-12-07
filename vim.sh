@@ -16,8 +16,7 @@ test -d "$HOME/.vim" || {
 test -d "$HOME/.config/nvim" || {
 	mkdir -p "$HOME/.config"
 
-	ln --symbolic "$HOME/.vim"   "$HOME/.config/nvim"
-	ln --symbolic "$HOME/.vimrc" "$HOME/.config/nvim/init.vim"
+	ln --symbolic "$HOME/.vim" "$HOME/.config/nvim"
 }
 
 grep --silent 'EDITOR' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" 'export EDITOR=vim'
