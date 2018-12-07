@@ -17,4 +17,15 @@ silent command -v 'docker' || {
 	install_packages 'docker-ce'
 }
 
-silent command -v 'docker-compose' || install_packages 'docker-compose'
+compose_version='1.23.2'
+
+test "${compose_version}," = "$( a=($(command -v docker-compose && docker-compose --version)); echo "${a[2]-}" )" || {
+	compose_checksum='4d618e19b91b9a49f36d041446d96a1a0a067c676330a4f25aca6bbd000de7a9'
+	compose_machine='x86_64'
+
+	remote_file "/tmp/docker-compose-${compose_version}" \
+		"https://github.com/docker/compose/releases/download/${compose_version}/docker-compose-Linux-${compose_machine}" \
+		"$compose_checksum"
+
+	sudo install --no-target-directory "/tmp/docker-compose-${compose_version}" '/usr/local/bin/docker-compose'
+}
