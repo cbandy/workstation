@@ -10,6 +10,7 @@ packages=()
 
 silent command -v ag         || packages+=('silversearcher-ag')
 silent command -v htop       || packages+=('htop')
+silent command -v jq         || packages+=('jq')
 silent command -v links      || packages+=('links')
 silent command -v shellcheck || packages+=('shellcheck')
 silent command -v zip        || packages+=('zip')
