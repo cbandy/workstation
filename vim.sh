@@ -19,9 +19,9 @@ test -d "$HOME/.config/nvim" || {
 	ln --symbolic "$HOME/.vim" "$HOME/.config/nvim"
 }
 
-grep --silent 'EDITOR' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" 'export EDITOR=vim'
-
 silent command -v 'nvim' || {
 	install_package_repository 'ppa:neovim-ppa/stable'
 	install_packages 'neovim'
 }
+
+grep --silent 'EDITOR' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" 'export EDITOR=nvim'
