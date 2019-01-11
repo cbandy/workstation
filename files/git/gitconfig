@@ -1,6 +1,5 @@
 [alias]
 	co = checkout
-	diff-words = diff --color-words='[[:alnum:]_]+|[^[:space:]]'
 	explain = blame
 	ga = "!f() { git graph --all; }; f"
 	graph = log --decorate --graph --oneline
@@ -8,10 +7,19 @@
 
 [color]
 	ui = true
+
+[color "diff-highlight"]
+	oldHighlight = bold ul
+	oldReset = nobold noul
+
 [commit]
 	template = ~/.gitmsg.txt
 [core]
 	excludesfile = ~/.gitignore
+[pager]
+	log =  diff-highlight | less
+	show = diff-highlight | less
+	diff = diff-highlight | less
 [push]
 	default = simple
 
