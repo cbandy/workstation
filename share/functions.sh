@@ -1,5 +1,11 @@
 #!/bin/bash
 
+file_contains() {
+	local target="$1"
+
+	[ -f "$target" ] && grep --silent --file /dev/stdin "$target"
+}
+
 file_content() {
 	local target="$1" content="$( < /dev/stdin )"
 	local check="sha256sum --check"

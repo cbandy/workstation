@@ -24,4 +24,4 @@ silent command -v 'nvim' || {
 	install_packages 'neovim'
 }
 
-grep --silent 'EDITOR' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" 'export EDITOR=nvim'
+file_contains "$HOME/.bashrc" <<< 'EDITOR' || echo >> "$HOME/.bashrc" 'export EDITOR=nvim'

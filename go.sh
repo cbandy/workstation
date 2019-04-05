@@ -17,7 +17,7 @@ test "go${go_version}" = "$( a=($(go version)); echo "${a[2]}" )" || {
 	sudo ln --no-dereference --force --symbolic "/usr/local/go-${go_version}" '/usr/local/go'
 }
 
-grep --silent '/usr/local/go/bin' "$HOME/.bashrc" || echo >> "$HOME/.bashrc" $'export PATH="$PATH:/usr/local/go/bin"'
-grep --silent "$HOME/go/bin"      "$HOME/.bashrc" || echo >> "$HOME/.bashrc" $'export PATH="$PATH:$HOME/go/bin"'
+file_contains "$HOME/.bashrc" <<< '/usr/local/go/bin' || echo >> "$HOME/.bashrc" $'export PATH="$PATH:/usr/local/go/bin"'
+file_contains "$HOME/.bashrc" <<< "$HOME/go/bin"      || echo >> "$HOME/.bashrc" $'export PATH="$PATH:$HOME/go/bin"'
 
 mkdir -p "$HOME/go"
