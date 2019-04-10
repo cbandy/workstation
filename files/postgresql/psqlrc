@@ -1,6 +1,15 @@
+\set QUIETRC :QUIET
+\set QUIET yes
+
+\pset border 2
+\pset linestyle unicode
 \pset null '∅'
+
 \set COMP_KEYWORD_CASE upper
 \set PROMPT1 '%n@%/%R%# '
 \setenv LESS '-iMSx4$FX'
 \setenv PAGER 'less'
 \x auto
+
+\set QUIET :QUIETRC
+\unset QUIETRC
