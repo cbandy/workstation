@@ -21,9 +21,9 @@ file_contains "$HOME/.bashrc" <<< 'chruby/chruby' || echo >> "$HOME/.bashrc" 'so
 file_contains "$HOME/.bashrc" <<< 'chruby/auto'   || echo >> "$HOME/.bashrc" 'source /usr/local/share/chruby/auto.sh' 
 
 silent command -v ruby-install || {
-	install_checksum='b3adf199f8cd8f8d4a6176ab605db9ddd8521df8dbb2212f58f7b8273ed85e73'
+	install_checksum='500a8ac84b8f65455958a02bcefd1ed4bfcaeaa2bb97b8f31e61ded5cd0fd70b'
 	install_github='github.com/postmodern/ruby-install'
-	install_version='0.6.1'
+	install_version='0.7.0'
 
 	remote_file "/tmp/ruby-install-${install_version}.tgz" "https://${install_github}/archive/v${install_version}.tar.gz" "$install_checksum"
 	tar --file  "/tmp/ruby-install-${install_version}.tgz" --extract --directory '/tmp'
