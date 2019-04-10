@@ -13,6 +13,7 @@ silent command -v htop       || packages+=('htop')
 silent command -v jq         || packages+=('jq')
 silent command -v links      || packages+=('links')
 silent command -v shellcheck || packages+=('shellcheck')
+silent command -v tree       || packages+=('tree')
 silent command -v zip        || packages+=('zip')
 
 [ "${#packages[@]}" -eq 0 ] || install_packages "${packages[@]}"
