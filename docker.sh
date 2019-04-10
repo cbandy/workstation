@@ -18,10 +18,10 @@ silent command -v 'docker' || {
 	install_packages 'docker-ce'
 }
 
-compose_version='1.23.2'
+compose_version='1.24.0'
 
 test "${compose_version}," = "$( a=($(silent command -v docker-compose && docker-compose --version)); echo "${a[2]-}" )" || {
-	compose_checksum='4d618e19b91b9a49f36d041446d96a1a0a067c676330a4f25aca6bbd000de7a9'
+	compose_checksum='bee6460f96339d5d978bb63d17943f773e1a140242dfa6c941d5e020a302c91b'
 	compose_machine='x86_64'
 
 	remote_file "/tmp/docker-compose-${compose_version}" \
