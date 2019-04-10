@@ -6,7 +6,7 @@ set -eu
 
 go_version='1.11.2'
 
-test "go${go_version}" = "$( a=($(go version)); echo "${a[2]}" )" || {
+test "go${go_version}" = "$( a=($(silent command -v go && go version)); echo "${a[2]-}" )" || {
 	go_checksum='1dfe664fa3d8ad714bbd15a36627992effd150ddabd7523931f077b3926d736d'
 	go_machine='amd64'
 

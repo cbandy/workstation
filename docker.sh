@@ -4,22 +4,23 @@
 
 set -eu
 
-apt-key list | grep --silent '^uid *Docker' || {
-	docker_checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
-	docker_key='0EBFCD88'
+docker_key='0EBFCD88'
 
-	remote_file       "/tmp/${docker_key}.asc" 'https://download.docker.com/linux/ubuntu/gpg' "$docker_checksum"
+test -n "$(apt-key list "$docker_key")" || {
+	docker_checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
+
+	remote_file       "/tmp/${docker_key}.asc" "https://download.docker.com/linux/$(distribution)/gpg" "$docker_checksum"
 	sudo apt-key add  "/tmp/${docker_key}.asc"
 }
 
 silent command -v 'docker' || {
-	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/$(distribution) $(lsb_release -cs) stable"
 	install_packages 'docker-ce'
 }
 
 compose_version='1.23.2'
 
-test "${compose_version}," = "$( a=($(command -v docker-compose && docker-compose --version)); echo "${a[2]-}" )" || {
+test "${compose_version}," = "$( a=($(silent command -v docker-compose && docker-compose --version)); echo "${a[2]-}" )" || {
 	compose_checksum='4d618e19b91b9a49f36d041446d96a1a0a067c676330a4f25aca6bbd000de7a9'
 	compose_machine='x86_64'
 

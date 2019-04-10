@@ -1,5 +1,12 @@
 #!/bin/bash
 
+distribution() {
+	silent command -v 'lsb_release' || install_packages 'lsb-release'
+
+	local id="$(lsb_release --id --short)"
+	echo "${id,,}"
+}
+
 file_contains() {
 	local target="$1"
 
@@ -71,8 +78,8 @@ uninstall_packages() {
 	local index='' packages=("$@")
 
 	for index in "${!packages[@]}"; do
-		silent dpkg -S "${packages[$index]}" || unset -v 'packages[index]'
+		silent dpkg-query --status "${packages[$index]}" || unset -v 'packages[index]'
 	done
 
-	sudo apt-get purge --yes "$@"
+	[ "${#packages[@]}" -eq 0 ] || sudo apt-get purge --yes "${packages[@]}"
 }
