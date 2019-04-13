@@ -4,16 +4,15 @@
 
 set -eu
 
-docker_key='0EBFCD88'
-
-test -n "$(apt-key list "$docker_key")" || {
-	docker_checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
-
-	remote_file       "/tmp/${docker_key}.asc" "https://download.docker.com/linux/$(distribution)/gpg" "$docker_checksum"
-	sudo apt-key add  "/tmp/${docker_key}.asc"
-}
-
 silent command -v 'docker' || {
+	docker_checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
+	docker_key='0EBFCD88'
+
+	test -n "$(apt-key list "$docker_key")" || {
+		remote_file       "/tmp/${docker_key}.asc" "https://download.docker.com/linux/$(distribution)/gpg" "$docker_checksum"
+		sudo apt-key add  "/tmp/${docker_key}.asc"
+	}
+
 	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/$(distribution) $(lsb_release -cs) stable"
 	install_packages 'docker-ce'
 }
