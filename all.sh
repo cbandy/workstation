@@ -11,6 +11,7 @@ cd "$(dirname "$(readlink -f "$0")")"
 ./git.sh
 ./go.sh
 ./postgresql.sh
+./python.sh
 ./ruby.sh
 ./tmux.sh
 ./vim.sh
