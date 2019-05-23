@@ -1,5 +1,10 @@
 #!/bin/bash
 
+codename() {
+	silent command -v 'lsb_release' || install_packages 'lsb-release'
+	lsb_release --codename --short
+}
+
 distribution() {
 	silent command -v 'lsb_release' || install_packages 'lsb-release'
 

@@ -13,7 +13,7 @@ silent command -v 'psql' || {
 		sudo apt-key add  "/tmp/${pgdg_key}.asc"
 	}
 
-	install_package_repository "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
+	install_package_repository "deb http://apt.postgresql.org/pub/repos/apt $(codename)-pgdg main"
 	install_packages 'postgresql-client' 'libpq-dev'
 }
 

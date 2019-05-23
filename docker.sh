@@ -13,7 +13,7 @@ silent command -v 'docker' || {
 		sudo apt-key add  "/tmp/${docker_key}.asc"
 	}
 
-	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/$(distribution) $(lsb_release -cs) stable"
+	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/$(distribution) $(codename) stable"
 	install_packages 'docker-ce'
 }
 
