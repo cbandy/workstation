@@ -17,6 +17,18 @@ silent command -v 'docker' || {
 	install_packages 'docker-ce'
 }
 
+docker_socket='/var/run/docker.sock'
+
+if [ -e "$docker_socket" ]; then
+	docker_socket_group="$( stat --format '%G' "$docker_socket" )"
+	docker_socket_owner="$( stat --format '%U' "$docker_socket" )"
+
+	if [ "$docker_socket_group" != "$docker_socket_owner" ]; then
+		groups | grep --fixed-strings --silent "$docker_socket_group" ||
+			sudo usermod --append --groups "$docker_socket_group" "$( id --user --name )"
+	fi
+fi
+
 compose_version='1.24.0'
 
 test "${compose_version}," = "$( a=($(silent command -v docker-compose && docker-compose --version)); echo "${a[2]-}" )" || {
