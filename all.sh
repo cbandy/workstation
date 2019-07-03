@@ -10,6 +10,7 @@ cd "$(dirname "$(readlink -f "$0")")"
 ./gcloud.sh
 ./git.sh
 ./go.sh
+./kubernetes.sh
 ./postgresql.sh
 ./python.sh
 ./ruby.sh
