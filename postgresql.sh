@@ -17,7 +17,7 @@ silent command -v 'psql' || {
 	install_packages 'postgresql-client' 'libpq-dev'
 }
 
-silent stat --format '%a' "$HOME/.pgpass" | grep --silent '?00' || {
+stat --format '%a' "$HOME/.pgpass" 2> /dev/null | grep --silent '.00' || {
 	touch       "$HOME/.pgpass"
 	chmod 'go=' "$HOME/.pgpass"
 }

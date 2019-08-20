@@ -3,7 +3,7 @@
 
 \pset border 2
 \pset linestyle unicode
-\pset null '∅'
+\pset null '␀'
 
 \set COMP_KEYWORD_CASE upper
 \set PROMPT1 '%n@%/%R%# '
