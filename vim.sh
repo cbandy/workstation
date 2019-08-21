@@ -19,9 +19,10 @@ test -d "$HOME/.config/nvim" || {
 	ln --symbolic "$HOME/.vim" "$HOME/.config/nvim"
 }
 
-silent command -v 'nvim' || {
-	neovim_checksum='f0bd70ebfdf407b9fd8c3a696f25510f0b51a8fb89eaa57ae09e396232371154'
-	neovim_version='0.3.4'
+neovim_version='0.3.8'
+
+test "v${neovim_version}" = "$( a=($(silent command -v nvim && nvim --version)); echo "${a[1]-}" )" || {
+	neovim_checksum='6e98287fe29624703961d9053ddd25877b36bb9f9e2bec226612c3bf28db04db'
 
 	silent command -v 'fusermount' || install_packages 'fuse'
 
