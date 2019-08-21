@@ -18,3 +18,9 @@ silent command -v tree       || packages+=('tree')
 silent command -v zip        || packages+=('zip')
 
 [ "${#packages[@]}" -eq 0 ] || install_packages "${packages[@]}"
+
+command -v pbcopy || file_contains "$HOME/.bash_aliases" <<< 'alias pbcopy=' ||
+	echo >> "$HOME/.bash_aliases" "pbcopy='xclip -selection clipboard'"
+
+command -v pbpaste || file_contains "$HOME/.bash_aliases" <<< 'alias pbpaste=' ||
+	echo >> "$HOME/.bash_aliases" "pbpaste='xclip -selection clipboard -o'"
