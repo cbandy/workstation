@@ -4,10 +4,10 @@
 
 set -eu
 
-k3d_version='1.2.2'
+k3d_version='1.3.1'
 
 test "v${k3d_version}" = "$( a=($(silent command -v k3d && k3d --version)); echo "${a[2]-}" )" || {
-	k3d_checksum='8a510003f0a69be161df020f0798b8be02c8caa95547596caec60644626e1cf3'
+	k3d_checksum='52b127b76ef76652adf94e8310c85270ae24831ca222bb082d5ced0e80380916'
 	k3d_machine='amd64'
 
 	remote_file "/tmp/k3d-${k3d_version}" \
