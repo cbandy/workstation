@@ -17,7 +17,7 @@ test "go${go_version}" = "$( a=($(silent command -v go && go version)); echo "${
 	sudo ln --no-dereference --force --symbolic "/usr/local/go-${go_version}" '/usr/local/go'
 }
 
-file_contains "$HOME/.bashrc" <<< '/usr/local/go/bin' || echo >> "$HOME/.bashrc" $'export PATH="$PATH:/usr/local/go/bin"'
-file_contains "$HOME/.bashrc" <<< "$HOME/go/bin"      || echo >> "$HOME/.bashrc" $'export PATH="$PATH:$HOME/go/bin"'
+file_contains "$HOME/.profile" <<< '/usr/local/go/bin' || echo >> "$HOME/.profile" 'export PATH="$PATH:/usr/local/go/bin"'
+file_contains "$HOME/.profile" <<< '$HOME/go/bin'      || echo >> "$HOME/.profile" 'export PATH="$PATH:$HOME/go/bin"'
 
 mkdir -p "$HOME/go"

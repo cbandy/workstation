@@ -19,8 +19,10 @@ silent command -v zip        || packages+=('zip')
 
 [ "${#packages[@]}" -eq 0 ] || install_packages "${packages[@]}"
 
-command -v pbcopy || file_contains "$HOME/.bash_aliases" <<< 'alias pbcopy=' ||
-	echo >> "$HOME/.bash_aliases" "pbcopy='xclip -selection clipboard'"
+[ -f "$(command -v pbcopy)" ] ||
+	file_contains "$HOME/.profile" <<< 'alias pbcopy=' ||
+	echo >> "$HOME/.profile" "alias pbcopy='xclip -selection clipboard'"
 
-command -v pbpaste || file_contains "$HOME/.bash_aliases" <<< 'alias pbpaste=' ||
-	echo >> "$HOME/.bash_aliases" "pbpaste='xclip -selection clipboard -o'"
+[ -f "$(command -v pbpaste)" ] ||
+	file_contains "$HOME/.profile" <<< 'alias pbpaste=' ||
+	echo >> "$HOME/.profile" "alias pbpaste='xclip -selection clipboard -o'"

@@ -33,4 +33,4 @@ test "v${neovim_version}" = "$( a=($(silent command -v nvim && nvim --version));
 	sudo install --no-target-directory "/tmp/neovim-${neovim_version}" '/usr/local/bin/nvim'
 }
 
-file_contains "$HOME/.bashrc" <<< 'EDITOR' || echo >> "$HOME/.bashrc" 'export EDITOR=nvim'
+file_contains "$HOME/.profile" <<< 'EDITOR' || echo >> "$HOME/.profile" 'export EDITOR=nvim'

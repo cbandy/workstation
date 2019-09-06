@@ -17,8 +17,8 @@ silent command -v chruby || {
 	( cd "/tmp/chruby-${chruby_version}" && sudo make install )
 }
 
-file_contains "$HOME/.bashrc" <<< 'chruby/chruby' || echo >> "$HOME/.bashrc" 'source /usr/local/share/chruby/chruby.sh'
-file_contains "$HOME/.bashrc" <<< 'chruby/auto'   || echo >> "$HOME/.bashrc" 'source /usr/local/share/chruby/auto.sh' 
+file_contains "$HOME/.profile" <<< 'chruby/chruby' || echo >> "$HOME/.profile" 'source /usr/local/share/chruby/chruby.sh'
+file_contains "$HOME/.profile" <<< 'chruby/auto'   || echo >> "$HOME/.profile" 'source /usr/local/share/chruby/auto.sh'
 
 silent command -v ruby-install || {
 	install_checksum='500a8ac84b8f65455958a02bcefd1ed4bfcaeaa2bb97b8f31e61ded5cd0fd70b'
