@@ -4,6 +4,8 @@
 
 set -eu
 
+export PATH="$PATH:$HOME/.local/bin"
+
 silent command -v 'docker' || {
 	docker_checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
 	docker_key='0EBFCD88'
@@ -39,5 +41,5 @@ test "${compose_version}," = "$( a=($(silent command -v docker-compose && docker
 		"https://github.com/docker/compose/releases/download/${compose_version}/docker-compose-Linux-${compose_machine}" \
 		"$compose_checksum"
 
-	sudo install --no-target-directory "/tmp/docker-compose-${compose_version}" '/usr/local/bin/docker-compose'
+	install --no-target-directory "/tmp/docker-compose-${compose_version}" "$HOME/.local/bin/docker-compose"
 }

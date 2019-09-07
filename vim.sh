@@ -4,6 +4,8 @@
 
 set -eu
 
+export PATH="$PATH:$HOME/.local/bin"
+
 test -d "$HOME/.vim" || {
 	git clone 'https://github.com/cbandy/vim-config.git' "$HOME/.vim"
 
@@ -30,7 +32,7 @@ test "v${neovim_version}" = "$( a=($(silent command -v nvim && nvim --version));
 		"https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim.appimage" \
 		"$neovim_checksum"
 
-	sudo install --no-target-directory "/tmp/neovim-${neovim_version}" '/usr/local/bin/nvim'
+	install --no-target-directory "/tmp/neovim-${neovim_version}" "$HOME/.local/bin/nvim"
 }
 
 file_contains "$HOME/.profile" <<< 'EDITOR' || echo >> "$HOME/.profile" 'export EDITOR=nvim'

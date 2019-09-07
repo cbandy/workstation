@@ -4,6 +4,8 @@
 
 set -eu
 
+export PATH="$PATH:$HOME/.local/bin"
+
 k3d_version='1.3.1'
 
 test "v${k3d_version}" = "$( a=($(silent command -v k3d && k3d --version)); echo "${a[2]-}" )" || {
@@ -14,5 +16,5 @@ test "v${k3d_version}" = "$( a=($(silent command -v k3d && k3d --version)); echo
 		"https://github.com/rancher/k3d/releases/download/v${k3d_version}/k3d-$(os_kernel)-${k3d_machine}" \
 		"$k3d_checksum"
 
-	sudo install --no-target-directory "/tmp/k3d-${k3d_version}" '/usr/local/bin/k3d'
+	install --no-target-directory "/tmp/k3d-${k3d_version}" "$HOME/.local/bin/k3d"
 }

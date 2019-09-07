@@ -4,6 +4,8 @@
 
 set -eu
 
+export PATH="$PATH:$HOME/.local/go/bin"
+
 go_version='1.12.9'
 
 test "go${go_version}" = "$( a=($(silent command -v go && go version)); echo "${a[2]-}" )" || {
@@ -12,12 +14,10 @@ test "go${go_version}" = "$( a=($(silent command -v go && go version)); echo "${
 
 	remote_file "/tmp/go-${go_version}.tgz" "https://storage.googleapis.com/golang/go${go_version}.linux-${go_machine}.tar.gz" "$go_checksum"
 	tar --file  "/tmp/go-${go_version}.tgz" --extract --directory '/tmp'
-	sudo chown --recursive root:root '/tmp/go'
-	sudo mv --no-target-directory    '/tmp/go'  "/usr/local/go-${go_version}"
-	sudo ln --no-dereference --force --symbolic "/usr/local/go-${go_version}" '/usr/local/go'
+	[ ! -d "$HOME/.local/go" ] || rm -r "$HOME/.local/go" && mv '/tmp/go' "$HOME/.local/go"
 }
 
-file_contains "$HOME/.profile" <<< '/usr/local/go/bin' || echo >> "$HOME/.profile" 'export PATH="$PATH:/usr/local/go/bin"'
-file_contains "$HOME/.profile" <<< '$HOME/go/bin'      || echo >> "$HOME/.profile" 'export PATH="$PATH:$HOME/go/bin"'
+file_contains "$HOME/.profile" <<< '$HOME/.local/go/bin' || echo >> "$HOME/.profile" 'export PATH="$PATH:$HOME/.local/go/bin"'
+file_contains "$HOME/.profile" <<< '$HOME/go/bin'        || echo >> "$HOME/.profile" 'export PATH="$PATH:$HOME/go/bin"'
 
 mkdir -p "$HOME/go"
