@@ -13,7 +13,7 @@ silent command -v 'gcloud' || {
 		sudo apt-key add  "/tmp/${gcloud_key}.gpg"
 	}
 
-	install_package_repository "deb http://packages.cloud.google.com/apt cloud-sdk-$(codename) main"
+	install_package_repository "deb http://packages.cloud.google.com/apt cloud-sdk-${OS[codename]} main"
 	install_packages 'google-cloud-sdk'
 }
 

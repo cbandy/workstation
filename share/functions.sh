@@ -1,17 +1,5 @@
 #!/bin/bash
 
-codename() {
-	silent command -v 'lsb_release' || install_packages 'lsb-release'
-	lsb_release --codename --short
-}
-
-distribution() {
-	silent command -v 'lsb_release' || install_packages 'lsb-release'
-
-	local id="$(lsb_release --id --short)"
-	echo "${id,,}"
-}
-
 file_contains() {
 	local target="$1"
 
@@ -65,11 +53,6 @@ local_file() {
 	fi
 }
 
-os_kernel() {
-	local name="$(uname --kernel-name)"
-	echo "${name,,}"
-}
-
 remote_file() {
 	local target="$1" origin="$2" sum="$3"
 	local check="shasum --algorithm $(( 4 * ${#sum} )) --check"
@@ -93,3 +76,12 @@ uninstall_packages() {
 
 	[ "${#packages[@]}" -eq 0 ] || sudo apt-get purge --yes "${packages[@]}"
 }
+
+silent command -v 'lsb_release' || install_packages 'lsb-release'
+
+# shellcheck disable=SC2034
+declare -Ar OS=(
+	[codename]="$(lsb_release --codename --short)"
+	[distribution]="$(lsb_release --id --short)"
+	[kernel]="$(uname --kernel-name)"
+)

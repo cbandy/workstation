@@ -11,11 +11,11 @@ silent command -v 'docker' || {
 	docker_key='0EBFCD88'
 
 	test -n "$(apt-key list "$docker_key")" || {
-		remote_file       "/tmp/${docker_key}.asc" "https://download.docker.com/linux/$(distribution)/gpg" "$docker_checksum"
+		remote_file       "/tmp/${docker_key}.asc" "https://download.docker.com/linux/${OS[distribution],,}/gpg" "$docker_checksum"
 		sudo apt-key add  "/tmp/${docker_key}.asc"
 	}
 
-	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/$(distribution) $(codename) stable"
+	install_package_repository "deb [arch=amd64] https://download.docker.com/linux/${OS[distribution],,} ${OS[codename]} stable"
 	install_packages 'docker-ce'
 }
 

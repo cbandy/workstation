@@ -13,7 +13,7 @@ test "v${k3d_version}" = "$( a=($(silent command -v k3d && k3d --version)); echo
 	k3d_machine='amd64'
 
 	remote_file "/tmp/k3d-${k3d_version}" \
-		"https://github.com/rancher/k3d/releases/download/v${k3d_version}/k3d-$(os_kernel)-${k3d_machine}" \
+		"https://github.com/rancher/k3d/releases/download/v${k3d_version}/k3d-${OS[kernel],,}-${k3d_machine}" \
 		"$k3d_checksum"
 
 	install --no-target-directory "/tmp/k3d-${k3d_version}" "$HOME/.local/bin/k3d"
