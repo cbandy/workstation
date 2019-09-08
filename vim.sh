@@ -34,5 +34,3 @@ test "v${neovim_version}" = "$( a=($(silent command -v nvim && nvim --version));
 
 	install --no-target-directory "/tmp/neovim-${neovim_version}" "$HOME/.local/bin/nvim"
 }
-
-file_contains "$HOME/.profile" <<< 'EDITOR' || echo >> "$HOME/.profile" 'export EDITOR=nvim'

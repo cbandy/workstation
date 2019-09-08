@@ -4,7 +4,7 @@ set -eu
 
 cd "$(dirname "$(readlink -f "$0")")"
 
-./misc.sh
+./shell.sh
 
 ./docker.sh
 ./gcloud.sh

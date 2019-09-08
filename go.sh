@@ -17,7 +17,4 @@ test "go${go_version}" = "$( a=($(silent command -v go && go version)); echo "${
 	[ ! -d "$HOME/.local/go" ] || rm -r "$HOME/.local/go" && mv '/tmp/go' "$HOME/.local/go"
 }
 
-file_contains "$HOME/.profile" <<< '$HOME/.local/go/bin' || echo >> "$HOME/.profile" 'export PATH="$PATH:$HOME/.local/go/bin"'
-file_contains "$HOME/.profile" <<< '$HOME/go/bin'        || echo >> "$HOME/.profile" 'export PATH="$PATH:$HOME/go/bin"'
-
 mkdir -p "$HOME/go"

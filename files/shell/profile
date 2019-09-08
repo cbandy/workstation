@@ -1,0 +1,6 @@
+#!/bin/sh
+# ~/.profile: executed by login shells dash and ksh (and bash, when named sh.)
+
+# The file in $ENV is executed by interactive shells sh, dash, and ksh.
+# (bash does also when invoked as interactive sh.)
+ENV="$HOME/.config/interactive"

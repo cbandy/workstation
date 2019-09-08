@@ -19,9 +19,6 @@ silent command -v chruby-exec || {
 	make --directory "/tmp/chruby-${chruby_version}" install PREFIX="$HOME/.local"
 }
 
-file_contains "$HOME/.profile" <<< 'chruby/chruby' || echo >> "$HOME/.profile" "source $HOME/.local/share/chruby/chruby.sh"
-file_contains "$HOME/.profile" <<< 'chruby/auto'   || echo >> "$HOME/.profile" "source $HOME/.local/share/chruby/auto.sh"
-
 silent command -v ruby-install || {
 	install_checksum='500a8ac84b8f65455958a02bcefd1ed4bfcaeaa2bb97b8f31e61ded5cd0fd70b'
 	install_github='github.com/postmodern/ruby-install'

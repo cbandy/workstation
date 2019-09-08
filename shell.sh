@@ -4,6 +4,12 @@
 
 set -eu
 
+local_file "$HOME/.config/interactive" 'files/shell/interactive'
+local_file "$HOME/.profile"            'files/shell/profile'
+
+local_file "$HOME/.bash_profile" 'files/shell/bash_profile'
+local_file "$HOME/.bashrc"       'files/shell/bashrc'
+
 uninstall_packages 'command-not-found' 'command-not-found-data'
 
 packages=()
@@ -18,11 +24,3 @@ silent command -v tree       || packages+=('tree')
 silent command -v zip        || packages+=('zip')
 
 [ "${#packages[@]}" -eq 0 ] || install_packages "${packages[@]}"
-
-[ -f "$(command -v pbcopy)" ] ||
-	file_contains "$HOME/.profile" <<< 'alias pbcopy=' ||
-	echo >> "$HOME/.profile" "alias pbcopy='xclip -selection clipboard'"
-
-[ -f "$(command -v pbpaste)" ] ||
-	file_contains "$HOME/.profile" <<< 'alias pbpaste=' ||
-	echo >> "$HOME/.profile" "alias pbpaste='xclip -selection clipboard -o'"

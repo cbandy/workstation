@@ -1,0 +1,16 @@
+#!/bin/sh
+# shellcheck source=/dev/null
+
+export EDITOR=nvim
+export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.local/go/bin"
+export PATH="$PATH:$HOME/go/bin"
+
+alias ls='ls --color=auto'
+[ -f "$(command -v pbcopy)"  ] || alias pbcopy='xclip -selection clipboard'
+[ -f "$(command -v pbpaste)" ] || alias pbpaste='xclip -selection clipboard -o'
+alias pcat='pygmentize -f 16m -O style=base16-tomorrow-night'
+alias ycat='pcat -l yaml -O style=base16-bright'
+
+{ [ -f "$HOME/.local/share/chruby/chruby.sh" ] && . "$HOME/.local/share/chruby/chruby.sh"; } || true
+{ [ -f "$HOME/.local/share/chruby/auto.sh"   ] && . "$HOME/.local/share/chruby/auto.sh";   } || true
