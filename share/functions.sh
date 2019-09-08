@@ -84,4 +84,5 @@ declare -Ar OS=(
 	[codename]="$(lsb_release --codename --short)"
 	[distribution]="$(lsb_release --id --short)"
 	[kernel]="$(uname --kernel-name)"
+	[machine]="$(uname --machine)"
 )

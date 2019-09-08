@@ -21,16 +21,17 @@ test -d "$HOME/.config/nvim" || {
 	ln --symbolic "$HOME/.vim" "$HOME/.config/nvim"
 }
 
-neovim_version='0.3.8'
 
-test "v${neovim_version}" = "$( a=($(silent command -v nvim && nvim --version)); echo "${a[1]-}" )" || {
-	neovim_checksum='6e98287fe29624703961d9053ddd25877b36bb9f9e2bec226612c3bf28db04db'
+checksum='6e98287fe29624703961d9053ddd25877b36bb9f9e2bec226612c3bf28db04db'
+project='github.com/neovim/neovim'
+version='0.3.8'
 
+test "v${version}" = "$( a=($(silent command -v nvim && nvim --version)); echo "${a[1]-}" )" || {
 	silent command -v 'fusermount' || install_packages 'fuse'
 
-	remote_file "/tmp/neovim-${neovim_version}" \
-		"https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim.appimage" \
-		"$neovim_checksum"
+	remote_file "/tmp/neovim-${version}" \
+		"https://${project}/releases/download/v${version}/nvim.appimage" \
+		"$checksum"
 
-	install --no-target-directory "/tmp/neovim-${neovim_version}" "$HOME/.local/bin/nvim"
+	install --no-target-directory "/tmp/neovim-${version}" "$HOME/.local/bin/nvim"
 }
