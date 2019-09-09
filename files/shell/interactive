@@ -2,8 +2,8 @@
 # shellcheck source=/dev/null
 
 export EDITOR=nvim
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/.local/go/bin"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/go/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 
 alias ls='ls --color=auto'
