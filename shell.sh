@@ -29,7 +29,7 @@ silent command -v zip  || packages+=('zip')
 checksum='84e06bee3c8b8c25f46906350fb32708f4b661636c04e55bd19cdd1071265112d84906055372149678d37f09a1667019488c62a0561b81fe6a6b45ad4fae4ac0'
 version='0.7.0'
 
-if [ "version: ${version}" != "$(silent command -v shellcheck && shellcheck --version | grep 'version:')" ]
+if [ "version: ${version}" != "$(maybe shellcheck --version | grep 'version:')" ]
 then
 	remote_file "/tmp/shellcheck-${version}.txz" \
 		"https://shellcheck.storage.googleapis.com/shellcheck-v${version}.${OS[kernel],,}.${OS[machine]}.tar.xz" \

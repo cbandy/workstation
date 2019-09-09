@@ -36,11 +36,11 @@ checksum='bee6460f96339d5d978bb63d17943f773e1a140242dfa6c941d5e020a302c91b'
 project='github.com/docker/compose'
 version='1.24.0'
 
-test "${version}," = "$( a=($(silent command -v docker-compose && docker-compose --version)); echo "${a[2]-}" )" || {
-
+if [ "${version}," != "$( read -ra array <<< "$(maybe docker-compose --version)"; echo "${array[2]-}" )" ]
+then
 	remote_file "/tmp/docker-compose-${version}" \
 		"https://${project}/releases/download/${version}/docker-compose-${OS[kernel]}-${OS[machine]}" \
 		"$checksum"
 
 	install --no-target-directory "/tmp/docker-compose-${version}" "$HOME/.local/bin/docker-compose"
-}
+fi

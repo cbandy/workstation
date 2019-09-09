@@ -26,7 +26,8 @@ checksum='6e98287fe29624703961d9053ddd25877b36bb9f9e2bec226612c3bf28db04db'
 project='github.com/neovim/neovim'
 version='0.3.8'
 
-test "v${version}" = "$( a=($(silent command -v nvim && nvim --version)); echo "${a[1]-}" )" || {
+if [ "v${version}" != "$( read -ra array <<< "$(maybe nvim --version)"; echo "${array[1]-}" )" ]
+then
 	silent command -v 'fusermount' || install_packages 'fuse'
 
 	remote_file "/tmp/neovim-${version}" \
@@ -34,4 +35,4 @@ test "v${version}" = "$( a=($(silent command -v nvim && nvim --version)); echo "
 		"$checksum"
 
 	install --no-target-directory "/tmp/neovim-${version}" "$HOME/.local/bin/nvim"
-}
+fi

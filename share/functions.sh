@@ -53,6 +53,10 @@ local_file() {
 	fi
 }
 
+maybe() {
+	silent command -v "$1" && "$@"
+}
+
 remote_file() {
 	local target="$1" origin="$2" sum="$3"
 	local check="shasum --algorithm $(( 4 * ${#sum} )) --check"
