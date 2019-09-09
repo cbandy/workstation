@@ -6,19 +6,19 @@ set -eu
 
 export PATH="$PATH:$HOME/.local/bin"
 
-silent command -v 'docker' || {
+if ! silent command -v 'docker'; then
 	checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
 	repository="download.docker.com/${OS[kernel],,}/${OS[distribution],,}"
 	key='0EBFCD88'
 
-	test -n "$(apt-key list "$key")" || {
+	if [ -z "$(apt-key list "$key")" ]; then
 		remote_file      "/tmp/${key}.asc" "https://${repository}/gpg" "$checksum"
 		sudo apt-key add "/tmp/${key}.asc"
-	}
+	fi
 
 	install_package_repository "deb [arch=${OS[machine]/x86_/amd}] https://${repository} ${OS[codename]} stable"
 	install_packages 'docker-ce'
-}
+fi
 
 docker_socket='/var/run/docker.sock'
 
