@@ -134,10 +134,12 @@ if [ "${OS[kernel]}" = 'Darwin' ]; then
 	OS[codename]="$(sw_vers -productVersion)"
 	OS[codename]="${OS[codename]%.*}"
 	OS[distribution]='macOS'
+	OS[processors]="$(getconf _NPROCESSORS_ONLN)"
 else
 	silent command -v 'lsb_release' || install_packages 'lsb-release'
 	OS[codename]="$(lsb_release --codename --short)"
 	OS[distribution]="$(lsb_release --id --short)"
+	OS[processors]="$(nproc)"
 fi
 
 # shellcheck disable=SC2034
