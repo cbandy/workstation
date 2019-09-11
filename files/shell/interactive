@@ -6,7 +6,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/go/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 
-alias ls='ls --color=auto'
 [ -f "$(command -v pbcopy)"  ] || alias pbcopy='xclip -selection clipboard'
 [ -f "$(command -v pbpaste)" ] || alias pbpaste='xclip -selection clipboard -o'
 alias pcat='pygmentize -f 16m -O style=base16-tomorrow-night'

@@ -1,9 +1,11 @@
 #!/bin/sh
-
 set -eu
+cd "$(dirname "$0")"
 
-cd "$(dirname "$(readlink -f "$0")")"
+# Use installed interpreters as soon as they are available
+export PATH="$HOME/.local/bin:$PATH"
 
+./mac.sh
 ./shell.sh
 
 ./docker.sh

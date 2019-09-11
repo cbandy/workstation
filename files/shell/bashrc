@@ -3,6 +3,11 @@
 #
 # ~/.bashrc: executed by interactive bash.
 
+if [ "$SHELL" != "$HOME/.local/bin/bash" ] && [ -x "$HOME/.local/bin/bash" ]; then
+	export SHELL="$HOME/.local/bin/bash"
+	exec "$SHELL"
+fi
+
 HISTCONTROL=ignoredups:ignorespace
 HISTFILE="$HOME/.history"
 HISTSIZE=1000
@@ -11,6 +16,12 @@ PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 shopt -s checkwinsize # update COLUMNS and LINES after every command.
 shopt -s globstar     # match directories and subdirectories with **.
 shopt -s histappend   # append to HISTFILE rather than overwrite it.
+
+if [[ "$OSTYPE" == darwin* ]]; then
+	export CLICOLOR=1
+else
+	alias ls='ls --color=auto'
+fi
 
 { [ -x "$(command -v dircolors)" ] && eval "$(dircolors --bourne-shell)"; } || true
 { [ -f "$HOME/.config/interactive" ] && . "$HOME/.config/interactive"; } || true

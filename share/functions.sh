@@ -1,28 +1,51 @@
 #!/usr/bin/env bash
 
 file_contains() {
-	local target="$1"
+	local -r target="$1"
 
 	[ -f "$target" ] && grep --silent --file /dev/stdin "$target"
 }
 
 file_content() {
-	local target="$1" content="$( < /dev/stdin )"
-	local check="sha256sum --check"
-	local filesum="$( sha256sum <<< "$content" )"
+	local -r target="$1" content="$( < /dev/stdin )"
+	local -r check="shasum --algorithm 256 --check"
+	local -r filesum="$( shasum --algorithm 256 <<< "$content" )"
 
 	if [ ! -f "$target" ] || ! $check <<< "${filesum/%-/$target}"; then
 		cat > "$target" <<< "$content"
 	fi
 }
 
+install_cask() {
+	brew cask install --appdir="$HOME/Applications" --require-sha "$@"
+}
+
+install_file() {
+	local -r target="$1" origin="$2"
+
+	# macOS install lacks --no-target-directory
+	if [ -d "$target" ]; then
+		>&2 echo "install: cannot overwrite directory '$target' with non-directory"
+		return 1
+	fi
+
+	install "$origin" "$target"
+}
+
 install_packages() {
-	sudo apt-get install --no-install-recommends --yes "$@"
+	if [ "${OS[distribution]}" = 'macOS' ]; then
+		local package
+		for package in "$@"; do
+			{ silent brew list "$package" && brew reinstall "$package"; } || brew install "$package"
+		done
+	else
+		sudo apt-get install --no-install-recommends --yes "$@"
+	fi
 }
 
 install_package_repository() {
-	local target="$1"
-	local installed="$( grep --no-filename '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/* )"
+	local -r target="$1"
+	local -r installed="$( grep --no-filename '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/* )"
 
 	if ! grep --silent "${target#*:}" <<< "$installed"; then
 		if [ "${target%%:*}" = 'ppa' ]; then
@@ -44,12 +67,18 @@ install_package_repository() {
 }
 
 local_file() {
-	local target="$1" origin="$2"
-	local check="sha256sum --check"
-	local filesum="$( sha256sum "$origin" )"
+	local -r target="$1" origin="$2"
+	local -r check="shasum --algorithm 256 --check"
+	local -r filesum="$( shasum --algorithm 256 "$origin" )"
+
+	# macOS cp lacks --no-target-directory
+	if [ -d "$target" ]; then
+		>&2 echo "cp: cannot overwrite directory '$target' with non-directory"
+		return 1
+	fi
 
 	if [ ! -f "$target" ] || ! $check <<< "${filesum/%$origin/$target}"; then
-		cp --no-target-directory --preserve "$origin" "$target"
+		cp -p "$origin" "$target"
 	fi
 }
 
@@ -58,9 +87,9 @@ maybe() {
 }
 
 remote_file() {
-	local target="$1" origin="$2" sum="$3"
-	local check="shasum --algorithm $(( 4 * ${#sum} )) --check"
-	local filesum="$sum  $target"
+	local -r target="$1" origin="$2" sum="$3"
+	local -r check="shasum --algorithm $(( 4 * ${#sum} )) --check"
+	local -r filesum="$sum  $target"
 
 	if [ ! -f "$target" ] || ! $check <<< "$filesum"; then
 		curl --location --output "$target" "$origin" && $check <<< "$filesum"
@@ -72,21 +101,36 @@ silent() {
 }
 
 uninstall_packages() {
-	local index='' packages=("$@")
+	if [ "${OS[distribution]}" = 'macOS' ]; then
+		local package
+		for package in "$@"; do
+			silent brew list "$package" || continue
+			brew uninstall "$package"
+		done
+	else
+		local index='' packages=("$@")
+		for index in "${!packages[@]}"; do
+			silent dpkg-query --status "${packages[$index]}" || unset -v 'packages[index]'
+		done
 
-	for index in "${!packages[@]}"; do
-		silent dpkg-query --status "${packages[$index]}" || unset -v 'packages[index]'
-	done
-
-	[ "${#packages[@]}" -eq 0 ] || sudo apt-get purge --yes "${packages[@]}"
+		[ "${#packages[@]}" -eq 0 ] || sudo apt-get purge --yes "${packages[@]}"
+	fi
 }
 
-silent command -v 'lsb_release' || install_packages 'lsb-release'
+
+declare -A OS
+OS[kernel]="$(uname -s)"
+OS[machine]="$(uname -m)"
+
+if [ "${OS[kernel]}" = 'Darwin' ]; then
+	OS[codename]="$(sw_vers -productVersion)"
+	OS[codename]="${OS[codename]%.*}"
+	OS[distribution]='macOS'
+else
+	silent command -v 'lsb_release' || install_packages 'lsb-release'
+	OS[codename]="$(lsb_release --codename --short)"
+	OS[distribution]="$(lsb_release --id --short)"
+fi
 
 # shellcheck disable=SC2034
-declare -Ar OS=(
-	[codename]="$(lsb_release --codename --short)"
-	[distribution]="$(lsb_release --id --short)"
-	[kernel]="$(uname --kernel-name)"
-	[machine]="$(uname --machine)"
-)
+readonly OS
