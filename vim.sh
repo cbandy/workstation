@@ -4,21 +4,26 @@
 
 set -eu
 
-export PATH="$PATH:$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
 
-checksum='6e98287fe29624703961d9053ddd25877b36bb9f9e2bec226612c3bf28db04db'
-project='github.com/neovim/neovim'
 version='0.3.8'
 
 if [ "v${version}" != "$( read -ra array <<< "$(maybe nvim --version)"; echo "${array[1]-}" )" ]
 then
-	silent command -v 'fusermount' || install_packages 'fuse'
+	if [ "${OS[distribution]}" = 'macOS' ]; then
+		install_packages 'neovim'
+	else
+		checksum='6e98287fe29624703961d9053ddd25877b36bb9f9e2bec226612c3bf28db04db'
 
-	remote_file "/tmp/neovim-${version}" \
-		"https://${project}/releases/download/v${version}/nvim.appimage" \
-		"$checksum"
+		silent command -v 'fusermount' || install_packages 'fuse'
 
-	install --no-target-directory "/tmp/neovim-${version}" "$HOME/.local/bin/nvim"
+		remote_file "/tmp/neovim-${version}" \
+			"https://github.com/neovim/neovim/releases/download/v${version}/nvim.appimage" \
+			"$checksum"
+
+		mkdir -p "$HOME/.local/bin"
+		install_file "$HOME/.local/bin/nvim" "/tmp/neovim-${version}"
+	fi
 fi
 
 if [ ! -d "$HOME/.config/nvim" ]; then
