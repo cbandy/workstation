@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-
-. share/functions.sh
-
 set -eu
+. share/functions.sh
 
 if ! silent command -v 'psql'; then
 	if [ "${OS[distribution]}" = 'macOS' ]; then

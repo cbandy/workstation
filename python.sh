@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-
-. share/functions.sh
-
 set -eu
+. share/functions.sh
 
 export LANG='en_US.UTF-8'
 export PATH="$HOME/.local/bin:$PATH"

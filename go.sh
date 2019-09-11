@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-
-. share/functions.sh
-
 set -eu
+. share/functions.sh
 
 export PATH="$HOME/.local/go/bin:$PATH"
 
