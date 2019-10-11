@@ -4,7 +4,6 @@
 	ga = "!f() { git graph --all; }; f"
 	graph = log --decorate --graph --oneline
 	graph = log --graph --pretty='%C(auto)%h%d %C(cyan)%an%C(reset) %s'
-
 [color]
 	ui = true
 
@@ -16,13 +15,14 @@
 	template = ~/.gitmsg.txt
 [core]
 	excludesfile = ~/.gitignore
+[diff]
+	noprefix = true
 [pager]
 	log =  diff-highlight | less
 	show = diff-highlight | less
 	diff = diff-highlight | less
 [push]
 	default = simple
-
 [user]
 	name = Chris Bandy
 	email = bandy.chris@gmail.com
