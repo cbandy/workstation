@@ -7,6 +7,10 @@ export PATH="$HOME/.local/bin:$PATH"
 if [ "${OS[distribution]}" = 'macOS' ]; then
 	silent brew cask list 'docker' || install_cask 'docker'
 	silent command -v 'dive' || install_packages 'dive'
+
+	ln -s "$HOME/Applications/Docker.app/Contents/Resources/etc/docker.bash-completion"         "$HOME/.local/etc/bash_completion.d/docker"
+	ln -s "$HOME/Applications/Docker.app/Contents/Resources/etc/docker-compose.bash-completion" "$HOME/.local/etc/bash_completion.d/docker-compose"
+
 	exit
 fi
 

@@ -28,6 +28,7 @@ if [ -r "$HOME/.config/interactive" ]; then . "$HOME/.config/interactive"; fi
 if [ -r "$HOME/.local/etc/profile.d/bash_completion.sh" ]; then . "$HOME/.local/etc/profile.d/bash_completion.sh"; fi
 
 if [ -x "$(command -v dircolors)" ]; then eval "$(dircolors --bourne-shell)"; fi
+if [ -x "$(command -v minikube)" ]; then eval "$(minikube completion bash)"; fi
 
 if command -v __git_ps1 &> /dev/null; then
 	GIT_PS1_SHOWCOLORHINTS=1

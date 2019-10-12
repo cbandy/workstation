@@ -5,6 +5,8 @@ set -eu
 if ! silent command -v 'gcloud'; then
 	if [ "${OS[distribution]}" = 'macOS' ]; then
 		install_cask --no-require-sha 'google-cloud-sdk'
+
+		ln -s "$HOME/.local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc" "$HOME/.local/etc/bash_completion.d/google-cloud-sdk"
 	else
 		checksum='1fe629470162c72777c1ed5e5b0f392acf403cf6a374cb229cf76109b5c90ed5'
 		repository='packages.cloud.google.com/apt'
