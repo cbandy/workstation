@@ -24,5 +24,13 @@ else
 	alias ls='ls --color=auto'
 fi
 
-{ [ -x "$(command -v dircolors)" ] && eval "$(dircolors --bourne-shell)"; } || true
-{ [ -f "$HOME/.config/interactive" ] && . "$HOME/.config/interactive"; } || true
+if [ -r "$HOME/.config/interactive" ]; then . "$HOME/.config/interactive"; fi
+if [ -r "$HOME/.local/etc/profile.d/bash_completion.sh" ]; then . "$HOME/.local/etc/profile.d/bash_completion.sh"; fi
+
+if [ -x "$(command -v dircolors)" ]; then eval "$(dircolors --bourne-shell)"; fi
+
+if command -v __git_ps1 &> /dev/null; then
+	GIT_PS1_SHOWCOLORHINTS=1
+	GIT_PS1_SHOWDIRTYSTATE=1
+	PROMPT_COMMAND="__git_ps1 '${PS1% }' ' '"
+fi
