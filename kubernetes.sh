@@ -23,25 +23,10 @@ then
 fi
 
 if [ "${OS[distribution]}" = 'macOS' ]; then
+	silent brew cask list 'docker' || install_packages 'hyperkit'
+
 	if ! silent command -v minikube; then
-		install_cask 'minikube'
-		install_packages 'hyperkit'
-	fi
-
-	version="$( read -ra array <<< "$(minikube version)"; echo "${array[2]-}" )"
-
-	if [ "$version" != "$( read -ra array <<< "$(maybe docker-machine-driver-hyperkit version)"; echo "${array[1]-}" )" ]
-	then
-		remote_file \
-			'/tmp/docker-machine-driver-hyperkit' \
-			'https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit' \
-			'b6a54b465f6e6c709229ce68d95742771c470183e56a52133b875befadd510bb'
-
-		mkdir -p "$HOME/.local/bin"
-		sudo install -o root -g wheel -m 4755 \
-			'/tmp/docker-machine-driver-hyperkit' \
-			"$HOME/.local/bin/"
-
+		install_packages 'minikube'
 		minikube config set vm-driver hyperkit
 	fi
 fi
