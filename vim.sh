@@ -19,7 +19,6 @@ then
 			"https://github.com/neovim/neovim/releases/download/v${version}/nvim.appimage" \
 			"$checksum"
 
-		mkdir -p "$HOME/.local/bin"
 		install_file "$HOME/.local/bin/nvim" "/tmp/neovim-${version}"
 	fi
 fi

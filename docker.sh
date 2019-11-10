@@ -51,6 +51,5 @@ then
 		"https://github.com/docker/compose/releases/download/${version}/docker-compose-${build}" \
 		"$checksum"
 
-	mkdir -p "$HOME/.local/bin"
 	install_file "$HOME/.local/bin/docker-compose" "/tmp/docker-compose-${version}"
 fi

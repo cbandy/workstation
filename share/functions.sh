@@ -37,6 +37,9 @@ install_file() {
 		return 1
 	fi
 
+	# macOS install lacks -D
+	mkdir -p "${target%/*}"
+
 	install "$origin" "$target"
 }
 

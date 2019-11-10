@@ -18,7 +18,6 @@ then
 		"https://github.com/rancher/k3d/releases/download/v${version}/k3d-${build}" \
 		"$checksum"
 
-	mkdir -p "$HOME/.local/bin"
 	install_file "$HOME/.local/bin/k3d" "/tmp/k3d-${version}"
 fi
 
