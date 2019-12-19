@@ -5,8 +5,24 @@
 \pset linestyle unicode
 \pset null '␀'
 
-\set COMP_KEYWORD_CASE upper
-\set PROMPT1 '%n@%/%R%# '
+\set COMP_KEYWORD_CASE 'upper'
+\set ON_ERROR_ROLLBACK 'interactive'
+
+-- %[%033[00m%] = ANSI reset
+-- %[%033[01m%] = ANSI bold
+-- %[%033[01;34m%] = ANSI bold blue
+-- %R = prompt continuation
+-- %n = session authorization
+-- %/ = session database
+-- %# = superuser status
+-- %x = transaction status
+\set PROMPT1 '(psql %:SERVER_VERSION_NAME_DIGITS:) '
+\set PROMPT1 :PROMPT1 '%[%033[01;34m%]%n@%/%[%033[00m%] '
+\set PROMPT1 :PROMPT1 '%#%[%033[01m%]%x%[%033[00m%] '
+\set PROMPT2 '%R%# '
+
+SELECT substring(:'SERVER_VERSION_NAME' from '^[\d.]+') "SERVER_VERSION_NAME_DIGITS" \gset
+
 \setenv LESS '-iMSx4$FX'
 \setenv PAGER 'less'
 \x auto
