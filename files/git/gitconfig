@@ -23,3 +23,5 @@
 [user]
 	name = Chris Bandy
 	email = bandy.chris@gmail.com
+[versionsort]
+	prereleaseSuffix = -rc
