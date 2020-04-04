@@ -2,6 +2,7 @@
 \set QUIET yes
 
 \pset border 2
+\pset expanded auto
 \pset linestyle unicode
 \pset null '␀'
 
@@ -25,7 +26,6 @@ SELECT substring(:'SERVER_VERSION_NAME' from '^[\d.]+') "SERVER_VERSION_NAME_DIG
 
 \setenv LESS '-iMSx4$FX'
 \setenv PAGER 'less'
-\x auto
 
 \set QUIET :QUIETRC
 \unset QUIETRC
