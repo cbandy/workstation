@@ -4,18 +4,18 @@ set -eu
 
 export PATH="$HOME/.local/go/bin:$PATH"
 
-version='1.12.9'
+version='1.15'
 
 if [ "go${version}" != "$( read -ra array <<< "$(maybe go version)"; echo "${array[2]-}" )" ]
 then
 	build="${OS[kernel],,}-${OS[machine]/x86_/amd}"
 	case "$build" in
-		'darwin-amd64') checksum='4f189102b15de0be1852d03a764acb7ac5ea2c67672a6ad3a340bd18d0e04bb4' ;;
-		'linux-amd64')  checksum='ac2a6efcc1f5ec8bdc0db0a988bb1d301d64b6d61b7e8d9e42f662fbb75a2b9b' ;;
+		'darwin-amd64') checksum='8a5fb9c8587854a84957a79b9616070b63d8842d4001c3c7d86f261cd7b5ffb6' ;;
+		'linux-amd64')  checksum='2d75848ac606061efe52a8068d0e647b35ce487a15bb52272c427df485193602' ;;
 	esac
 
 	remote_file "/tmp/go-${version}.tgz" \
-		"https://dl.google.com/go/go${version}.${build}.tar.gz" \
+		"https://golang.org/dl/go${version}.${build}.tar.gz" \
 		"$checksum"
 
 	tar --file "/tmp/go-${version}.tgz" --extract --directory '/tmp'
