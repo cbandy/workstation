@@ -89,7 +89,7 @@ local_file() {
 	fi
 
 	if [ ! -f "$target" ] || ! $check <<< "${filesum/%$origin/$target}"; then
-		cp -p "$origin" "$target"
+		cp -p "$origin" "$target" && $check <<< "${filesum/%$origin/$target}"
 	fi
 }
 
