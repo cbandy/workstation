@@ -4,14 +4,14 @@ set -eu
 
 export PATH="$HOME/.local/bin:$PATH"
 
-version='4.2.0'
+version='5.2.1'
 
 if [ "v${version}" != "$( read -ra array <<< "$(maybe k3d --version)"; echo "${array[2]-}" )" ]
 then
 	build="${OS[kernel],,}-${OS[machine]/x86_/amd}"
 	case "$build" in
-		'darwin-amd64') checksum='9d3ba7bde30651f5ff638d772c5d96fe7b795e0f6e9e0bf98e197183425473d2' ;;
-		'linux-amd64')  checksum='745396701fb0ffaa832b02c5b734fd5b6bb042ac878b3ad16bb810ebbf02df0c' ;;
+		'darwin-amd64') checksum='fb7f0ed1b507b14cb8ff6c9a186d5534aa2dd9083b342cae9dbce7a2eb7c3248' ;;
+		'linux-amd64')  checksum='70141637bbe7531d17cf313688520287572e78711361e7162237648a59a6e91d' ;;
 	esac
 
 	remote_file "/tmp/k3d-${version}" \
