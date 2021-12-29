@@ -17,15 +17,13 @@ file_content() {
 }
 
 install_cask() {
-	local args=("$@")
-
-	if [ "${args[0]}" = '--no-require-sha' ]; then
-		unset -v 'args[0]'
+	if [ "$1" = '--no-require-sha' ]; then
+		shift
 	else
-		args=('--require-sha' "${args[@]}")
+		set -- '--require-sha' "$@"
 	fi
 
-	brew cask install --appdir="$HOME/Applications" "${args[@]}"
+	brew install --cask --appdir="$HOME/Applications" "$@"
 }
 
 install_file() {

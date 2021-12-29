@@ -42,18 +42,19 @@ if [ ! -d "$HOME/.local/homebrew" ]; then
 fi
 
 applications=(
+	'brave-browser'
 	'drawio'
-	'google-chrome'
 	'iterm2'
 	'keeweb'
 	'macdown'
+	'rectangle'
 	'slack'
 	'textual'
 	'visual-studio-code'
 )
 
 for application in "${applications[@]}"; do
-	brew cask list "$application" &> /dev/null || brew cask install "$application"
+	brew list --cask "$application" &> /dev/null || brew install --cask "$application"
 done
 
 if [ "0${BASH_VERSION%%.*}" -lt '4' ]; then
@@ -61,3 +62,5 @@ if [ "0${BASH_VERSION%%.*}" -lt '4' ]; then
 fi
 
 brew list 'git' &> /dev/null || brew install 'git'
+
+xcode-select --print-path || xcode-select --install

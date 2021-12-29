@@ -22,10 +22,10 @@ then
 fi
 
 if [ "${OS[distribution]}" = 'macOS' ]; then
-	silent brew cask list 'docker' || install_packages 'hyperkit'
+	silent brew list --cask 'docker' || install_packages 'hyperkit'
 
 	if ! silent command -v minikube; then
 		install_packages 'minikube'
-		minikube config set vm-driver hyperkit
+		minikube config set driver hyperkit
 	fi
 fi
