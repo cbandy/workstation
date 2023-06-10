@@ -4,14 +4,14 @@ set -eu
 
 export PATH="$HOME/.local/bin:$PATH"
 
-version='0.8.3'
+version='0.9.1'
 
 if [ "v${version}" != "$( read -ra array <<< "$(maybe nvim --version)"; echo "${array[1]-}" )" ]
 then
 	if [ "${OS[distribution]}" = 'macOS' ]; then
 		install_packages 'neovim'
 	else
-		checksum='05f7a2cb177f4506882b7cd867d82207c79066e7a9550e4ef78e6eac537dd4a8'
+		checksum='262892176e21da0902c4f0b1e027d54d21b4bcae6b0397afccd8a81b476c3055'
 
 		silent command -v 'fusermount' || install_packages 'fuse'
 
