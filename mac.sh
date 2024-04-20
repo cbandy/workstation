@@ -5,12 +5,12 @@ test "$(uname)" = 'Darwin' || exit 0
 export HOMEBREW_CASK_OPTS="--appdir='$HOME/Applications' --require-sha"
 export PATH="$HOME/.local/bin:$PATH"
 
-# show Home folder by going to Finder > Preferences > Sidebar
+# show Home folder by going to Finder > Settings > Sidebar
 
 applications=(
 	'Calculator'
 	'Preview'
-	'System Preferences'
+	'System Settings'
 	'TextEdit'
 )
 
