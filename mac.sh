@@ -42,7 +42,7 @@ if [ ! -d "$HOME/.local/homebrew" ]; then
 fi
 
 applications=(
-	'brave-browser'
+	'firefox'
 	'drawio'
 	'iterm2'
 	'keeweb'
