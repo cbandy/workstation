@@ -3,7 +3,7 @@ set -eu
 cd "$(dirname "$0")"
 
 # Use installed interpreters as soon as they are available
-export PATH="${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.local/bin:${HOME}/.local/homebrew/bin${PATH+:$PATH}"
 
 ./mac.sh
 ./shell.sh

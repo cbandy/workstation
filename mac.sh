@@ -3,9 +3,33 @@ set -eu
 test "$(uname)" = 'Darwin' || exit 0
 
 export HOMEBREW_CASK_OPTS="--appdir='$HOME/Applications' --require-sha"
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="${HOME}/.local/bin:${HOME}/.local/homebrew/bin:${PATH}"
 
 # show Home folder by going to Finder > Settings > Sidebar
+
+if ! command -v brew &> /dev/null; then
+	case "$(uname -m)" in
+		'arm64')
+			bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+			ln -sf /opt/homebrew "${HOME}/.local/homebrew"
+			;;
+		'x86_64')
+			mkdir -p "$HOME/.local/homebrew"
+			git -C "$HOME/.local/homebrew" init -c 'init.defaultBranch=master' --quiet
+			git -C "$HOME/.local/homebrew" config --bool core.autocrlf 'false'
+			git -C "$HOME/.local/homebrew" config --bool core.symlinks 'true'
+			git -C "$HOME/.local/homebrew" remote add origin 'https://github.com/Homebrew/brew'
+			git -C "$HOME/.local/homebrew" fetch --force --tags origin 'master:refs/remotes/origin/master'
+			git -C "$HOME/.local/homebrew" reset --hard origin/master
+			ln -sf "$HOME/.local/homebrew/bin/brew" "$HOME/.local/bin/brew"
+			;;
+	esac
+
+	brew analytics off
+	brew update --force
+fi
+
+brew analytics off
 
 applications=(
 	'Calculator'
@@ -26,21 +50,6 @@ for application in "${applications[@]}"; do
 	APPLESCRIPT
 done
 
-if [ ! -d "$HOME/.local/homebrew" ]; then
-	mkdir -p "$HOME/.local/homebrew" "$HOME/.local/bin"
-	(
-		cd "$HOME/.local/homebrew"
-		git init --quiet
-		git config core.autocrlf 'false'
-		git remote add origin 'https://github.com/Homebrew/brew'
-		git fetch --force --tags origin 'master:refs/remotes/origin/master'
-		git reset --hard origin/master
-		ln -sf "$(pwd)/bin/brew" "$HOME/.local/bin/brew"
-	)
-	brew analytics off
-	brew update --force
-fi
-
 applications=(
 	'brave-browser'
 	'drawio'
@@ -60,6 +69,7 @@ done
 if [ "0${BASH_VERSION%%.*}" -lt '4' ]; then
 	brew list 'bash' &> /dev/null || brew install 'bash'
 fi
+[[ -x "${HOME}/.local/bin/bash" ]] || (cd "${HOME}/.local/bin" && ln -sf '../homebrew/bin/bash' .)
 
 brew list 'git' &> /dev/null || brew install 'git'
 
