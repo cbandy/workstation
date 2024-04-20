@@ -24,8 +24,9 @@ else
 	alias ls='ls --color=auto'
 fi
 
-if [ -r "$HOME/.config/interactive" ]; then . "$HOME/.config/interactive"; fi
-if [ -r "$HOME/.local/etc/profile.d/bash_completion.sh" ]; then . "$HOME/.local/etc/profile.d/bash_completion.sh"; fi
+[[ -r "${HOME}/.config/interactive" ]] && . "${HOME}/.config/interactive"
+[[ -r "${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh" ]] &&
+	. "${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh"
 
 if [ -x "$(command -v dircolors)" ]; then eval "$(dircolors --bourne-shell)"; fi
 if [ -x "$(command -v minikube)" ]; then eval "$(minikube completion bash)"; fi
