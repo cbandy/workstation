@@ -2,7 +2,8 @@
 set -eu
 test "$(uname)" = 'Darwin' || exit 0
 
-export PATH="${HOME}/.local/bin:${HOME}/.local/homebrew/bin:${PATH}"
+PATH="${HOME}/.local/homebrew/bin:${PATH}"
+PATH="${HOME}/.local/bin:${PATH}"
 
 # show Home folder by going to Finder > Settings > Sidebar
 
@@ -39,11 +40,41 @@ fi
 
 brew analytics off
 
+packages=(
+	'bash-completion@2'
+	'gh'
+	'git'
+	'gnupg'
+	'mas'
+	'ripgrep'
+)
+
+for package in "${packages[@]}"; do
+	brew list "$package" &> /dev/null || brew install "$package"
+done
+
+apps=(
+	'552792489:Status Clock'
+	'1538878817:UTM'
+	'1451685025:WireGuard'
+)
+
+for app in "${apps[@]}"; do
+	if ! grep -q "^${app%%:*} " <<< "$(mas list)" &&
+		grep -q "^${app#*:}" <<< "$(mas info "${app%%:*}")"
+	then
+		mas install "${app%%:*}"
+	fi
+done
+
 applications=(
 	'Calculator'
 	'Preview'
+	'StatusClock'
 	'System Settings'
 	'TextEdit'
+	'UTM'
+	'WireGuard'
 )
 
 for application in "${applications[@]}"; do
@@ -59,26 +90,28 @@ for application in "${applications[@]}"; do
 done
 
 applications=(
-	'brave-browser'
-	'drawio'
+	'grammarly-desktop'
 	'iterm2'
 	'keeweb'
-	'macdown'
+	'meetingbar'
+	'rancher'
 	'rectangle'
 	'slack'
+	'todoist'
 	'textual'
 	'visual-studio-code'
 )
 
 for application in "${applications[@]}"; do
-	brew list --cask "$application" &> /dev/null || brew install --cask "$application"
+	brew list "$application" &> /dev/null || brew install "$application"
 done
 
-if [ "0${BASH_VERSION%%.*}" -lt '4' ]; then
-	brew list 'bash' &> /dev/null || brew install 'bash'
-fi
+brew list 'librewolf' &> /dev/null || brew install --no-quarantine 'librewolf'
+
 [[ -x "${HOME}/.local/bin/bash" ]] || (cd "${HOME}/.local/bin" && ln -sf '../homebrew/bin/bash' .)
 
-brew list 'git' &> /dev/null || brew install 'git'
+if [ -x '/Applications/UTM.app/Contents/MacOS/utmctl' ] && ! command -v utmctl &> /dev/null; then
+	ln -sf '/Applications/UTM.app/Contents/MacOS/utmctl' "${HOME}/.local/bin/utmctl"
+fi
 
 xcode-select --print-path || xcode-select --install
