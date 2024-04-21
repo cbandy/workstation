@@ -6,6 +6,14 @@ export PATH="${HOME}/.local/bin:${HOME}/.local/homebrew/bin:${PATH}"
 
 # show Home folder by going to Finder > Settings > Sidebar
 
+# iTerm2 Settings
+# Appearance > Windows > Show border around windows
+# Profiles > Colors > Color Presets...
+# - 'https://raw.githubusercontent.com/tinted-theming/base16-iterm2/main/itermcolors/base16-tomorrow-night-256.itermcolors'
+# Profiles > Text > Font
+# Profiles > Keys > General
+# - Left Option key: Esc+
+
 mkdir -p "${HOME}/.config/homebrew"
 cp -p 'files/homebrew/brew.env' "${HOME}/.config/homebrew/brew.env"
 [[ -d "${HOME}/.homebrew" ]] || ln -s "${HOME}/.config/homebrew" "${HOME}/.homebrew"
