@@ -13,10 +13,6 @@ export PATH="${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:${PATH}"
 export PATH="${HOME}/go/bin:${PATH}"
 export PYTHONUSERBASE="${HOME}/.local"
 
-if [ -n "$(command -v brew ||:)" ]
-then export HOMEBREW_CASK_OPTS="--require-sha --appdir='${HOME}/Applications'"
-fi
-
 if [ -z "$(command -v pbcopy ||:)" ]
 then
 	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-copy ||:)" ]

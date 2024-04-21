@@ -2,10 +2,13 @@
 set -eu
 test "$(uname)" = 'Darwin' || exit 0
 
-export HOMEBREW_CASK_OPTS="--appdir='$HOME/Applications' --require-sha"
 export PATH="${HOME}/.local/bin:${HOME}/.local/homebrew/bin:${PATH}"
 
 # show Home folder by going to Finder > Settings > Sidebar
+
+mkdir -p "${HOME}/.config/homebrew"
+cp -p 'files/homebrew/brew.env' "${HOME}/.config/homebrew/brew.env"
+[[ -d "${HOME}/.homebrew" ]] || ln -s "${HOME}/.config/homebrew" "${HOME}/.homebrew"
 
 if ! command -v brew &> /dev/null; then
 	case "$(uname -m)" in
