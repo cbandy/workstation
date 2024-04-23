@@ -1,10 +1,14 @@
+# vim: set filetype=gitconfig :
+
 [alias]
 	co = checkout
 	di = diff --no-prefix
 	explain = blame
 	ga = "!f() { git graph --all; }; f"
+	gh-pr = "!f() { git fetch $1 pull/$2/head:pr-$2; }; f"
 	graph = log --decorate --graph --oneline
 	graph = log --graph --pretty='%C(auto)%h%d %C(cyan)%an%C(reset) %s'
+	show-fixup = "!f() { git di $1^^..$1 \"${@:2:$#}\"; }; f"
 [color]
 	ui = true
 [color "diff-highlight"]
@@ -24,4 +28,5 @@
 	name = Chris Bandy
 	email = bandy.chris@gmail.com
 [versionsort]
-	prereleaseSuffix = -rc
+	suffix = -beta
+	suffix = -rc

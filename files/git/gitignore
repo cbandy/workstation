@@ -1,1 +1,4 @@
+# vim: set filetype=gitignore :
+
 .*.sw?
+.DS_Store
