@@ -8,7 +8,7 @@
 	gh-pr = "!f() { git fetch $1 pull/$2/head:pr-$2; }; f"
 	graph = log --decorate --graph --oneline
 	graph = log --graph --pretty='%C(auto)%h%d %C(cyan)%an%C(reset) %s'
-	show-fixup = "!f() { git di $1^^..$1 \"${@:2:$#}\"; }; f"
+	show-fixup = "!f() { git di $1^^..\"$@\"; }; f"
 [color]
 	ui = true
 [color "diff-highlight"]
