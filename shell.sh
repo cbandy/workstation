@@ -31,7 +31,7 @@ silent command -v zip  || packages+=('zip')
 
 [ "${#packages[@]}" -eq 0 ] || install_packages "${packages[@]}"
 
-version='0.7.0'
+version='0.10.0'
 
 if [ "version: ${version}" != "$(maybe shellcheck --version | grep 'version:')" ]
 then
@@ -39,10 +39,12 @@ then
 		install_packages 'shellcheck'
 	else
 		build="${OS[kernel],,}.${OS[machine]}"
-		checksum='84e06bee3c8b8c25f46906350fb32708f4b661636c04e55bd19cdd1071265112d84906055372149678d37f09a1667019488c62a0561b81fe6a6b45ad4fae4ac0'
+		case "$build" in
+			'linux.x86_64') checksum='6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87' ;;
+		esac
 
 		remote_file "/tmp/shellcheck-${version}.txz" \
-			"https://shellcheck.storage.googleapis.com/shellcheck-v${version}.${build}.tar.xz" \
+			"https://github.com/koalaman/shellcheck/releases/download/v${version}/shellcheck-v${version}.${build}.tar.xz" \
 			"$checksum"
 
 		tar --file "/tmp/shellcheck-${version}.txz" --extract --directory '/tmp'
