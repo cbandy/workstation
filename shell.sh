@@ -16,16 +16,11 @@ uninstall_packages 'command-not-found' 'command-not-found-data'
 
 packages=()
 
-if [ "${OS[distribution]}" = 'macOS' ]; then
-	silent command -v ag || packages+=('the_silver_searcher')
-else
-	silent command -v ag || packages+=('silversearcher-ag')
-fi
-
 silent command -v curl || packages+=('curl')
 silent command -v htop || packages+=('htop')
 silent command -v jq   || packages+=('jq')
 silent command -v make || packages+=('make')
+silent command -v rg   || packages+=('ripgrep')
 silent command -v tree || packages+=('tree')
 silent command -v zip  || packages+=('zip')
 
