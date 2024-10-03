@@ -18,6 +18,8 @@
 	template = ~/.gitmsg.txt
 [core]
 	excludesfile = ~/.gitignore
+[init]
+	defaultBranch = main
 [pager]
 	log =  diff-highlight | less
 	show = diff-highlight | less
