@@ -15,6 +15,7 @@ fi
 
 alias ag='rg --smart-case'
 alias pcat='pygmentize -f 16m -O style=base16-tomorrow-night'
+alias ybat='bat --language yaml'
 alias ycat='pcat -l yaml -O style=base16-bright'
 
 { [ -f "$HOME/.local/share/chruby/chruby.sh" ] && . "$HOME/.local/share/chruby/chruby.sh"; } || true
