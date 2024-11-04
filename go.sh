@@ -4,15 +4,15 @@ set -eu
 
 export PATH="$HOME/.local/go/bin:$PATH"
 
-version='1.22.2'
+version='1.23.2'
 
 if [ "go${version}" != "$( read -ra array <<< "$(maybe go version)"; echo "${array[2]-}" )" ]
 then
 	build="${OS[kernel],,}-${OS[machine]/x86_/amd}"
 	case "$build" in
-		'darwin-amd64') checksum='33e7f63077b1c5bce4f1ecadd4d990cf229667c40bfb00686990c950911b7ab7' ;;
-		'darwin-arm64') checksum='660298be38648723e783ba0398e90431de1cb288c637880cdb124f39bd977f0d' ;;
-		'linux-amd64')  checksum='5901c52b7a78002aeff14a21f93e0f064f74ce1360fce51c6ee68cd471216a17' ;;
+		'darwin-amd64') checksum='445c0ef19d8692283f4c3a92052cc0568f5a048f4e546105f58e991d4aea54f5' ;;
+		'darwin-arm64') checksum='d87031194fe3e01abdcaf3c7302148ade97a7add6eac3fec26765bcb3207b80f' ;;
+		'linux-amd64')  checksum='542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e' ;;
 	esac
 
 	remote_file "/tmp/go-${version}.tgz" \
