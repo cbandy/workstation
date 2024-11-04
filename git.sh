@@ -17,3 +17,16 @@ if ! silent command -v diff-highlight; then
 		exists "$HOME/.local/share/git-core/contrib/diff-highlight/diff-highlight"
 	)"
 fi
+
+version='0.18.2'
+
+if [ "${version}" != "$( read -ra array <<< "$(maybe delta --version)"; echo "${array[1]-}" )" ]
+then
+	build="${OS[machine]/x86_/amd}"
+	project='https://github.com/dandavison/delta'
+
+	remote_file '/tmp/delta.deb' \
+		"${project}/releases/download/${version}/git-delta_${version}_${build}.deb" \
+		'1658c7b61825d411b50734f34016101309e4b6e7f5799944cf8e4ac542cebd7f'
+	sudo dpkg --install '/tmp/delta.deb'
+fi

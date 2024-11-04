@@ -18,12 +18,14 @@
 	template = ~/.gitmsg.txt
 [core]
 	excludesfile = ~/.gitignore
+	ignorecase = false
+	pager = delta
+[delta]
+	line-numbers = true
 [init]
 	defaultBranch = main
-[pager]
-	log =  diff-highlight | less
-	show = diff-highlight | less
-	diff = diff-highlight | less
+[interactive]
+	diffFilter = delta --color-only
 [push]
 	default = simple
 [user]
