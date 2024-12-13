@@ -42,12 +42,12 @@ if [ -e "$docker_socket" ]; then
 	fi
 fi
 
-version='1.24.0'
+version='v2.31.0'
 
 if [ "${version}," != "$( read -ra array <<< "$(maybe docker-compose --version)"; echo "${array[2]-}" )" ]
 then
 	build="${OS[kernel]}-${OS[machine]}"
-	checksum='bee6460f96339d5d978bb63d17943f773e1a140242dfa6c941d5e020a302c91b'
+	checksum='8b5d2cb358427e654ada217cfdfedc00c4273f7a8ee07f27003a18d15461b6cd'
 
 	remote_file "/tmp/docker-compose-${version}" \
 		"https://github.com/docker/compose/releases/download/${version}/docker-compose-${build}" \
