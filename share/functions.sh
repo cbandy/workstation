@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+error() {
+	>&2 echo "$@"
+	return 1
+}
+
 file_contains() {
 	local -r target="$1"
 

@@ -28,3 +28,4 @@ mkdir -p "$HOME/go"
 go install golang.org/x/tools/cmd/godoc@latest
 go install golang.org/x/tools/gopls@latest
 go install golang.org/x/vuln/cmd/govulncheck@latest
+go install github.com/direnv/direnv/v2@latest
