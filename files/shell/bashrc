@@ -1,37 +1,49 @@
 #!/bin/bash
 # shellcheck source=/dev/null
 #
-# ~/.bashrc: executed by interactive bash.
+# ~/.bashrc: executed by interactive bash and bash started by sshd.
 
-if [ "$SHELL" != "$HOME/.local/bin/bash" ] && [ -x "$HOME/.local/bin/bash" ]; then
-	export SHELL="$HOME/.local/bin/bash"
-	exec "$SHELL"
+# only run this file when deliberately interactive (not sshd).
+case $- in *i*) ;; *) return ;; esac
+
+if test "${SHELL}" != "${HOME}/.local/bin/bash" &&
+	test -x "${HOME}/.local/bin/bash"
+then
+	export SHELL="${HOME}/.local/bin/bash"
+	exec "${SHELL}"
 fi
 
 HISTCONTROL=ignoredups:ignorespace
-HISTFILE="$HOME/.history"
+HISTFILE="${HOME}/.history"
 HISTSIZE=1000
 PS1='\[\e[01;$([ $? != 0 ] && printf 31 || printf 32)m\]●\[\e[00m\] ' # circle colored per exit code
-PS1="$PS1"'\[\e[01;34m\]\W\[\e[00m\] ' # current directory basename
+PS1="${PS1}"'\[\e[01;34m\]\W\[\e[00m\] ' # current directory basename
 
 shopt -s checkwinsize # update COLUMNS and LINES after every command.
 shopt -s globstar     # match directories and subdirectories with **.
 shopt -s histappend   # append to HISTFILE rather than overwrite it.
 
-if [[ "$OSTYPE" == darwin* ]]; then
-	export CLICOLOR=1
-else
-	alias ls='ls --color=auto'
-fi
+case "${OSTYPE}" in
+	darwin*) export CLICOLOR=1 ;;
+	*) alias ls='ls --color=auto' ;;
+esac
 
-if [ -r "$HOME/.config/interactive" ]; then . "$HOME/.config/interactive"; fi
-if [ -r "$HOME/.local/etc/profile.d/bash_completion.sh" ]; then . "$HOME/.local/etc/profile.d/bash_completion.sh"; fi
+[[ -r "${HOME}/.config/interactive" ]] &&
+	. "${HOME}/.config/interactive"
+[[ -r "${HOME}/.local/etc/profile.d/bash_completion.sh" ]] &&
+	. "${HOME}/.local/etc/profile.d/bash_completion.sh"
 
-if [ -x "$(command -v dircolors)" ]; then eval "$(dircolors --bourne-shell)"; fi
-if [ -x "$(command -v minikube)" ]; then eval "$(minikube completion bash)"; fi
+# https://junegunn.github.io/fzf/shell-integration
+&> /dev/null command -v fzf && eval "$(fzf --bash ||:)"
+&> /dev/null command -v dircolors && eval "$(dircolors --bourne-shell ||:)"
+&> /dev/null command -v minikube  && eval "$(minikube completion bash ||:)"
 
-if command -v __git_ps1 &> /dev/null; then
+# shellcheck disable=SC2034  # The GIT_PS1 variables are used by __git_ps1
+if &> /dev/null command -v __git_ps1; then
 	GIT_PS1_SHOWCOLORHINTS=1
 	GIT_PS1_SHOWDIRTYSTATE=1
 	PROMPT_COMMAND="__git_ps1 '${PS1% }' ' '"
 fi
+
+# https://github.com/direnv/direnv/blob/-/docs/hook.md
+&> /dev/null command -v direnv && eval "$(direnv hook bash ||:)"

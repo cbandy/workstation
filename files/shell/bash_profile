@@ -4,4 +4,4 @@
 # ~/.bash_profile: executed by bash as a login shell.
 
 # https://unix.stackexchange.com/a/88266/309712
-case $- in *i*) . "$HOME/.bashrc";; esac
+case $- in *i*) . "${HOME}/.bashrc" ;; *) esac

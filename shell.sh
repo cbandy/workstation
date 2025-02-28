@@ -8,11 +8,11 @@ export PATH="${HOME}/.local/bin:${PATH}"
 
 mkdir -p "${HOME}/.config" "${HOME}/.local/bin"
 
-local_file "$HOME/.config/interactive" 'files/shell/interactive'
-local_file "$HOME/.profile"            'files/shell/profile'
+local_file "${HOME}/.config/interactive" 'files/shell/interactive'
+local_file "${HOME}/.profile"            'files/shell/profile'
 
-local_file "$HOME/.bash_profile" 'files/shell/bash_profile'
-local_file "$HOME/.bashrc"       'files/shell/bashrc'
+local_file "${HOME}/.bash_profile" 'files/shell/bash_profile'
+local_file "${HOME}/.bashrc"       'files/shell/bashrc'
 
 uninstall_packages 'command-not-found' 'command-not-found-data'
 

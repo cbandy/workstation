@@ -4,28 +4,35 @@
 export EDITOR='nvim'
 export LANG='en_US.UTF-8'
 export LESS='-R'
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/go/bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
-export PYTHONUSERBASE="$HOME/.local"
+export PATH="${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.local/go/bin:${PATH}"
+export PATH="${HOME}/go/bin:${PATH}"
+export PYTHONUSERBASE="${HOME}/.local"
 
-if [ -n "$(command -v brew)" ]; then
+if [ -n "$(command -v brew ||:)" ]
+then
 	export HOMEBREW_CASK_OPTS="--require-sha --appdir='${HOME}/Applications'"
 fi
-if [ -z "$(command -v pbcopy)" ]; then
-	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-copy)" ]; then
-		alias pbcopy='wl-copy --type text/plain'
-	elif [ -n "${TMUX}" ] && [ -n "$(command -v tmux)" ]; then
-		alias pbcopy='tmux load-buffer -w -'
+
+if [ -z "$(command -v pbcopy ||:)" ]
+then
+	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-copy ||:)" ]
+	then alias pbcopy='wl-copy --type text/plain'
+
+	elif [ -n "${TMUX}" ] && [ -n "$(command -v tmux ||:)" ]
+	then alias pbcopy='tmux load-buffer -w -'
+
 	else
 		# As a last resort, send stdin to the terminal using OSC 52:
 		# https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h3-Operating-System-Commands
 		alias pbcopy='base64 -w0 | xargs -0 printf "\e]52;c;%s\e\\"'
 	fi
 fi
-if [ -z "$(command -v pbpaste)" ]; then
-	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-paste)" ]; then
-		alias pbpaste='wl-paste --no-newline'
+
+if [ -z "$(command -v pbpaste ||:)" ]
+then
+	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-paste ||:)" ]
+	then alias pbpaste='wl-paste --no-newline'
 	fi
 fi
 
@@ -34,5 +41,6 @@ alias pcat='pygmentize -f 16m -O style=base16-tomorrow-night'
 alias ybat='bat --language yaml'
 alias ycat='pcat -l yaml -O style=base16-bright'
 
-{ [ -f "$HOME/.local/share/chruby/chruby.sh" ] && . "$HOME/.local/share/chruby/chruby.sh"; } || true
-{ [ -f "$HOME/.local/share/chruby/auto.sh"   ] && . "$HOME/.local/share/chruby/auto.sh";   } || true
+for f in chruby/chruby.sh chruby/auto.sh
+do [ -r "${HOME}/.local/share/${f}" ] && . "${HOME}/.local/share/${f}"
+done
