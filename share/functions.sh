@@ -35,15 +35,12 @@ install_file() {
 	local -r target="$1" origin="$2"
 
 	# macOS install lacks --no-target-directory
-	if [ -d "$target" ]; then
-		>&2 echo "install: cannot overwrite directory '$target' with non-directory"
-		return 1
-	fi
+	[[ -d "${target}" ]] && error "install: cannot overwrite directory '${target}' with non-directory"
 
 	# macOS install lacks -D
 	mkdir -p "${target%/*}"
 
-	install "$origin" "$target"
+	install "${origin}" "${target}"
 }
 
 install_packages() {
@@ -83,16 +80,13 @@ install_package_repository() {
 local_file() {
 	local -r target="$1" origin="$2"
 	local -r check="shasum --algorithm 256 --check"
-	local -r filesum="$( shasum --algorithm 256 "$origin" )"
+	local -r filesum="$( shasum --algorithm 256 "${origin}" )"
 
 	# macOS cp lacks --no-target-directory
-	if [ -d "$target" ]; then
-		>&2 echo "cp: cannot overwrite directory '$target' with non-directory"
-		return 1
-	fi
+	[[ -d "${target}" ]] && error "cp: cannot overwrite directory '${target}' with non-directory"
 
-	if [ ! -f "$target" ] || ! $check <<< "${filesum/%$origin/$target}"; then
-		cp -p "$origin" "$target" && $check <<< "${filesum/%$origin/$target}"
+	if [[ ! -f "$target" ]] || ! ${check} <<< "${filesum/%${origin}/${target}}"; then
+		cp -p "${origin}" "${target}" && ${check} <<< "${filesum/%${origin}/${target}}"
 	fi
 }
 
