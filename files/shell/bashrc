@@ -13,13 +13,14 @@ then
 	exec "${SHELL}"
 fi
 
-HISTCONTROL=ignoredups:ignorespace
+HISTCONTROL=erasedups:ignoredups:ignorespace
 HISTFILE="${HOME}/.history"
-HISTSIZE=1000
+HISTSIZE=2000
 PS1='\[\e[01;$([ $? != 0 ] && printf 31 || printf 32)m\]●\[\e[00m\] ' # circle colored per exit code
 PS1="${PS1}"'\[\e[01;34m\]\W\[\e[00m\] ' # current directory basename
 
 shopt -s checkwinsize # update COLUMNS and LINES after every command.
+shopt -s cmdhist      # preserve multi-line commands in HISTFILE.
 shopt -s globstar     # match directories and subdirectories with **.
 shopt -s histappend   # append to HISTFILE rather than overwrite it.
 
