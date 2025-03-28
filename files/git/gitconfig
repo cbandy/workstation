@@ -22,6 +22,7 @@
 	pager = delta
 [delta]
 	line-numbers = true
+	syntax-theme = base16-tomorrow-night
 [init]
 	defaultBranch = main
 [interactive]
