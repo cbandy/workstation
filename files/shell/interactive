@@ -6,6 +6,7 @@ export LANG='en_US.UTF-8'
 export LESS='-R'
 export PATH="${HOME}/.local/bin:${PATH}"
 export PATH="${HOME}/.local/go/bin:${PATH}"
+export PATH="${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:${PATH}"
 export PATH="${HOME}/go/bin:${PATH}"
 export PYTHONUSERBASE="${HOME}/.local"
 
