@@ -6,19 +6,19 @@ if ! silent command -v 'gcloud'; then
 	if [ "${OS[distribution]}" = 'macOS' ]; then
 		install_cask --no-require-sha 'google-cloud-sdk'
 
-		ln -s "$HOME/.local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc" "$HOME/.local/etc/bash_completion.d/google-cloud-sdk"
+		ln -s "${HOME}/.local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc" \
+			"${HOME}/.local/etc/bash_completion.d/google-cloud-sdk"
 	else
-		checksum='1fe629470162c72777c1ed5e5b0f392acf403cf6a374cb229cf76109b5c90ed5'
+		checksum='3ecc63922b7795eb23fdc449ff9396f9114cb3cf186d6f5b53ad4cc3ebfbb11f'
 		repository='packages.cloud.google.com/apt'
-		key='BA07F4FB'
 
-		if [ -z "$(apt-key list "$key")" ]; then
-			remote_file      "/tmp/${key}.gpg" "https://${repository}/doc/apt-key.gpg" "$checksum"
-			sudo apt-key add "/tmp/${key}.gpg"
-		fi
-
-		install_package_repository "deb http://${repository} cloud-sdk-${OS[codename]} main"
-		install_packages 'google-cloud-sdk'
+		install_package_repository "https://${repository}/doc/apt-key.gpg" "${checksum}" <<-APT
+			Types: deb
+			URIs: https://${repository}
+			Suites: cloud-sdk
+			Components: main
+		APT
+		install_packages 'google-cloud-cli'
 	fi
 fi
 

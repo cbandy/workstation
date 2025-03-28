@@ -55,26 +55,27 @@ install_packages() {
 }
 
 install_package_repository() {
-	local -r target="$1"
-	local -r installed="$( grep --no-filename '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/* )"
+	local -r key="$1" checksum="$2" content="$( < /dev/stdin )"
 
-	if ! grep --silent "${target#*:}" <<< "$installed"; then
-		if [ "${target%%:*}" = 'ppa' ]; then
-			sudo add-apt-repository --yes --update "$target"
-			return
-		fi
+	case "${content}" in
+		*https:*) ;;
+		*) error 'package repository lacks certificate' ;;
+	esac
 
-		local list="$target"
-		list="${list#*http://}"
-		list="${list#*https://}"
-		list="${list%%/*}.list"
+	local key_content name="${content#*https://}"
+	key_content=$(remote_content "${key}" "${checksum}")
+	key_content=$(
+		awk '{ printf " " } /^$/ { printf "." } { print $0 }' <<< "${key_content}"
+	)
 
-		file_content "/tmp/${list}" <<< "$target"
-		sudo mv --no-target-directory "/tmp/${list}" "/etc/apt/sources.list.d/${list}"
+	sudo "${BASH}" -esu -- "${name%%/*}" "${content}" "${key_content}" <<-BASH
+		$(declare -f file_content)
+		file_content "/etc/apt/sources.list.d/\${1}.sources" <<< \
+			"\${2}"\$'\nSigned-By:\n'"\${3}"
+	BASH
 
-		sudo rm --force /var/lib/apt/periodic/update-success-stamp
-		sudo apt-get update
-	fi
+	sudo rm --force /var/lib/apt/periodic/update-success-stamp
+	sudo apt-get update
 }
 
 local_file() {
@@ -92,6 +93,14 @@ local_file() {
 
 maybe() {
 	silent command -v "$1" && "$@"
+}
+
+remote_content() {
+	local content checksum
+	content=$( curl --fail --location --show-error --silent "$1" ) || return
+	checksum=$( shasum --algorithm "$(( 4 * ${#2} ))" <<< "${content}" ) || return
+	[[ "${checksum}" == "${2}  -" ]] || return
+	echo "${content}"
 }
 
 remote_file() {

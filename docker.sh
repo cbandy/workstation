@@ -19,14 +19,14 @@ fi
 if ! silent command -v 'docker'; then
 	build="${OS[kernel],,}/${OS[distribution],,}"
 	checksum='1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570'
-	key='0EBFCD88'
 
-	if [ -z "$(apt-key list "$key")" ]; then
-		remote_file      "/tmp/${key}.asc" "https://download.docker.com/${build}/gpg" "$checksum"
-		sudo apt-key add "/tmp/${key}.asc"
-	fi
-
-	install_package_repository "deb [arch=${OS[machine]/x86_/amd}] https://download.docker.com/${build} ${OS[codename]} stable"
+	install_package_repository "https://download.docker.com/${build}/gpg" "${checksum}" <<-APT
+		Types: deb
+		URIs: https://download.docker.com/${build}
+		Architectures: ${OS[machine]/x86_/amd}
+		Suites: ${OS[codename]}
+		Components: stable
+	APT
 	install_packages 'docker-ce'
 fi
 
@@ -42,12 +42,12 @@ if [ -e "$docker_socket" ]; then
 	fi
 fi
 
-version='v2.31.0'
+version='v2.34.0'
 
 if [ "${version}," != "$( read -ra array <<< "$(maybe docker-compose --version)"; echo "${array[2]-}" )" ]
 then
 	build="${OS[kernel]}-${OS[machine]}"
-	checksum='8b5d2cb358427e654ada217cfdfedc00c4273f7a8ee07f27003a18d15461b6cd'
+	checksum='94a416c6f2836a0a1ba5eb3feb00f2e700a9d98311f062c4c61494ccbf3cd457'
 
 	remote_file "/tmp/docker-compose-${version}" \
 		"https://github.com/docker/compose/releases/download/${version}/docker-compose-${build}" \
