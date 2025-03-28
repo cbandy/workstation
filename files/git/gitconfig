@@ -26,6 +26,9 @@
 	defaultBranch = main
 [interactive]
 	diffFilter = delta --color-only
+[merge]
+	conflictstyle = zdiff3
+	ff = only
 [push]
 	default = simple
 [user]
