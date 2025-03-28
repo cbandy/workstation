@@ -4,7 +4,7 @@ set -eu
 
 export PATH="$HOME/.local/bin:$PATH"
 
-version='0.10.4'
+version='0.11.0'
 
 if [ "v${version}" != "$( read -ra array <<< "$(maybe nvim --version)"; echo "${array[1]-}" )" ]
 then
@@ -13,8 +13,8 @@ then
 	else
 		build="${OS[kernel],,}-${OS[machine]}"
 		case "$build" in
-			'linux-arm64')  checksum='cc02d640809f6cfb27ee5fca78cc612ccda0dc4fbb648430d49de623660d0216' ;;
-			'linux-x86_64') checksum='d1b1488ef6a970dc3a2826b788d31d81b2f308ad42ef70ed62d35d0bf6189336' ;;
+			'linux-arm64')  checksum='307972fd1e14f68e3a24c23a48e91387399385a3cf3d80e319542c01efe3bcf2' ;;
+			'linux-x86_64') checksum='ca44cd43fe8d55418414496e8ec7bac83f611705ece167f4ccb93cbf46fec6c0' ;;
 		esac
 
 		silent command -v 'fusermount' || install_packages 'fuse'
