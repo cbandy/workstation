@@ -116,7 +116,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#cc6666</string>
+				<string>#c5c8c6</string><!-- originally base08, Red -->
 			</dict>
 		</dict>
 		<dict>
