@@ -1,0 +1,11 @@
+# vim: set filetype=sshconfig tabstop=2 :
+# [:Man ssh_config]
+
+Host *.github.com github.com
+	GSSAPIAuthentication no
+	IdentityFile ~/.ssh/id_github
+
+	# Expect the public key in [known_hosts] for GitHub hostnames (not IPs)
+	CheckHostIP no
+	HashKnownHosts no
+	StrictHostKeyChecking yes
