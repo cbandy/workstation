@@ -144,6 +144,10 @@ if [ "${OS[kernel]}" = 'Darwin' ]; then
 	OS[codename]="${OS[codename]%.*}"
 	OS[distribution]='macOS'
 	OS[processors]="$(getconf _NPROCESSORS_ONLN)"
+elif [ -r /etc/os-release ]; then
+	OS[codename]="$(. /etc/os-release && echo "${VERSION_CODENAME}")"
+	OS[distribution]="$(. /etc/os-release && echo "${ID}")"
+	OS[processors]="$(nproc)"
 else
 	silent command -v 'lsb_release' || install_packages 'lsb-release'
 	OS[codename]="$(lsb_release --codename --short)"
