@@ -24,5 +24,3 @@ PyEnv
 
 # TODO: packages: libbz2-dev libsqlite3-dev liblzma-dev
 
-silent command -v pygmentize || pip3 install --user pygments
-pygmentize -L styles | grep --silent base16 || pip3 install --user pygments-base16

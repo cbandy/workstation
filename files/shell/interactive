@@ -44,9 +44,7 @@ then export COLORTERM='truecolor'
 fi
 
 alias ag='rg --smart-case'
-alias pcat='pygmentize -f 16m -O style=base16-tomorrow-night'
 alias ybat='bat --language yaml'
-alias ycat='pcat -l yaml -O style=base16-bright'
 
 for f in chruby/chruby.sh chruby/auto.sh
 do [ -r "${HOME}/.local/share/${f}" ] && . "${HOME}/.local/share/${f}"
