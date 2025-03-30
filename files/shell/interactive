@@ -12,8 +12,7 @@ export PATH="${HOME}/go/bin:${PATH}"
 export PYTHONUSERBASE="${HOME}/.local"
 
 if [ -n "$(command -v brew ||:)" ]
-then
-	export HOMEBREW_CASK_OPTS="--require-sha --appdir='${HOME}/Applications'"
+then export HOMEBREW_CASK_OPTS="--require-sha --appdir='${HOME}/Applications'"
 fi
 
 if [ -z "$(command -v pbcopy ||:)" ]
@@ -36,6 +35,12 @@ then
 	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-paste ||:)" ]
 	then alias pbpaste='wl-paste --no-newline'
 	fi
+fi
+
+# The Crostini terminal supports truecolor but does not export COLORTERM.
+# https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
+if ps hx -o command | grep -q 'google[/]cros-containers'
+then export COLORTERM='truecolor'
 fi
 
 alias ag='rg --smart-case'
