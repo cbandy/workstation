@@ -10,5 +10,8 @@ indent_size = tab
 indent_style = tab
 tab_width = 2
 
+[files/obsidian/obsidian-logo-gradient.svg]
+end_of_line = crlf
+
 [files/themes/base16-tomorrow-night.tmTheme]
 end_of_line = crlf

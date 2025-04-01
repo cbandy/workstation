@@ -2,7 +2,7 @@
 Type=Application
 Terminal=false
 Name=Obsidian
-Exec=obsidian
+Exec=.local/bin/obsidian %u
 Icon=obsidian
 StartupWMClass=obsidian
 MimeType=x-scheme-handler/obsidian;
