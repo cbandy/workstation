@@ -81,6 +81,14 @@ else
 	install_file "${HOME}/.local/bin/tree-sitter" "/tmp/treesitter-${version}"
 fi
 
+if silent command -v yaml-language-server; then
+	:
+elif [[ "${OS[distribution]}" == 'macOS' ]]; then
+	install_packages 'yaml-language-server'
+else
+	maybe npm install --global --omit=dev yaml-language-server
+fi
+
 if [[ ! -d "${HOME}/.config/nvim" ]]; then
 	mkdir -p "${HOME}/.config"
 
