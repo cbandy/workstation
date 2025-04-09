@@ -2,7 +2,9 @@
 . share/functions.sh
 
 shopt -s -o errexit nounset
-export PATH="${HOME}/.local/bin:${HOME}/.local/luals/bin:${PATH}"
+PATH="${HOME}/.local/ltex-ls-plus/bin:${PATH}"
+PATH="${HOME}/.local/luals/bin:${PATH}"
+PATH="${HOME}/.local/bin:${PATH}"
 
 read -r _ current _ <<< "$(maybe nvim --version ||:)"
 version='0.11.0'
@@ -26,6 +28,37 @@ else
 		"${project}/releases/download/v${version}/nvim-${build}.appimage" "${checksum}"
 
 	install_file "${HOME}/.local/bin/nvim" "/tmp/neovim-${version}"
+fi
+
+current=$(maybe ltex-ls-plus --version ||:)
+current=$(python3 -c 'import sys, json; print(json.loads(sys.argv[1] or "{}").get("ltex-ls"))' "${current}")
+version='18.5.0'
+
+if [[ "${current}" == "${version}" ]]; then
+	:
+elif [[ "${OS[distribution]}" == 'macOS' ]]; then
+	install_packages 'ltex-ls-plus'
+else
+	project='https://github.com/ltex-plus/ltex-ls-plus'
+	build="${OS[kernel],,}-${OS[machine]/x86_/x}"
+	case "${build}" in
+		'linux-x64') checksum='8c517552890c8dc2341d97ff1703ba774c1bdb2c5abf159af6fe2e4550e0ad2a' ;;
+		*) error "missing checksum for ${build}" ;;
+	esac
+
+	remote_file "/tmp/ltex-ls-plus-${version}.tar" \
+		"${project}/releases/download/${version}/ltex-ls-plus-${version}-${build}.tar.gz" "${checksum}"
+
+	members=$(tar --list --file "/tmp/ltex-ls-plus-${version}.tar")
+	if [[ "${members%%$'\n'*}" == './' ]]; then
+		tar --file "/tmp/ltex-ls-plus-${version}.tar" --extract --directory '/tmp' --strip-components=1
+	else
+		error 'Expected a ./ in the archive!'
+	fi
+	unset members
+
+	[[ ! -d "${HOME}/.local/ltex-ls-plus" ]] || rm -r "${HOME}/.local/ltex-ls-plus" &&
+		mv "/tmp/ltex-ls-plus-${version}" "${HOME}/.local/ltex-ls-plus"
 fi
 
 current=$(maybe lua-language-server --version ||:)
