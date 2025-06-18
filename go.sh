@@ -5,16 +5,16 @@ shopt -s -o errexit nounset
 export PATH="${HOME}/.local/go/bin:${PATH}"
 
 read -r _ _ current _ <<< "$(maybe go version ||:)"
-version='1.24.1'
+version='1.24.4'
 
 if [[ "${current}" == "go${version}" ]]; then
 	:
 else
 	build="${OS[kernel],,}-${OS[machine]/x86_/amd}"
 	case "${build}" in
-		'darwin-amd64') checksum='addbfce2056744962e2d7436313ab93486660cf7a2e066d171b9d6f2da7c7abe' ;;
-		'darwin-arm64') checksum='295581b5619acc92f5106e5bcb05c51869337eb19742fdfa6c8346c18e78ff88' ;;
-		'linux-amd64')  checksum='cb2396bae64183cdccf81a9a6df0aea3bce9511fc21469fb89a0c00470088073' ;;
+		'darwin-amd64') checksum='69bef555e114b4a2252452b6e7049afc31fbdf2d39790b669165e89525cd3f5c' ;;
+		'darwin-arm64') checksum='27973684b515eaf461065054e6b572d9390c05e69ba4a423076c160165336470' ;;
+		'linux-amd64')  checksum='77e5da33bb72aeaef1ba4418b6fe511bc4d041873cbf82e5aa6318740df98717' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
