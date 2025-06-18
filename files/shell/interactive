@@ -37,7 +37,7 @@ fi
 
 # The Crostini terminal supports truecolor but does not export COLORTERM.
 # https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
-if ps hx -o command | grep -q 'google[/]cros-containers'
+if [ -n "$(pgrep -f 'google/cros-containers' ||:)" ]
 then export COLORTERM='truecolor'
 fi
 
