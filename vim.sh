@@ -7,7 +7,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 read -r _ current _ <<< "$(maybe nvim --version ||:)"
-version='0.11.0'
+version='0.11.2'
 
 if [[ "${current}" == "v${version}" ]]; then
 	:
@@ -19,8 +19,8 @@ else
 	project='https://github.com/neovim/neovim'
 	build="${OS[kernel],,}-${OS[machine]}"
 	case "${build}" in
-		'linux-arm64')  checksum='307972fd1e14f68e3a24c23a48e91387399385a3cf3d80e319542c01efe3bcf2' ;;
-		'linux-x86_64') checksum='ca44cd43fe8d55418414496e8ec7bac83f611705ece167f4ccb93cbf46fec6c0' ;;
+		'linux-arm64')  checksum='a1b4206d8f8065a6c92a49f1af2050dbc212335435fee2058d2ec5387f2b551e' ;;
+		'linux-x86_64') checksum='c7c365fdf651f058b2fc153d667b406ac39ca674a54aa9f799544bc8c28dd898' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
@@ -62,7 +62,7 @@ else
 fi
 
 current=$(maybe lua-language-server --version ||:)
-version='3.13.9'
+version='3.14.0'
 
 if [[ "${current}" == "${version}" ]]; then
 	:
@@ -76,8 +76,8 @@ else
 
 	build="${OS[kernel],,}-${OS[machine]/86_/}${build}"
 	case "${build}" in
-		'linux-arm64') checksum='0857343d82cdbc01ce2ed56b548358ec90c351f2d0db28c567d1198d531018df' ;;
-		'linux-x64')   checksum='17642b2154446c0a15c7f6d335242f071d6910ce1e76c7cd95a29b64dfae1348' ;;
+		'linux-arm64') checksum='0e145ec52647c92cd19469687d7e34f16e9212a81b573bddfe435976cfd5d4d9' ;;
+		'linux-x64')   checksum='cec69b78b147f988525ed797961f0a9e4a2ee2d62c4558acecf1073b02048ea7' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
@@ -93,7 +93,7 @@ else
 fi
 
 read -r _ current _ <<< "$(maybe tree-sitter --version ||:)"
-version='0.25.3'
+version='0.25.6'
 
 if [[ "${current}" == "${version}" ]]; then
 	:
@@ -103,8 +103,8 @@ else
 	project='https://github.com/tree-sitter/tree-sitter'
 	build="${OS[kernel],,}-${OS[machine]/86_/}"
 	case "${build}" in
-		'linux-arm64') checksum='ead1d0bdb0d8daeb1b27833635790bc673403e53fb80b4f61c9b3db7bd446151' ;;
-		'linux-x64')   checksum='ad69bfbd54f9ebba1387bf0e7c2683896a5968f2f78768380af70f0c4dd8ceab' ;;
+		'linux-arm64') checksum='daf6f8e5b2f87195370f28dd9936a168920831fc2a5e0987e0bedd9999b6e2b8' ;;
+		'linux-x64')   checksum='c300ea9f2ca368186ce1308793aaad650c3f6db78225257cbb5be961aeff4038' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
