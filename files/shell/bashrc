@@ -16,7 +16,7 @@ fi
 HISTCONTROL=erasedups:ignoredups:ignorespace
 HISTFILE="${HOME}/.history"
 HISTSIZE=2000
-PS1='\[\e[01;$([ $? != 0 ] && printf 31 || printf 32)m\]●\[\e[00m\] ' # circle colored per exit code
+PS1='\[\e[01;$([ $? != 0 ] && printf 31 || printf 32)m\]●\[\e[00m\] ' # circle colored per exit status
 PS1="${PS1}"'\[\e[01;34m\]\W\[\e[00m\] ' # current directory basename
 
 shopt -s checkwinsize # update COLUMNS and LINES after every command.
@@ -48,3 +48,5 @@ fi
 
 # https://github.com/direnv/direnv/blob/-/docs/hook.md
 &> /dev/null command -v direnv && eval "$(direnv hook bash ||:)"
+
+: # start the session with an exit status of zero
