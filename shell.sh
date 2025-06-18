@@ -41,9 +41,10 @@ case "$(maybe shellcheck --version)" in *"version: ${version}"*) :;; *)
 			'linux.x86_64') checksum='6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87' ;;
 			*) error "unexpected: ${build}" ;;
 		esac
+		project='https://github.com/koalaman/shellcheck'
 
 		remote_file "/tmp/shellcheck-${version}.tar" \
-			"https://github.com/koalaman/shellcheck/releases/download/v${version}/shellcheck-v${version}.${build}.tar.xz" \
+			"${project}/releases/download/v${version}/shellcheck-v${version}.${build}.tar.xz" \
 			"${checksum}"
 
 		tar --file "/tmp/shellcheck-${version}.tar" --extract --directory '/tmp'
@@ -79,7 +80,7 @@ else
 fi
 
 current=$(maybe fzf --version ||:)
-version='0.60.2'
+version='0.62.0'
 
 case "${current}" in "${version} "*) :;; *)
 	if [[ "${OS[distribution]}" == 'macOS' ]]; then
@@ -87,7 +88,7 @@ case "${current}" in "${version} "*) :;; *)
 	else
 		build="${OS[kernel],,}_${OS[machine]/x86_/amd}"
 		case "${build}" in
-			'linux_amd64') checksum='f459d9c0676edfcd4a717efc48ea7768d395d5745872d34ae338452017381839' ;;
+			'linux_amd64') checksum='64b56dd484a2317d5f04c28ac0791b36807f034adb419209ad39fb6637255794' ;;
 			*) error "unexpected: ${build}" ;;
 		esac
 		project='https://github.com/junegunn/fzf'
