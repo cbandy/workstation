@@ -4,13 +4,17 @@
 export EDITOR='nvim'
 export LANG='en_US.UTF-8'
 export LESS='-R'
-export PATH="${HOME}/.local/go/bin:${PATH}"
-export PATH="${HOME}/.local/node/bin:${PATH}"
-export PATH="${HOME}/.local/homebrew/bin:${PATH}"
-export PATH="${HOME}/.local/bin:${PATH}"
-export PATH="${HOME}/.cargo/bin:${PATH}"
-export PATH="${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:${PATH}"
-export PATH="${HOME}/go/bin:${PATH}"
+
+# Local fameworks are usually newer than those installed by package managers; search them first.
+# NOTE: "$*" expands arguments to a single word separated by IFS.
+PATH=$(IFS=: && set -- \
+"${HOME}/.cargo/bin" \
+"${HOME}/.local/go/bin:${HOME}/go/bin" \
+"${HOME}/.local/node/bin" \
+"${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:${PATH}" \
+"${HOME}/.local/bin:${HOME}/.local/homebrew/bin" \
+"${PATH}" && echo "$*")
+
 export PYTHONUSERBASE="${HOME}/.local"
 
 if [ -z "$(command -v pbcopy ||:)" ]
