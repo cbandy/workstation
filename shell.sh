@@ -58,7 +58,7 @@ version='10.2.0'
 if [[ "${current}" == "fd ${version}" ]]; then
 	:
 elif [[ "${OS[distribution]}" == 'macOS' ]]; then
-	install_packages 'fzf'
+	install_packages 'fd'
 else
 	build=$(ldd --version 2>&1 ||:)
 	[[ "${build}" == *musl* ]] && build='unknown-linux-musl'

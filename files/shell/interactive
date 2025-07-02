@@ -15,6 +15,7 @@ PATH=$(IFS=: && set -- \
 "${HOME}/.local/bin:${HOME}/.local/homebrew/bin" \
 "${PATH}" && echo "$*")
 
+export KUBECOLOR_CONFIG="${HOME}/.config/kubecolor.yaml"
 export PYTHONUSERBASE="${HOME}/.local"
 
 if [ -z "$(command -v pbcopy ||:)" ]
@@ -46,6 +47,7 @@ then export COLORTERM='truecolor'
 fi
 
 alias ag='rg --smart-case'
+alias ka='kubectl apply --server-side'
 alias ybat='bat --language yaml'
 
 for f in chruby/chruby.sh chruby/auto.sh

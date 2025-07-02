@@ -81,12 +81,12 @@ install_package_repository() {
 local_file() {
 	local -r target="$1" origin="$2"
 	local -r check="shasum --algorithm 256 --check"
-	local -r filesum="$( shasum --algorithm 256 "${origin}" )"
+	local -r filesum="$(shasum --algorithm 256 "${origin}" ||:)"
 
 	# macOS cp lacks --no-target-directory
 	[[ -d "${target}" ]] && error "cp: cannot overwrite directory '${target}' with non-directory"
 
-	if [[ ! -f "$target" ]] || ! ${check} <<< "${filesum/%${origin}/${target}}"; then
+	if [[ ! -f "${target}" ]] || ! ${check} <<< "${filesum/%${origin}/${target}}"; then
 		cp -p "${origin}" "${target}" && ${check} <<< "${filesum/%${origin}/${target}}"
 	fi
 }

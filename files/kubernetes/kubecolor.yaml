@@ -1,0 +1,5 @@
+# schema documentation: https://kubecolor.github.io/reference/config
+# yaml-language-server: $schema=https://github.com/kubecolor/kubecolor/raw/main/config-schema.json
+
+objFreshThreshold: 1m
+paging: auto

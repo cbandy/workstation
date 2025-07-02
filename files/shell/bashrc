@@ -37,7 +37,13 @@ esac
 # https://junegunn.github.io/fzf/shell-integration
 &> /dev/null command -v fzf && eval "$(fzf --bash ||:)"
 &> /dev/null command -v dircolors && eval "$(dircolors --bourne-shell ||:)"
-&> /dev/null command -v minikube  && eval "$(minikube completion bash ||:)"
+&> /dev/null command -v minikube && eval "$(minikube completion bash ||:)"
+
+# When available, extend kubectl completions with kubecolor.
+# https://kubecolor.github.io/setup/shells/bash
+if &> /dev/null command -v kubectl
+then eval "$(2> /dev/null kubecolor completion bash || kubectl completion bash ||:)"
+fi
 
 # shellcheck disable=SC2034  # The GIT_PS1 variables are used by __git_ps1
 if &> /dev/null command -v __git_ps1; then
