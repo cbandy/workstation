@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-set -eu
+# shellcheck disable=SC1091
 . share/functions.sh
 
-local_file "$HOME/.tmux.conf" "files/tmux/tmux.conf"
+shopt -s -o errexit nounset
+
+local_file "${HOME}/.tmux.conf" 'files/tmux/tmux.conf'
 
 silent command -v tmux || install_packages 'tmux'

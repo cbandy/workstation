@@ -29,10 +29,13 @@ case "${OSTYPE}" in
 	*) alias ls='ls --color=auto' ;;
 esac
 
-[[ -r "${HOME}/.config/interactive" ]] &&
-	. "${HOME}/.config/interactive"
-[[ -r "${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh" ]] &&
-	. "${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh"
+for i in \
+	"${HOME}/.config/interactive" \
+	"${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh" \
+	/usr/*/git*/**/completion/git-*prompt* \
+	;
+do [[ -r "${i}" ]] && . "${i}"
+done
 
 # https://junegunn.github.io/fzf/shell-integration
 &> /dev/null command -v fzf && eval "$(fzf --bash ||:)"

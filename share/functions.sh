@@ -44,14 +44,19 @@ install_file() {
 }
 
 install_packages() {
-	if [ "${OS[distribution]}" = 'macOS' ]; then
-		local package
-		for package in "$@"; do
-			{ silent brew list "$package" && brew reinstall "$package"; } || brew install "$package"
-		done
-	else
-		sudo apt-get install --no-install-recommends --yes "$@"
-	fi
+	local package
+	case "${OS[distribution]}" in
+		'macOS')
+			for package in "$@"
+			do { silent brew list "$package" && brew reinstall "$package"; } || brew install "$package"
+			done ;;
+		'fedora'|'rhel')
+			sudo dnf install -yq --setopt install_weak_deps=False "$@" ;;
+		'debian'|'ubuntu')
+			sudo apt-get install --no-install-recommends --yes "$@" ;;
+
+		*) error 'unexpected system:' "${OS[distribution]}"
+	esac
 }
 
 install_package_repository() {
@@ -80,8 +85,8 @@ install_package_repository() {
 
 local_file() {
 	local -r target="$1" origin="$2"
-	local -r check="shasum --algorithm 256 --check"
-	local -r filesum="$(shasum --algorithm 256 "${origin}" ||:)"
+	local -r check="sha256sum --check"
+	local -r filesum="$(sha256sum "${origin}" ||:)"
 
 	# macOS cp lacks --no-target-directory
 	[[ -d "${target}" ]] && error "cp: cannot overwrite directory '${target}' with non-directory"
@@ -105,7 +110,7 @@ remote_content() {
 
 remote_file() {
 	local -r target="$1" origin="$2" sum="$3"
-	local -r check="shasum --algorithm $(( 4 * ${#sum} )) --check"
+	local -r check="sha$(( 4 * ${#sum} ))sum --check"
 	local -r filesum="$sum  $target"
 
 	if [ ! -f "$target" ] || ! $check <<< "$filesum"; then
@@ -145,7 +150,7 @@ if [ "${OS[kernel]}" = 'Darwin' ]; then
 	OS[distribution]='macOS'
 	OS[processors]="$(getconf _NPROCESSORS_ONLN)"
 elif [ -r /etc/os-release ]; then
-	OS[codename]="$(. /etc/os-release && echo "${VERSION_CODENAME}")"
+	OS[codename]="$(. /etc/os-release && echo "${VERSION_CODENAME:-}")"
 	OS[distribution]="$(. /etc/os-release && echo "${ID}")"
 	OS[processors]="$(nproc)"
 else
