@@ -1,0 +1,6 @@
+# vim: set filetype=sshdconfig tabstop=2 :
+# [:Man sshd_config]
+
+# Allow remote terminals to indicate what colors they support.
+# - https://github.com/termstandard/colors
+AcceptEnv COLORTERM

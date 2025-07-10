@@ -1,6 +1,10 @@
 # vim: set filetype=sshconfig tabstop=2 :
 # [:Man ssh_config]
 
+# Indicate to remote tools what colors the local terminal supports.
+# - https://github.com/termstandard/colors
+SendEnv COLORTERM
+
 Host *.github.com github.com
 	GSSAPIAuthentication no
 	IdentityFile ~/.ssh/id_github
