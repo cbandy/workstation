@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 . share/functions.sh
+: "${OS[distribution]:?}"
 
 shopt -s -o errexit nounset
 export PATH="${HOME}/.local/bin:${PATH}"
@@ -41,6 +43,23 @@ then
 		sudo tee -a /etc/libvirt/qemu.conf <<< "${expected}"
 		sudo systemctl restart libvirtd
 	fi
+
+# minikube works on RHEL with rootless Podman (with some adjustments)
+# https://minikube.sigs.k8s.io/docs/drivers/podman
+elif [[ "${OS[distribution]}" == 'rhel' ]]; then
+	silent minikube config set driver podman
+	silent minikube config set rootless true
+
+	# https://rootlesscontaine.rs/getting-started/common/cgroup2#enabling-cpu-cpuset-and-io-delegation
+	controllers=$(< "/sys/fs/cgroup/user.slice/user-$(id -u ||:).slice/user@"*.service/cgroup.controllers)
+
+	if [[ "${controllers}" != *'cpu '* || "${controllers}" != *'cpuset '* ]]; then
+		sudo mkdir -p /etc/systemd/system/user@.service.d
+		sudo cp files/kubernetes/systemd.conf /etc/systemd/system/user@.service.d/delegate.conf
+		sudo systemctl daemon-reload
+	fi
+
+	echo Use "'--container-runtime=containerd'" when starting minikube clusters
 fi
 
 current=$(maybe kubecolor --kubecolor-version ||:)
