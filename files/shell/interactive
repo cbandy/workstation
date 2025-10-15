@@ -63,7 +63,3 @@ fi
 alias ag='rg --smart-case'
 alias ka='kubectl apply --server-side'
 alias ybat='bat --language yaml'
-
-for f in chruby/chruby.sh chruby/auto.sh
-do [ -r "${HOME}/.local/share/${f}" ] && . "${HOME}/.local/share/${f}"
-done

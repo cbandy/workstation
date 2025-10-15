@@ -4,9 +4,11 @@
 : "${OS[distribution]:?}"
 
 shopt -s -o errexit nounset
-export PATH="${HOME}/.local/bin:${PATH}"
+PATH="${HOME}/.local/bin:${PATH}"
 
-mkdir -p "${HOME}/.config" "${HOME}/.local/bin"
+mkdir -p "${HOME}/.config/direnv" "${HOME}/.local/bin"
+
+local_file "${HOME}/.config/direnv/direnvrc" 'files/direnv/direnvrc'
 
 local_file "${HOME}/.config/interactive" 'files/shell/interactive'
 local_file "${HOME}/.profile"            'files/shell/profile'
@@ -27,7 +29,7 @@ silent command -v tree   || packages+=('tree')
 silent command -v zip    || packages+=('zip')
 
 case "${OS[distribution]}" in
-	'debian'|'macOS'|'ubuntu')
+	'debian'|'fedora'|'macOS'|'ubuntu')
 		silent command -v direnv || packages+=('direnv') ;; # https://direnv.net → https://github.com/direnv/direnv
 	*) ;;
 esac

@@ -1,0 +1,44 @@
+# https://direnv.net
+# shellcheck shell=bash
+#
+# ~/.config/direnv/direnvrc: Bash code loaded before every .envrc.
+
+# https://direnv.net/docs/ruby.html
+use_ruby() {
+	local version
+	case "${1-}" in
+		'.ruby-version') read -r version < '.ruby-version' || return ;;
+		'') read -r version < '.ruby-version' ||: ;;
+		*) version="${1-}"
+	esac
+
+	# search for an exact match or longest partial match.
+	# glob results are sorted, and longer numbers are often larger.
+	# NOTE: this not a thorough version comparison.
+	#
+	# https://github.com/postmodern/ruby-install
+	local dir match
+	for dir in "${RUBY_INSTALL_RUBIES_DIR:-${HOME}/.rubies}"/*; do
+		case "${dir##*/}" in
+			"${version}") match="${dir}" && break ;;
+			*"${version}"*) [[ "${#dir}" -ge "${#match}" ]] && match="${dir}" ;;
+			*)
+		esac
+	done
+
+	unset error
+	load_prefix "${match:-${error:?Ruby ${version} not installed}}"
+
+	# NOTE: layout_ruby included with direnv caches gems per project.
+
+	# https://bundler.io/man/bundle-config.1.html
+	BUNDLE_BIN="$(direnv_layout_dir)/bin"
+	export BUNDLE_BIN
+	PATH_add "${BUNDLE_BIN}"
+
+	# isolate gems by Ruby engine and version
+	# https://guides.rubygems.org/command-reference
+	GEM_HOME="${HOME?}/.gem/${match##*/}"
+	export GEM_HOME
+	PATH_add "${GEM_HOME}/bin"
+}
