@@ -11,7 +11,7 @@ PATH=$(IFS=: && set -- \
 "${HOME}/.cargo/bin" \
 "${HOME}/.local/go/bin:${HOME}/go/bin" \
 "${HOME}/.local/node/bin" \
-"${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:${PATH}" \
+"${HOME}/.pyenv/shims:${HOME}/.pyenv/bin" \
 "${HOME}/.local/bin:${HOME}/.local/homebrew/bin" \
 "${PATH}" && echo "$*")
 
