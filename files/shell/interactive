@@ -40,6 +40,20 @@ then
 	fi
 fi
 
+case "$(grep -m1 '^model name' /proc/cpuinfo)" in
+	# 13th Intel Core i5-1335U reports 12 cores and 12 sockets but is really 2P, 8E, 12T
+	# https://www.intel.com/content/www/us/en/products/sku/232153/-/specifications.html
+	*'i5-1335U')
+		# https://pkg.go.dev/runtime#GOMAXPROCS
+		export "GOMAXPROCS=${GOMAXPROCS:-2}"
+
+		# https://www.gnu.org/software/coreutils/manual/html_node/nproc-invocation.html
+		export "OMP_NUM_THREADS=${OMP_NUM_THREADS:-2}"
+		export "OMP_THREAD_LIMIT=${OMP_THREAD_LIMIT:-2}"
+		;;
+	*)
+esac
+
 # The Crostini terminal supports truecolor but does not export COLORTERM.
 # https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
 if [ -n "$(pgrep -f 'google/cros-containers' ||:)" ]
