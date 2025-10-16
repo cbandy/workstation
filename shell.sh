@@ -35,18 +35,20 @@ esac
 [[ "${#packages[@]}" -eq 0 ]] || install_packages "${packages[@]}"
 
 current=$(maybe shellcheck --version ||:)
-version='0.10.0'
+version='0.11.0'
 
 case "${current}" in *"version: ${version}"*) :;; *)
 	case "${OS[distribution]}" in
 		'fedora'|'macOS'|'rhel') install_packages 'shellcheck' ;;
 		*)
 			build="${OS[kernel],,}.${OS[machine]}"
+			project='https://github.com/koalaman/shellcheck'
+
 			case "${build}" in
-				'linux.x86_64') checksum='6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87' ;;
+				'linux.aarch64') checksum='12b331c1d2db6b9eb13cfca64306b1b157a86eb69db83023e261eaa7e7c14588' ;;
+				'linux.x86_64')  checksum='8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198' ;;
 				*) error "unexpected: ${build}" ;;
 			esac
-			project='https://github.com/koalaman/shellcheck'
 
 			remote_file "/tmp/shellcheck-${version}.tar" \
 				"${project}/releases/download/v${version}/shellcheck-v${version}.${build}.tar.xz" \
