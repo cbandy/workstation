@@ -7,7 +7,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 read -r _ current _ <<< "$(maybe nvim --version ||:)"
-version='0.11.2'
+version='0.11.5'
 
 if [[ "${current}" == "v${version}" ]]; then
 	:
@@ -19,8 +19,8 @@ else
 	project='https://github.com/neovim/neovim'
 	build="${OS[kernel],,}-${OS[machine]}"
 	case "${build}" in
-		'linux-arm64')  checksum='a1b4206d8f8065a6c92a49f1af2050dbc212335435fee2058d2ec5387f2b551e' ;;
-		'linux-x86_64') checksum='c7c365fdf651f058b2fc153d667b406ac39ca674a54aa9f799544bc8c28dd898' ;;
+		'linux-arm64')  checksum='d0ecda5d55f9d3fade97bb0403b39b437f0ecd5e0fd1a45823f76d15fcf14df1' ;;
+		'linux-x86_64') checksum='7a4adf657f0b775ee4f4de6c94353b4a0548a3c6b31049a20538e05d4eea411a' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
