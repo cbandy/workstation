@@ -1,14 +1,25 @@
+#!/dev/null/bash
 # https://direnv.net
-# shellcheck shell=bash
 #
 # ~/.config/direnv/direnvrc: Bash code loaded before every .envrc.
 
 # https://direnv.net/docs/ruby.html
 use_ruby() {
+	local method
+	if [[ -n "${1-}" ]]
+	then method="${1?}"
+	elif [[ -r '.ruby-version' ]]
+	then method='.ruby-version'
+	elif [[ -r 'Gemfile' ]]
+	then method='Gemfile'
+		command -v bundle || use_ruby 'any' || return
+	fi
+
 	local version
-	case "${1-}" in
+	case "${method}" in
 		'.ruby-version') read -r version < '.ruby-version' || return ;;
-		'') read -r version < '.ruby-version' ||: ;;
+		'Gemfile') read -r _ version <<< "$(bundle platform --ruby ||:)" || return ;;
+		'any') version='' ;;
 		*) version="${1-}"
 	esac
 
