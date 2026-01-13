@@ -32,6 +32,8 @@
 	ff = only
 [push]
 	default = simple
+[url "git@github.com:cbandy"]
+	insteadOf = https://github.com/cbandy
 [user]
 	name = Chris Bandy
 	email = bandy.chris@gmail.com
