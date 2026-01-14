@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/dev/null/bash
+# shellcheck disable=SC1091
 
 error() {
 	>&2 echo "$@"
@@ -143,21 +144,17 @@ uninstall_packages() {
 declare -A OS
 OS[kernel]="$(uname -s)"
 OS[machine]="$(uname -m)"
+OS[processors]="$(getconf _NPROCESSORS_ONLN)"
 
-if [ "${OS[kernel]}" = 'Darwin' ]; then
+if [[ "${OS[kernel]}" == 'Darwin' ]]; then
 	OS[codename]="$(sw_vers -productVersion)"
 	OS[codename]="${OS[codename]%.*}"
 	OS[distribution]='macOS'
-	OS[processors]="$(getconf _NPROCESSORS_ONLN)"
-elif [ -r /etc/os-release ]; then
+elif [[ -r /etc/os-release ]]; then
 	OS[codename]="$(. /etc/os-release && echo "${VERSION_CODENAME:-}")"
-	OS[distribution]="$(. /etc/os-release && echo "${ID}")"
-	OS[processors]="$(nproc)"
+	OS[distribution]="$(. /etc/os-release && echo "${ID:?}")"
 else
-	silent command -v 'lsb_release' || install_packages 'lsb-release'
-	OS[codename]="$(lsb_release --codename --short)"
-	OS[distribution]="$(lsb_release --id --short)"
-	OS[processors]="$(nproc)"
+	>&2 echo "WARNING: Unable to find an OS[distribution]"
 fi
 
 # shellcheck disable=SC2034

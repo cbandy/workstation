@@ -5,7 +5,7 @@ export EDITOR='nvim'
 export LANG='en_US.UTF-8'
 export LESS='-R'
 
-# Local fameworks are usually newer than those installed by package managers; search them first.
+# Local frameworks are usually newer than those installed by package managers; search them first.
 # NOTE: "$*" expands arguments to a single word separated by IFS.
 PATH=$(IFS=: && set -- \
 "${HOME}/.cargo/bin" \
