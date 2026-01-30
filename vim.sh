@@ -7,7 +7,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 read -r _ current _ <<< "$(maybe nvim --version ||:)"
-version='0.11.5'
+version='0.11.6'
 
 if [[ "${current}" == "v${version}" ]]; then
 	:
@@ -19,8 +19,8 @@ else
 	project='https://github.com/neovim/neovim'
 	build="${OS[kernel],,}-${OS[machine]}"
 	case "${build}" in
-		'linux-arm64')  checksum='d0ecda5d55f9d3fade97bb0403b39b437f0ecd5e0fd1a45823f76d15fcf14df1' ;;
-		'linux-x86_64') checksum='7a4adf657f0b775ee4f4de6c94353b4a0548a3c6b31049a20538e05d4eea411a' ;;
+		'linux-arm64')  checksum='sha256:ed34c4d8eb79eb2d111987f57cce9ba87c31a97524d602752ce1b0cd35e6a554' ;;
+		'linux-x86_64') checksum='sha256:77dd16d86e6549a0bbbbfbc18636d434ffe5b0ac8b9854a7669e35cc4b93dda0' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
@@ -62,7 +62,7 @@ else
 fi
 
 current=$(maybe lua-language-server --version ||:)
-version='3.14.0'
+version='3.17.1'
 
 if [[ "${current}" == "${version}" ]]; then
 	:
@@ -76,8 +76,8 @@ else
 
 	build="${OS[kernel],,}-${OS[machine]/86_/}${build}"
 	case "${build}" in
-		'linux-arm64') checksum='0e145ec52647c92cd19469687d7e34f16e9212a81b573bddfe435976cfd5d4d9' ;;
-		'linux-x64')   checksum='cec69b78b147f988525ed797961f0a9e4a2ee2d62c4558acecf1073b02048ea7' ;;
+		'linux-arm64') checksum='sha256:680285a36d8cf7b17ca4be7a2f9c93643ebd8daec0b7425a6b7a02d003f3da81' ;;
+		'linux-x64')   checksum='sha256:248b0858a0afc8233f2535e89b648398b2202cb96cf51ce187e3263923dd0223' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
@@ -92,8 +92,9 @@ else
 		mv '/tmp/luals' "${HOME}/.local/luals"
 fi
 
+# Versions 0.26 and newer are not compatible with Debian bookworm.
 read -r _ current _ <<< "$(maybe tree-sitter --version ||:)"
-version='0.25.6'
+version='0.25.10'
 
 if [[ "${current}" == "${version}" ]]; then
 	:
@@ -103,8 +104,8 @@ else
 	project='https://github.com/tree-sitter/tree-sitter'
 	build="${OS[kernel],,}-${OS[machine]/86_/}"
 	case "${build}" in
-		'linux-arm64') checksum='daf6f8e5b2f87195370f28dd9936a168920831fc2a5e0987e0bedd9999b6e2b8' ;;
-		'linux-x64')   checksum='c300ea9f2ca368186ce1308793aaad650c3f6db78225257cbb5be961aeff4038' ;;
+		'linux-arm64') checksum='sha256:07fbff8ae0eeb0d3e496e14fc1a30dcc730cc2c97d70e601e5357f2e51958af5' ;;
+		'linux-x64')   checksum='sha256:8283ddba69253c698f6e987ba0e2f9285e079c8db4d36ebe1394b5bb3a0ebdfd' ;;
 		*) error "missing checksum for ${build}" ;;
 	esac
 
