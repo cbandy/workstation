@@ -110,12 +110,13 @@ remote_content() {
 }
 
 remote_file() {
-	local -r target="$1" origin="$2" sum="$3"
+	# TODO: require a prefix on checksums
+	local -r target="$1" origin="$2" sum="${3#sha256:*}"
 	local -r check="sha$(( 4 * ${#sum} ))sum --check"
-	local -r filesum="$sum  $target"
+	local -r filesum="${sum}  ${target}"
 
-	if [ ! -f "$target" ] || ! $check <<< "$filesum"; then
-		curl --location --output "$target" "$origin" && $check <<< "$filesum"
+	if [[ ! -f "${target}" ]] || ! ${check} <<< "${filesum}"; then
+		curl --location --output "${target}" "${origin}" && ${check} <<< "${filesum}"
 	fi
 }
 
