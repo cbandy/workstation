@@ -15,9 +15,8 @@
 	oldHighlight = bold ul
 	oldReset = nobold noul
 [commit]
-	template = ~/.gitmsg.txt
+	template = ~/.config/git/commit-template.txt
 [core]
-	excludesfile = ~/.gitignore
 	ignorecase = false
 	pager = delta
 [delta]

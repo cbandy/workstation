@@ -4,11 +4,12 @@
 : "${OS[distribution]:?}"
 
 shopt -s -o errexit nounset
-export PATH="${HOME}/.local/bin:${PATH}"
+PATH="${HOME}/.local/bin:${PATH}"
 
-local_file "${HOME}/.gitconfig"  'files/git/gitconfig'
-local_file "${HOME}/.gitignore"  'files/git/gitignore'
-local_file "${HOME}/.gitmsg.txt" 'files/git/gitmsg.txt'
+mkdir -p "${HOME}/.config/git"
+local_file "${HOME}/.config/git/config" 'files/git/config'
+local_file "${HOME}/.config/git/ignore" 'files/git/ignore'
+local_file "${HOME}/.config/git/commit-template.txt" 'files/git/commit-template.txt'
 
 silent command -v git || install_packages 'git'
 
@@ -27,7 +28,7 @@ else
 
 			remote_file '/tmp/delta.deb' \
 				"${project}/releases/download/${version}/git-delta_${version}_${build}.deb" \
-				'1658c7b61825d411b50734f34016101309e4b6e7f5799944cf8e4ac542cebd7f'
+				'sha256:1658c7b61825d411b50734f34016101309e4b6e7f5799944cf8e4ac542cebd7f'
 			sudo dpkg --install '/tmp/delta.deb'
 			;;
 		*) error "missing package for ${OS[distribution]}" ;;
