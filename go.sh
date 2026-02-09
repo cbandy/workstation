@@ -5,7 +5,7 @@ shopt -s -o errexit nounset
 PATH="${HOME}/.local/go/bin:${PATH}"
 
 read -r _ _ current _ <<< "$(maybe go version ||:)"
-version='1.24.8'
+version='1.25.7'
 
 if [[ "${current}" == "go${version}" ]]
 then :
@@ -15,9 +15,9 @@ else
 		'debian'|'macOS'|'ubuntu')
 			build="${OS[kernel],,}-${OS[machine]/x86_/amd}"
 			case "${build}" in
-				'darwin-amd64') checksum='ecb3cecb1e0bcfb24e50039701f9505b09744cc4730a8b9fc512b0a3b47cf232' ;;
-				'darwin-arm64') checksum='0db27ff8c3e35fd93ccf9d31dd88a0f9c6454e8d9b30c28bd88a70b930cc4240' ;;
-				'linux-amd64')  checksum='6842c516ca66c89d648a7f1dbe28e28c47b61b59f8f06633eb2ceb1188e9251d' ;;
+				'darwin-amd64') checksum='sha256:bf5050a2152f4053837b886e8d9640c829dbacbc3370f913351eb0904cb706f5' ;;
+				'darwin-arm64') checksum='sha256:ff18369ffad05c57d5bed888b660b31385f3c913670a83ef557cdfd98ea9ae1b' ;;
+				'linux-amd64')  checksum='sha256:12e6d6a191091ae27dc31f6efc630e3a3b8ba409baf3573d955b196fdf086005' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
