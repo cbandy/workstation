@@ -148,12 +148,13 @@ OS[machine]="$(uname -m)"
 OS[processors]="$(getconf _NPROCESSORS_ONLN)"
 
 if [[ "${OS[kernel]}" == 'Darwin' ]]; then
-	OS[codename]="$(sw_vers -productVersion)"
-	OS[codename]="${OS[codename]%.*}"
+	OS[version]="$(sw_vers -productVersion)"
+	OS[codename]="${OS[version]%.*}"
 	OS[distribution]='macOS'
 elif [[ -r /etc/os-release ]]; then
-	OS[codename]="$(. /etc/os-release && echo "${VERSION_CODENAME:-}")"
-	OS[distribution]="$(. /etc/os-release && echo "${ID:?}")"
+	OS[version]=$(. /etc/os-release && echo "${VERSION_ID:?}")
+	OS[codename]=$(. /etc/os-release && echo "${VERSION_CODENAME:-}")
+	OS[distribution]=$(. /etc/os-release && echo "${ID:?}")
 else
 	>&2 echo "WARNING: Unable to find an OS[distribution]"
 fi
