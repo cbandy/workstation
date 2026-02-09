@@ -18,6 +18,7 @@ else
 
 	project='https://github.com/neovim/neovim'
 	build="${OS[kernel],,}-${OS[machine]}"
+	build="${build/aarch/arm}"
 	case "${build}" in
 		'linux-arm64')  checksum='sha256:ed34c4d8eb79eb2d111987f57cce9ba87c31a97524d602752ce1b0cd35e6a554' ;;
 		'linux-x86_64') checksum='sha256:77dd16d86e6549a0bbbbfbc18636d434ffe5b0ac8b9854a7669e35cc4b93dda0' ;;
@@ -41,6 +42,7 @@ elif [[ "${OS[distribution]}" == 'macOS' ]]; then
 else
 	project='https://github.com/ltex-plus/ltex-ls-plus'
 	build="${OS[kernel],,}-${OS[machine]/x86_/x}"
+	build="${build/86_/}"
 	case "${build}" in
 		'linux-x64') checksum='8c517552890c8dc2341d97ff1703ba774c1bdb2c5abf159af6fe2e4550e0ad2a' ;;
 		*) error "missing checksum for ${build}" ;;
@@ -74,7 +76,9 @@ else
 	[[ "${build}" == *musl* ]] && build='-musl'
 	[[ "${build}" != *musl* ]] && build=''
 
-	build="${OS[kernel],,}-${OS[machine]/86_/}${build}"
+	build="${OS[kernel],,}-${OS[machine]}${build}"
+	build="${build/aarch/arm}"
+	build="${build/86_/}"
 	case "${build}" in
 		'linux-arm64') checksum='sha256:680285a36d8cf7b17ca4be7a2f9c93643ebd8daec0b7425a6b7a02d003f3da81' ;;
 		'linux-x64')   checksum='sha256:248b0858a0afc8233f2535e89b648398b2202cb96cf51ce187e3263923dd0223' ;;
@@ -92,9 +96,11 @@ else
 		mv '/tmp/luals' "${HOME}/.local/luals"
 fi
 
-# Versions 0.26 and newer are not compatible with Debian bookworm.
 read -r _ current _ <<< "$(maybe tree-sitter --version ||:)"
-version='0.25.10'
+version='0.26.5'
+
+# Versions 0.26 and newer are not compatible with Debian bookworm.
+[[ "${OS[distribution]}" == 'debian' && "${OS[version]}" -le 12 ]] && version='0.25.10'
 
 if [[ "${current}" == "${version}" ]]; then
 	:
@@ -102,12 +108,19 @@ elif [[ "${OS[distribution]}" == 'macOS' ]]; then
 	install_packages 'tree-sitter'
 else
 	project='https://github.com/tree-sitter/tree-sitter'
-	build="${OS[kernel],,}-${OS[machine]/86_/}"
-	case "${build}" in
-		'linux-arm64') checksum='sha256:07fbff8ae0eeb0d3e496e14fc1a30dcc730cc2c97d70e601e5357f2e51958af5' ;;
-		'linux-x64')   checksum='sha256:8283ddba69253c698f6e987ba0e2f9285e079c8db4d36ebe1394b5bb3a0ebdfd' ;;
-		*) error "missing checksum for ${build}" ;;
-	esac
+	build="${OS[kernel],,}-${OS[machine]}"
+	build="${build/aarch/arm}"
+	build="${build/86_/}"
+
+	if [[ "${version}" == '0.25.10' ]]; then
+		case "${build}" in
+			'linux-arm64') checksum='sha256:07fbff8ae0eeb0d3e496e14fc1a30dcc730cc2c97d70e601e5357f2e51958af5' ;;
+			'linux-x64')   checksum='sha256:8283ddba69253c698f6e987ba0e2f9285e079c8db4d36ebe1394b5bb3a0ebdfd' ;;
+			*) error "missing checksum for ${build}" ;;
+		esac
+	else
+		error "missing checksum for ${OS[*]}"
+	fi
 
 	remote_file "/tmp/treesitter-${version}.gz" \
 		"${project}/releases/download/v${version}/tree-sitter-${build}.gz" "${checksum}"
