@@ -6,6 +6,23 @@ error() {
 	return 1
 }
 
+file_checksum() {
+	local -r target="$1" algorithm="${2:-sha256}"
+	local filesum
+
+	case "${algorithm}" in
+		'md5'|'sha1'|'sha256'|'sha384'|'sha512') ;;
+		*) error "unexpected algorithm: ${algorithm}" || return ;;
+	esac
+
+	case "${OS[distribution]}" in
+		'macOS') filesum=$("${algorithm}" "${target}") || return ;;
+		*) filesum=$(cksum -a "${algorithm}" "${target}") || return ;;
+	esac
+
+	echo "${algorithm}:${filesum##* }"
+}
+
 file_contains() {
 	local -r target="$1"
 
@@ -14,12 +31,18 @@ file_contains() {
 
 file_content() {
 	local -r target="$1" content="$( < /dev/stdin )"
-	local -r check="shasum --algorithm 256 --check"
-	local -r filesum="$( shasum --algorithm 256 <<< "$content" )"
+	local actual checksum
 
-	if [ ! -f "$target" ] || ! $check <<< "${filesum/%-/$target}"; then
-		cat > "$target" <<< "$content"
+	if [[ -f "${target}" ]]
+	then
+		actual=$(file_checksum "${target}") || return
+		checksum=$(file_checksum /dev/stdin <<< "${content}") || return
+
+		[[ "${actual}" == "${checksum}" ]] && return
 	fi
+
+	echo "replacing ${target}"
+	cat > "${target}" <<< "${content}"
 }
 
 install_cask() {
@@ -41,6 +64,7 @@ install_file() {
 	# macOS install lacks -D
 	mkdir -p "${target%/*}"
 
+	echo "installing ${target}"
 	install "${origin}" "${target}"
 }
 
@@ -86,15 +110,21 @@ install_package_repository() {
 
 local_file() {
 	local -r target="$1" origin="$2"
-	local -r check="sha256sum --check"
-	local -r filesum="$(sha256sum "${origin}" ||:)"
+	local actual checksum
 
 	# macOS cp lacks --no-target-directory
 	[[ -d "${target}" ]] && error "cp: cannot overwrite directory '${target}' with non-directory"
 
-	if [[ ! -f "${target}" ]] || ! ${check} <<< "${filesum/%${origin}/${target}}"; then
-		cp -p "${origin}" "${target}" && ${check} <<< "${filesum/%${origin}/${target}}"
+	if [[ -f "${target}" ]]
+	then
+		actual=$(file_checksum "${target}") || return
+		checksum=$(file_checksum "${origin}") || return
+
+		[[ "${actual}" == "${checksum}" ]] && return
 	fi
+
+	echo "replacing ${target}"
+	cp -p "${origin}" "${target}"
 }
 
 maybe() {
@@ -102,21 +132,35 @@ maybe() {
 }
 
 remote_content() {
-	local content checksum
-	content=$( curl --fail --location --show-error --silent "$1" ) || return
-	checksum=$( shasum --algorithm "$(( 4 * ${#2} ))" <<< "${content}" ) || return
-	[[ "${checksum}" == "${2}  -" ]] || return
+	local -r origin="$1" checksum="$2" algorithm="${2%%:*}"
+	local content actual
+
+	content=$(curl --fail --location --show-error --silent "${origin}") || return
+	actual=$(file_checksum /dev/stdin "${algorithm}" <<< "${content}") || return
+	[[ "${actual}" == "${checksum}" ]] || return
+
 	echo "${content}"
 }
 
 remote_file() {
-	# TODO: require a prefix on checksums
-	local -r target="$1" origin="$2" sum="${3#sha256:*}"
-	local -r check="sha$(( 4 * ${#sum} ))sum --check"
-	local -r filesum="${sum}  ${target}"
+	local -r target="$1" origin="$2" checksum="$3" algorithm="${3%%:*}"
+	local actual
 
-	if [[ ! -f "${target}" ]] || ! ${check} <<< "${filesum}"; then
-		curl --location --output "${target}" "${origin}" && ${check} <<< "${filesum}"
+	if [[ -f "${target}" ]]
+	then
+		actual=$(file_checksum "${target}" "${algorithm}") || return
+
+		[[ "${actual}" == "${checksum}" ]] && return
+	fi
+
+	echo "downloading ${target}"
+	curl --location --output "${target}" "${origin}" || return
+	actual=$(file_checksum "${target}" "${algorithm}") || return
+
+	if [[ "${actual}" != "${checksum}" ]]
+	then
+		error "expected: ${checksum}"
+		error "actual:   ${actual}"
 	fi
 }
 
