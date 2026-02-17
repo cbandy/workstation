@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1091
 . share/functions.sh
 : "${OS[distribution]:?}"
 
@@ -13,12 +12,10 @@ local_file "${HOME}/.config/git/commit-template.txt" 'files/git/commit-template.
 
 silent command -v git || install_packages 'git'
 
-read -r _ current _ <<< "$(maybe delta --version ||:)"
+current=$(maybe delta --version ||:)
 version='0.18.2'
 
-if [[ "${current}" == "${version}" ]]
-then :
-else
+case "${current}" in *"${version}") :;; *)
 	# https://dandavison.github.io/delta/installation.html
 	case "${OS[distribution]}" in
 		'fedora'|'macOS'|'rhel') install_packages 'git-delta' ;;
@@ -33,4 +30,4 @@ else
 			;;
 		*) error "missing package for ${OS[distribution]}" ;;
 	esac
-fi
+esac

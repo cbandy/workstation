@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 . share/functions.sh
+: "${OS[distribution]:?}"
 
 shopt -s -o errexit nounset
 PATH="${HOME}/.local/go/bin:${PATH}"
 
-read -r _ _ current _ <<< "$(maybe go version ||:)"
+current=$(maybe go version ||:)
 version='1.25.7'
 
-if [[ "${current}" == "go${version}" ]]
-then :
-else
+case "${current}" in *"go${version} ${OS[kernel],,}"*) :;; *)
 	case "${OS[distribution]}" in
 		'fedora'|'rhel') install_packages 'golang-bin' ;;
 		'debian'|'macOS'|'ubuntu')
-			build="${OS[kernel],,}-${OS[machine]/x86_/amd}"
+			# https://go.dev/dl
+			build="${OS[kernel],,}-${OS[machine]}"
+			build="${build/x86_/amd}"
+
 			case "${build}" in
 				'darwin-amd64') checksum='sha256:bf5050a2152f4053837b886e8d9640c829dbacbc3370f913351eb0904cb706f5' ;;
 				'darwin-arm64') checksum='sha256:ff18369ffad05c57d5bed888b660b31385f3c913670a83ef557cdfd98ea9ae1b' ;;
@@ -30,7 +32,7 @@ else
 			;;
 		*) error "missing package for ${OS[distribution]}" ;;
 	esac
-fi
+esac
 
 go env -w GOTOOLCHAIN='auto'
 
