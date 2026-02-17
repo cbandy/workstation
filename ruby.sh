@@ -8,19 +8,18 @@ PATH="${HOME}/.local/bin:${PATH}"
 local_file "${HOME}/.gemrc" "files/ruby/gemrc"
 local_file "${HOME}/.rspec" "files/ruby/rspec"
 
-read -r _ _ current _ <<< "$(maybe ruby-install --version ||:)"
-version='0.10.1'
+current=$(maybe ruby-install --version ||:)
+version='0.10.2'
 
-if [[ "${current}" == "${version}" ]]
-then :
-else
-	checksum='af09889b55865fc2a04e337fb4fe5632e365c0dce871556c22dfee7059c47a33'
+case "${current}" in *" ${version}") :;; *)
+	# https://github.com/postmodern/ruby-install#install
 	project='https://github.com/postmodern/ruby-install'
+	checksum='sha256:65836158b8026992b2e96ed344f3d888112b2b105d0166ecb08ba3b4a0d91bf6'
 
-	remote_file "/tmp/ruby-install-${version}.tgz" "${project}/archive/v${version}.tar.gz" "${checksum}"
-	tar  --file "/tmp/ruby-install-${version}.tgz" --extract --directory '/tmp'
+	remote_file "/tmp/ruby-install-${version}.tar" "${project}/releases/download/v${version}/ruby-install-${version}.tar.gz" "${checksum}"
+	tar  --file "/tmp/ruby-install-${version}.tar" --extract --directory '/tmp'
 	make --directory "/tmp/ruby-install-${version}" install PREFIX="${HOME}/.local"
-fi
+esac
 
 case "${OS[distribution]}" in
 	'rhel') sudo dnf config-manager --enable "codeready-builder-for-rhel-*-${OS[machine]}-rpms" ;;
