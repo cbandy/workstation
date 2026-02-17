@@ -16,7 +16,9 @@ mkdir -p "${HOME}/.config/homebrew"
 cp -p 'files/homebrew/brew.env' "${HOME}/.config/homebrew/brew.env"
 [[ -d "${HOME}/.homebrew" ]] || ln -s "${HOME}/.config/homebrew" "${HOME}/.homebrew"
 
-if ! command -v brew &> /dev/null; then
+if command -v brew &> /dev/null
+then brew analytics off
+else
 	case "$(uname -m)" in
 		'arm64')
 			bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -37,8 +39,6 @@ if ! command -v brew &> /dev/null; then
 	brew analytics off
 	brew update --force
 fi
-
-brew analytics off
 
 packages=(
 	'bash-completion@2'

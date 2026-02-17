@@ -40,7 +40,7 @@ then
 	fi
 fi
 
-case "$(grep -m1 '^model name' /proc/cpuinfo)" in
+[ -r /proc/cpuinfo ] && case "$(grep -m1 '^model name' /proc/cpuinfo)" in
 	# 13th Intel Core i5-1335U reports 12 cores and 12 sockets but is really 2P, 8E, 12T
 	# https://www.intel.com/content/www/us/en/products/sku/232153/-/specifications.html
 	*'i5-1335U')

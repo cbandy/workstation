@@ -20,7 +20,7 @@ use_ruby() {
 		'.ruby-version') read -r version < '.ruby-version' || return ;;
 		'Gemfile') read -r _ version <<< "$(bundle platform --ruby ||:)" || return ;;
 		'any') version='' ;;
-		*) version="${1-}"
+		*) version="${method}"
 	esac
 
 	# search for an exact match or longest partial match.
