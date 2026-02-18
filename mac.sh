@@ -12,6 +12,8 @@ PATH="${HOME}/.local/bin:${PATH}"
 # Profiles > Colors > Color Presets… > Import… > [files/themes/base16-tomorrow-night.itermcolors]
 # Profiles > Text > Font
 
+# Homebrew configuration centers around environment variables.
+# It automatically loads from a brew.env file, but it looks in $XDG_CONFIG_HOME only when $XDG_CONFIG_HOME is set.
 mkdir -p "${HOME}/.config/homebrew"
 cp -p 'files/homebrew/brew.env' "${HOME}/.config/homebrew/brew.env"
 [[ -d "${HOME}/.homebrew" ]] || ln -s "${HOME}/.config/homebrew" "${HOME}/.homebrew"
@@ -19,21 +21,15 @@ cp -p 'files/homebrew/brew.env' "${HOME}/.config/homebrew/brew.env"
 if command -v brew &> /dev/null
 then brew analytics off
 else
+	# Homebrew's prefix has changed over time; always symlink it to ~/.local/homebrew to simplify $PATH, etc.
+
+	echo "✨ Homebrew"
 	case "$(uname -m)" in
 		'arm64')
-			bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+			bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh ||:)"
 			ln -sf /opt/homebrew "${HOME}/.local/homebrew"
 			;;
-		'x86_64')
-			mkdir -p "$HOME/.local/homebrew"
-			git -C "$HOME/.local/homebrew" init -c 'init.defaultBranch=master' --quiet
-			git -C "$HOME/.local/homebrew" config --bool core.autocrlf 'false'
-			git -C "$HOME/.local/homebrew" config --bool core.symlinks 'true'
-			git -C "$HOME/.local/homebrew" remote add origin 'https://github.com/Homebrew/brew'
-			git -C "$HOME/.local/homebrew" fetch --force --tags origin 'master:refs/remotes/origin/master'
-			git -C "$HOME/.local/homebrew" reset --hard origin/master
-			ln -sf "$HOME/.local/homebrew/bin/brew" "$HOME/.local/bin/brew"
-			;;
+		*) >&2 echo "unexpected architecture: $(uname -m ||:)"; exit 1 ;;
 	esac
 
 	brew analytics off
