@@ -26,7 +26,7 @@ file_checksum() {
 file_contains() {
 	local -r target="$1"
 
-	[ -f "$target" ] && grep --silent --file /dev/stdin "$target"
+	[[ -f "${target}" ]] && grep --silent --file /dev/stdin "${target}"
 }
 
 file_content() {
@@ -41,7 +41,7 @@ file_content() {
 		[[ "${actual}" == "${checksum}" ]] && return
 	fi
 
-	echo "replacing ${target}"
+	echo "Replacing ${target}"
 	cat > "${target}" <<< "${content}"
 }
 
@@ -52,7 +52,7 @@ install_cask() {
 		set -- '--require-sha' "$@"
 	fi
 
-	brew install --cask --appdir="$HOME/Applications" "$@"
+	brew install --cask --appdir="${HOME}/Applications" "$@"
 }
 
 install_file() {
@@ -64,7 +64,7 @@ install_file() {
 	# macOS install lacks -D
 	mkdir -p "${target%/*}"
 
-	echo "installing ${target}"
+	echo "Installing ${target}"
 	install "${origin}" "${target}"
 }
 
@@ -73,14 +73,18 @@ install_packages() {
 	case "${OS[distribution]}" in
 		'macOS')
 			for package in "$@"
-			do { silent brew list "$package" && brew reinstall "$package"; } || brew install "$package"
+			do
+				if silent brew list "${package}"
+				then brew reinstall "${package}"
+				else brew install "${package}"
+				fi
 			done ;;
 		'fedora'|'rhel')
 			sudo dnf install -yq --setopt install_weak_deps=False "$@" ;;
 		'debian'|'ubuntu')
-			sudo apt-get install --no-install-recommends --yes "$@" ;;
+			sudo apt install --no-install-recommends --yes "$@" ;;
 
-		*) error 'unexpected system:' "${OS[distribution]}"
+		*) error "unexpected system: ${OS[distribution]}" ;;
 	esac
 }
 
@@ -106,7 +110,7 @@ install_package_repository() {
 	BASH
 
 	sudo rm --force /var/lib/apt/periodic/update-success-stamp
-	sudo apt-get update
+	sudo apt update
 }
 
 local_file() {
@@ -124,7 +128,7 @@ local_file() {
 		[[ "${actual}" == "${checksum}" ]] && return
 	fi
 
-	echo "replacing ${target}"
+	echo "Replacing ${target}"
 	cp -p "${origin}" "${target}"
 }
 
@@ -154,7 +158,7 @@ remote_file() {
 		[[ "${actual}" == "${checksum}" ]] && return
 	fi
 
-	echo "downloading ${target}"
+	echo "Downloading ${target}"
 	curl --location --output "${target}" "${origin}" || return
 	actual=$(file_checksum "${target}" "${algorithm}") || return
 
@@ -170,20 +174,25 @@ silent() {
 }
 
 uninstall_packages() {
-	if [ "${OS[distribution]}" = 'macOS' ]; then
-		local package
-		for package in "$@"; do
-			silent brew list "$package" || continue
-			brew uninstall "$package"
-		done
-	else
-		local index='' packages=("$@")
-		for index in "${!packages[@]}"; do
-			silent dpkg-query --status "${packages[$index]}" || unset -v 'packages[index]'
-		done
+	case "${OS[distribution]}" in
+		'macOS')
+			local package
+			for package in "$@"
+			do
+				silent brew list "${package}" || continue
+				brew uninstall "${package}"
+			done ;;
+		'debian'|'ubuntu')
+			local index='' packages=("$@")
+			for index in "${!packages[@]}"
+			do silent dpkg-query --status "${packages[${index}]}" || unset -v 'packages[index]'
+			done
 
-		[ "${#packages[@]}" -eq 0 ] || sudo apt-get purge --yes "${packages[@]}"
-	fi
+			[[ "${#packages[@]}" -eq 0 ]] && return
+			sudo apt purge --yes "${packages[@]}" ;;
+
+		*) error "unexpected system: ${OS[distribution]}" ;;
+	esac
 }
 
 
