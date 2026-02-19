@@ -12,7 +12,8 @@ use_ruby() {
 	then method='.ruby-version'
 	elif [[ -r 'Gemfile' ]]
 	then method='Gemfile'
-		command -v bundle || use_ruby 'any' || return
+		# Use a recent Ruby when Bundler is missing or too old to read this Gemfile.
+		bundle platform --ruby &> /dev/null || use_ruby 'any' || return
 	fi
 
 	local version
