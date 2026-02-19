@@ -20,7 +20,7 @@ use_ruby() {
 	case "${method}" in
 		'.ruby-version') read -r version < '.ruby-version' || return ;;
 		'Gemfile') read -r _ version <<< "$(bundle platform --ruby ||:)" || return ;;
-		'any') version='' ;;
+		'any') ;;
 		*) version="${method}"
 	esac
 
@@ -38,19 +38,21 @@ use_ruby() {
 		esac
 	done
 
-	unset error
-	load_prefix "${match:-${error:?Ruby ${version} not installed}}"
+	local error
+	load_prefix "${match:-${error:?Ruby ${version:+${version} }not installed}}"
 
 	# NOTE: layout_ruby included with direnv caches gems per project.
 
-	# https://bundler.io/man/bundle-config.1.html
-	BUNDLE_BIN="$(direnv_layout_dir)/bin"
-	export BUNDLE_BIN
-	PATH_add "${BUNDLE_BIN}"
-
-	# isolate gems by Ruby engine and version
+	# isolate gems by Ruby engine and version.
 	# https://guides.rubygems.org/command-reference
 	GEM_HOME="${HOME?}/.gem/${match##*/}"
 	export GEM_HOME
 	PATH_add "${GEM_HOME}/bin"
+
+	# install gems to $GEM_HOME and symlink executables locally.
+	# https://bundler.io/man/bundle-config.1.html
+	BUNDLE_BIN="$(direnv_layout_dir)/bin"
+	export BUNDLE_BIN
+	export BUNDLE_PATH__SYSTEM=true
+	PATH_add "${BUNDLE_BIN}"
 }

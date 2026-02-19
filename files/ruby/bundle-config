@@ -1,0 +1,7 @@
+---
+BUNDLE_SIMULATE_VERSION: "4"
+
+# BUNDLE_JOBS defaults to _SC_NPROCESSORS_ONLN
+# [Bundler::Installer.installation_parallelization]
+# [Gem::Installer.build_jobs]: https://docs.ruby-lang.org/en/4.0/Gem/Installer.html#method-i-build_jobs
+# [Etc.nprocessors]: https://docs.ruby-lang.org/en/4.0/Etc.html#method-c-nprocessors

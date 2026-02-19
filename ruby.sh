@@ -5,6 +5,8 @@
 shopt -s -o errexit nounset
 PATH="${HOME}/.local/bin:${PATH}"
 
+mkdir "${HOME}/.bundle"
+local_file "${HOME}/.bundle/config" "files/ruby/bundle-config"
 local_file "${HOME}/.gemrc" "files/ruby/gemrc"
 local_file "${HOME}/.rspec" "files/ruby/rspec"
 
