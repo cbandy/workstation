@@ -99,6 +99,7 @@ install_package_repository() {
 	)
 
 	sudo "${BASH}" -esu -- "${name%%/*}" "${content}" "${key_content}" <<-BASH
+		$(declare -f file_checksum)
 		$(declare -f file_content)
 		file_content "/etc/apt/sources.list.d/\${1}.sources" <<< \
 			"\${2}"\$'\nSigned-By:\n'"\${3}"
