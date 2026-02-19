@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/dev/null/bash
 # shellcheck source=/dev/null
 #
 # ~/.bashrc: executed by interactive bash and bash started by sshd.
@@ -6,8 +6,7 @@
 # only run this file when deliberately interactive (not sshd).
 case $- in *i*) ;; *) return ;; esac
 
-if test "${SHELL}" != "${HOME}/.local/bin/bash" &&
-	test -x "${HOME}/.local/bin/bash"
+if [[ "${SHELL}" != "${HOME}/.local/bin/bash" && -x "${HOME}/.local/bin/bash" ]]
 then
 	export SHELL="${HOME}/.local/bin/bash"
 	exec "${SHELL}"

@@ -49,7 +49,7 @@ esac
 current=$(maybe shellcheck --version ||:)
 version='0.11.0'
 
-case "${current}" in *"version: ${version}"*) :;; *)
+case "${current}" in *"version: ${version}"*) ;; *)
 	case "${OS[distribution]}" in
 		'fedora'|'macOS') install_packages 'shellcheck' ;;
 		*)
@@ -74,7 +74,7 @@ esac
 current=$(maybe fd --version ||:)
 version='10.3.0'
 
-case "${current}" in "fd ${version}") :;; *)
+case "${current}" in "fd ${version}") ;; *)
 	case "${OS[distribution]}" in
 		'macOS') install_packages 'fd' ;;
 		*)
@@ -102,7 +102,7 @@ esac
 current=$(maybe fzf --version ||:)
 version='0.67.0'
 
-case "${current}" in "${version} "*) :;; *)
+case "${current}" in "${version} "*) ;; *)
 	case "${OS[distribution]}" in
 		'macOS') install_packages 'fzf' ;;
 		*)

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/dev/null/bash
 # shellcheck source=/dev/null
 #
 # ~/.bash_profile: executed by bash as a login shell.

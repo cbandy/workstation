@@ -8,7 +8,7 @@ PATH="${HOME}/.local/go/bin:${PATH}"
 current=$(maybe go version ||:)
 version='1.25.7'
 
-case "${current}" in *"go${version} ${OS[kernel],,}"*) :;; *)
+case "${current}" in *"go${version} ${OS[kernel],,}"*) ;; *)
 	case "${OS[distribution]}" in
 		'fedora'|'rhel') install_packages 'golang-bin' ;;
 		'debian'|'macOS'|'ubuntu')

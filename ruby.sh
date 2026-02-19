@@ -11,7 +11,7 @@ local_file "${HOME}/.rspec" "files/ruby/rspec"
 current=$(maybe ruby-install --version ||:)
 version='0.10.2'
 
-case "${current}" in *" ${version}") :;; *)
+case "${current}" in *" ${version}") ;; *)
 	# https://github.com/postmodern/ruby-install#install
 	project='https://github.com/postmodern/ruby-install'
 	checksum='sha256:65836158b8026992b2e96ed344f3d888112b2b105d0166ecb08ba3b4a0d91bf6'

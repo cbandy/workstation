@@ -8,7 +8,7 @@ PATH="${HOME}/.cargo/bin:${HOME}/.local/bin:${PATH}"
 current=$(maybe rustup --version ||:)
 version='1.28.2'
 
-case "${current}" in "rustup ${version}"*) :;; *)
+case "${current}" in "rustup ${version}"*) ;; *)
 	case "${OS[distribution]}" in
 		'macOS') install_packages 'rustup' ;;
 		*)

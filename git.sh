@@ -15,7 +15,7 @@ silent command -v git || install_packages 'git'
 current=$(maybe delta --version ||:)
 version='0.18.2'
 
-case "${current}" in *"${version}") :;; *)
+case "${current}" in *"${version}") ;; *)
 	# https://dandavison.github.io/delta/installation.html
 	case "${OS[distribution]}" in
 		'fedora'|'macOS'|'rhel') install_packages 'git-delta' ;;

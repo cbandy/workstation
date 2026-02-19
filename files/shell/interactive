@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/dev/null/sh
 # shellcheck source=/dev/null
 
 export EDITOR='nvim'
