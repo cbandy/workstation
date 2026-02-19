@@ -1,7 +1,7 @@
-
+#!/usr/bin/awk -f
 # https://github.com/termstandard/colors
 
-awk 'BEGIN{
+BEGIN {
     s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
     for (colnum = 0; colnum<77; colnum++) {
         r = 255-(colnum*255/76);
@@ -13,5 +13,4 @@ awk 'BEGIN{
         printf "%s\033[0m", substr(s,colnum+1,1);
     }
     printf "\n";
-}'
-
+}
