@@ -3,6 +3,46 @@
 #
 # ~/.config/direnv/direnvrc: Bash code loaded before every .envrc.
 
+# add PostgreSQL client tools to PATH by looking for `pg_config`.
+use_postgresql() {
+	local version="${1-}"
+	version="${version%%.*}"
+
+	local match
+	match=$(pg_config --version 2> /dev/null)
+
+	# return early when tools on PATH are an acceptable version.
+	[[ -n "${version}" && "${match}" =~ " ${version}"($|[^0-9]) ]] && return
+	[[ -z "${version}" && -n "${match}" ]] && return
+
+	# use `command` to search for `pg_config` in versioned paths.
+	[[ -n "${version}" ]] && match=$(
+		PATH=$(IFS=: && set -- \
+			"${HOME}/.local/homebrew/opt/postgresql@${version}/bin" \
+			"/usr/lib/postgresql/${version}/bin" \
+			"/usr/libexec/postgresql${version}" \
+			"/usr/pgsql-${version}/bin" \
+			&& echo "$*")
+		command -v pg_config
+	)
+
+	# use nullglob to select a `pg_config` with the largest versioned path.
+	[[ -z "${version}" ]] && match=$(shopt -s nullglob \
+		&& printf '%s\n' \
+		"${HOME}/.local/homebrew/opt/postgresql@"*/bin/pg_config \
+		/usr/lib/postgresql/*/bin/pg_config \
+		/usr/libexec/postgresql*/pg_config \
+		/usr/pgsql-*/bin/pg_config \
+		| sort -rnt/
+	)
+
+	local error
+	: "${match:-${error:?PostgreSQL ${version:+${version} }not installed}}"
+
+	# add the first/largest directory to PATH.
+	match="${match%%$'\n'*}" && PATH_add "${match%/*}"
+}
+
 # https://direnv.net/docs/ruby.html
 use_ruby() {
 	local method
