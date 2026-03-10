@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 . share/functions.sh
+: "${OS[distribution]:?}"
 
 shopt -s -o errexit nounset
 PATH="${HOME}/.local/bin:${PATH}"
 
 mkdir -p "${HOME}/.local/bin"
 
-silent command -v bat || install_packages 'bat'
+if ! silent command -v bat
+then
+	case "${OS[distribution]}" in
+		'debian'|'fedora'|'macOS'|'rhel'|'ubuntu') install_packages 'bat' ;;
+		*) error "missing package for ${OS[distribution]}" ;;
+	esac
+fi
 
 # Debian packages deliver the executable as 'batcat'. Regardless, create
 # a local link named 'bat' to whichever `command -p` finds on the system PATH.
