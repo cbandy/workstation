@@ -47,7 +47,7 @@ case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 			build="${build/86_/}"
 
 			case "${build}" in
-				'linux-x64') checksum='8c517552890c8dc2341d97ff1703ba774c1bdb2c5abf159af6fe2e4550e0ad2a' ;;
+				'linux-x64') checksum='sha256:32ca6ac29fcfa58bf037cc4f1c8609fe72f690597a25faa1dbcf4909b73aec63' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -70,14 +70,14 @@ case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 esac
 
 current=$(maybe lua-language-server --version ||:)
-version='3.17.1'
+version='3.16.4' # https://github.com/folke/lazydev.nvim/issues/136
 
 case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 	case "${OS[distribution]}" in
-		'macOS') install_packages 'lua-language-server' ;;
+		'macOS') uninstall_packages 'lua-language-server' ;&
 		*)
 			project='https://github.com/LuaLS/lua-language-server'
-			build="$(ldd --version 2>&1)"
+			build="$(ldd --version 2>&1 ||:)"
 			[[ "${build}" == *musl* ]] && build='-musl'
 			[[ "${build}" != *musl* ]] && build=''
 			build="${OS[kernel],,}-${OS[machine]}${build}"
@@ -85,8 +85,9 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 			build="${build/86_/}"
 
 			case "${build}" in
-				'linux-arm64') checksum='sha256:680285a36d8cf7b17ca4be7a2f9c93643ebd8daec0b7425a6b7a02d003f3da81' ;;
-				'linux-x64')   checksum='sha256:248b0858a0afc8233f2535e89b648398b2202cb96cf51ce187e3263923dd0223' ;;
+				'darwin-arm64') checksum='sha256:54eb1c78408922ff7db997be2939a8f873e5d9d8975d2e075305511626b45021' ;;
+				'linux-arm64')  checksum='sha256:43c0ea3634258280ca635e0494e8f75e6a8b0e59e993d530824d97b3a6c695f1' ;;
+				'linux-x64')    checksum='sha256:93d9f29fb4e4e98bddf329223a90387cc1e84057902f9455d56fdb98e4e89560' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
