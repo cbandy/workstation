@@ -54,12 +54,19 @@ fi
 	*)
 esac
 
-# The Crostini terminal supports truecolor but does not export COLORTERM.
-# https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
-if [ -n "$(pgrep -f 'google/cros-containers' ||:)" ]
-then export COLORTERM='truecolor'
-fi
+#shellcheck disable=SC2034  # MACHINE is used by scripts that source this one
+case "$([ -r /sys/class/dmi/id/bios_vendor ] && cat /sys/class/dmi/id/bios_vendor)" in
+	'Amazon'*) MACHINE='amazon' ;;
+	'Google'|'google') MACHINE='google' ;;
+	'crosvm') MACHINE='crostini'
+		# The Crostini terminal supports truecolor but does not export COLORTERM.
+		# https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
+		export COLORTERM='truecolor'
+		;;
+	*)
+esac
 
 alias ag='rg --smart-case'
 alias ka='kubectl apply --server-side'
+alias jbat='bat --language json'
 alias ybat='bat --language yaml'
