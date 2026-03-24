@@ -1,3 +1,5 @@
+--map-syntax='*.diffs:Diff'
+
 --theme=base16-tomorrow-night
 
 # https://github.com/sharkdp/bat/issues/2869
