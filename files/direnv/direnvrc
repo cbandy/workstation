@@ -3,6 +3,10 @@
 #
 # ~/.config/direnv/direnvrc: Bash code loaded before every .envrc.
 
+# https://github.com/nix-community/nix-direnv#installation
+[[ -r "${HOME}/.nix-profile/share/nix-direnv/direnvrc" ]] &&
+	. "${HOME}/.nix-profile/share/nix-direnv/direnvrc"
+
 # add PostgreSQL client tools to PATH by looking for `pg_config`.
 use_postgresql() {
 	local version="${1-}"
