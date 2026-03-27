@@ -36,19 +36,21 @@ for i in \
 do [[ -r "${i}" ]] && . "${i}"
 done
 
-# https://junegunn.github.io/fzf/shell-integration
-&> /dev/null command -v fzf && eval "$(fzf --bash ||:)"
-&> /dev/null command -v dircolors && eval "$(dircolors --bourne-shell ||:)"
-&> /dev/null command -v minikube && eval "$(minikube completion bash ||:)"
-
-# When available, extend kubectl completions with kubecolor.
-# https://kubecolor.github.io/setup/shells/bash
-if &> /dev/null command -v kubectl
-then eval "$(2> /dev/null kubecolor completion bash || kubectl completion bash ||:)"
-fi
+eval "$(cat \
+<(&> /dev/null command -v fzf && fzf --bash) \
+<(&> /dev/null command -v dircolors && dircolors --bourne-shell) \
+<(&> /dev/null command -v minikube && minikube completion bash) \
+<(
+	# When available, extend kubectl completions with kubecolor.
+	# https://kubecolor.github.io/setup/shells/bash
+	if &> /dev/null command -v kubectl
+	then 2> /dev/null kubecolor completion bash || kubectl completion bash
+	fi
+) ||:)"
 
 # shellcheck disable=SC2034  # The GIT_PS1 variables are used by __git_ps1
-if &> /dev/null command -v __git_ps1; then
+if &> /dev/null command -v __git_ps1
+then
 	GIT_PS1_SHOWCOLORHINTS=1
 	GIT_PS1_SHOWDIRTYSTATE=1
 	PROMPT_COMMAND="__git_ps1 '${PS1% }' ' '"
