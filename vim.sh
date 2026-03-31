@@ -8,7 +8,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 current=$(maybe nvim --version ||:)
-version='0.11.6'
+version='0.12.0'
 
 case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 	case "${OS[distribution]}" in
@@ -20,8 +20,8 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 			build="${build/aarch/arm}"
 
 			case "${build}" in
-				'linux-arm64')  checksum='sha256:ed34c4d8eb79eb2d111987f57cce9ba87c31a97524d602752ce1b0cd35e6a554' ;;
-				'linux-x86_64') checksum='sha256:77dd16d86e6549a0bbbbfbc18636d434ffe5b0ac8b9854a7669e35cc4b93dda0' ;;
+				'linux-arm64')  checksum='sha256:51799635c6008c77bd8dc3fe8732f0f72f98a49a42205da1ee0fd63d2d98ecc7' ;;
+				'linux-x86_64') checksum='sha256:7876b67462af08abdc884818b398b3e82907d6a4c89edfe7c6b1ff168eb7c4d6' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -108,45 +108,14 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 esac
 
 current=$(maybe tree-sitter --version ||:)
-version='0.26.5'
-
-# Versions 0.26 and newer are not compatible with Debian bookworm.
-[[ "${OS[distribution]}" == 'debian' && "${OS[version]}" -le 12 ]] && version='0.25.10'
+version='0.26.7'
 
 case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 	case "${OS[distribution]}" in
 		'macOS') install_packages 'tree-sitter-cli' ;;
 		*)
-			# cargo install "tree-sitter-cli@${version}" --locked
-			project='https://github.com/tree-sitter/tree-sitter'
-			build="${OS[kernel],,}-${OS[machine]}"
-			build="${build/aarch/arm}"
-			build="${build/86_/}"
-
-			case "${version}" in
-				'0.25.10')
-					case "${build}" in
-						'linux-arm64') checksum='sha256:07fbff8ae0eeb0d3e496e14fc1a30dcc730cc2c97d70e601e5357f2e51958af5' ;;
-						'linux-x64')   checksum='sha256:8283ddba69253c698f6e987ba0e2f9285e079c8db4d36ebe1394b5bb3a0ebdfd' ;;
-						*) error "missing checksum for ${build}" ;;
-					esac
-					;;
-				'0.26.5')
-					case "${build}" in
-						'linux-arm64') checksum='sha256:519e8648004a725a3bb566bdb3f3134946df4c9d7fcda6be5cf67d237d2b0921' ;;
-						'linux-x64')   checksum='sha256:d38d9a22ef398489e1eb291b2dea41467487020fe8280c2311dbbad9ba663a34' ;;
-						*) error "missing checksum for ${build}" ;;
-					esac
-					;;
-				*) error "missing checksum for ${OS[*]}" ;;
-			esac
-
-			remote_file "/tmp/treesitter-${version}.gz" \
-				"${project}/releases/download/v${version}/tree-sitter-${build}.gz" \
-				"${checksum}"
-
-			gunzip --force "/tmp/treesitter-${version}.gz"
-			install_file "${HOME}/.local/bin/tree-sitter" "/tmp/treesitter-${version}"
+			maybe cargo install "tree-sitter-cli@${version}" --locked || error "requires 'cargo' on ${OS[distribution]}"
+			rm -f "${HOME}/.local/bin/tree-sitter"
 			;;
 	esac
 esac
