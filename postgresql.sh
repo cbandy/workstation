@@ -18,7 +18,7 @@ then
 			ln -sf "${HOME}/.local/homebrew/opt/postgresql@${version%.*}/bin/psql" "${HOME}/.local/bin/psql"
 			;;
 		'debian'|'ubuntu')
-			checksum='0144068502a1eddd2a0280ede10ef607d1ec592ce819940991203941564e8e76'
+			checksum='sha256:0144068502a1eddd2a0280ede10ef607d1ec592ce819940991203941564e8e76'
 			key='ACCC4CF8'
 
 			install_package_repository "https://www.postgresql.org/media/keys/${key}.asc" "${checksum}" <<-APT
