@@ -8,7 +8,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 current=$(maybe nvim --version ||:)
-version='0.12.0'
+version='0.12.2'
 
 case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 	case "${OS[distribution]}" in
@@ -20,8 +20,8 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 			build="${build/aarch/arm}"
 
 			case "${build}" in
-				'linux-arm64')  checksum='sha256:51799635c6008c77bd8dc3fe8732f0f72f98a49a42205da1ee0fd63d2d98ecc7' ;;
-				'linux-x86_64') checksum='sha256:7876b67462af08abdc884818b398b3e82907d6a4c89edfe7c6b1ff168eb7c4d6' ;;
+				'linux-arm64')  checksum='sha256:ea5bbff4a53176e7677feb59e4246111cadd9eff1ff49613da71ed725a936dcd' ;;
+				'linux-x86_64') checksum='sha256:f9f1901144dc1b0715a1f5178b596d7cdbb22c0f027383bb430862d59377b59f' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -47,7 +47,8 @@ case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 			build="${build/86_/}"
 
 			case "${build}" in
-				'linux-x64') checksum='sha256:32ca6ac29fcfa58bf037cc4f1c8609fe72f690597a25faa1dbcf4909b73aec63' ;;
+				'linux-aarch64') checksum='sha256:fe8f92e8b341fee667faa891e31bea38fee7237c1181e99ae09db24bf9a22766' ;;
+				'linux-x64')     checksum='sha256:32ca6ac29fcfa58bf037cc4f1c8609fe72f690597a25faa1dbcf4909b73aec63' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -63,7 +64,7 @@ case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 				set -x && [[ -x "/tmp/ltex-ls-plus-${version}/bin/ltex-ls-plus" ]]
 			)
 
-			( [[ ! -d "${HOME}/.local/ltex-ls-plus" ]] || rm -r "${HOME}/.local/ltex-ls-plus" ) &&
+			( [[ ! -d "${HOME}/.local/ltex-ls-plus" ]] || rm -rf "${HOME}/.local/ltex-ls-plus" ) &&
 				mv "/tmp/ltex-ls-plus-${version}" "${HOME}/.local/ltex-ls-plus"
 			;;
 	esac
@@ -108,7 +109,7 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 esac
 
 current=$(maybe tree-sitter --version ||:)
-version='0.26.7'
+version='0.26.8'
 
 case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 	case "${OS[distribution]}" in
@@ -121,7 +122,7 @@ case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 esac
 
 current=$(maybe yaml-language-server --version ||:)
-version='1.20.0'
+version='1.22.0'
 
 case "${current}" in "${version}") ;; *) echo "✨ YAML language server"
 	case "${OS[distribution]}" in
