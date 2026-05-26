@@ -17,6 +17,7 @@ file_checksum() {
 
 	case "${OS[distribution]}" in
 		'macOS') filesum=$("${algorithm}" "${target}") || return ;;
+		'rocky') filesum=$("${algorithm}sum" "${target}" --tag) || return ;;
 		*) filesum=$(cksum -a "${algorithm}" "${target}") || return ;;
 	esac
 
@@ -46,10 +47,9 @@ file_content() {
 }
 
 install_cask() {
-	if [ "$1" = '--no-require-sha' ]; then
-		shift
-	else
-		set -- '--require-sha' "$@"
+	if [[ "$1" = '--no-require-sha' ]]
+	then shift
+	else set -- '--require-sha' "$@"
 	fi
 
 	brew install --cask --appdir="${HOME}/Applications" "$@"
@@ -79,11 +79,9 @@ install_packages() {
 				else brew install "${package}"
 				fi
 			done ;;
-		'fedora'|'rhel')
-			sudo dnf install -yq --setopt install_weak_deps=False "$@" ;;
-		'debian'|'ubuntu')
-			sudo apt install --no-install-recommends --yes "$@" ;;
 
+		'debian'|'ubuntu') sudo apt install --no-install-recommends --yes "$@" ;;
+		'fedora'|'rhel'|'rocky') sudo dnf install -yq --setopt install_weak_deps=False "$@" ;;
 		*) error "unexpected system: ${OS[distribution]}" ;;
 	esac
 }
@@ -182,6 +180,7 @@ uninstall_packages() {
 				silent brew list "${package}" || continue
 				brew uninstall "${package}"
 			done ;;
+
 		'debian'|'ubuntu')
 			local index='' packages=("$@")
 			for index in "${!packages[@]}"
@@ -191,6 +190,7 @@ uninstall_packages() {
 			[[ "${#packages[@]}" -eq 0 ]] && return
 			sudo apt purge --yes "${packages[@]}" ;;
 
+		'fedora'|'rhel'|'rocky') sudo dnf remove -yq "$@" || return ;;
 		*) error "unexpected system: ${OS[distribution]}" ;;
 	esac
 }

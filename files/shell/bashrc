@@ -12,6 +12,8 @@ then
 	exec "${SHELL}"
 fi
 
+[[ -r "${HOME}/.config/interactive" ]] && . "${HOME}/.config/interactive"
+
 HISTCONTROL=erasedups:ignoredups:ignorespace
 HISTFILE="${HOME}/.history"
 HISTSIZE=2000
@@ -29,7 +31,7 @@ case "${OSTYPE}" in
 esac
 
 for i in \
-	"${HOME}/.config/interactive" \
+	/etc/bashrc \
 	"${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh" \
 	/usr/*/git*/**/completion/git-*prompt* \
 	;

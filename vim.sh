@@ -113,7 +113,7 @@ version='0.26.8'
 
 case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 	case "${OS[distribution]}" in
-		'macOS') install_packages 'tree-sitter-cli' ;;
+		'macOS'|'rocky') install_packages 'tree-sitter-cli' ;;
 		*)
 			maybe cargo install "tree-sitter-cli@${version}" --locked || error "requires 'cargo' on ${OS[distribution]}"
 			rm -f "${HOME}/.local/bin/tree-sitter"
