@@ -100,7 +100,7 @@ case "${current}" in "fd ${version}") ;; *)
 esac
 
 current=$(maybe fzf --version ||:)
-version='0.71.0'
+version='0.73.1'
 
 case "${current}" in "${version} "*) ;; *)
 	case "${OS[distribution]}" in
@@ -112,8 +112,8 @@ case "${current}" in "${version} "*) ;; *)
 			build="${build/x86_/amd}"
 
 			case "${build}" in
-				'linux_amd64') checksum='sha256:22639bb38489dbca8acef57850cbb50231ab714d0e8e855ac52fae8b41233df4' ;;
-				'linux_arm64') checksum='sha256:98b7d322efae9c37e4bfbbab1cbcd8722eb742d9399511f96375feb40cc35d1d' ;;
+				'linux_amd64') checksum='sha256:f3252c2c366bc1700d3c85781ec8c9695998927ac127870eb049ceea2d540f8a' ;;
+				'linux_arm64') checksum='sha256:a408b0b6c08d486307b8f1554f967b8b50ee1b3ea8b4035e3161bab31fdfc28d' ;;
 				*) error "unexpected: ${build}" ;;
 			esac
 
