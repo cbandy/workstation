@@ -1,4 +1,6 @@
 
-# If this commit is applied, it will...
+# If this commit is applied, it will…
 
 # Why was this change made?
+
+# Use `--cleanup=scissors` to retain everything but whitespace.
