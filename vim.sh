@@ -109,7 +109,7 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 esac
 
 current=$(maybe tree-sitter --version ||:)
-version='0.26.8'
+version='0.26.9'
 
 case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 	case "${OS[distribution]}" in
@@ -122,7 +122,7 @@ case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 esac
 
 current=$(maybe yaml-language-server --version ||:)
-version='1.22.0'
+version='1.23.0'
 
 case "${current}" in "${version}") ;; *) echo "✨ YAML language server"
 	case "${OS[distribution]}" in
