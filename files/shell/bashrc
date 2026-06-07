@@ -42,6 +42,7 @@ eval "$(cat \
 <(&> /dev/null command -v fzf && fzf --bash) \
 <(&> /dev/null command -v dircolors && dircolors --bourne-shell) \
 <(&> /dev/null command -v minikube && minikube completion bash) \
+<(&> /dev/null command -v rustup && rustup completions bash) \
 <(
 	# When available, extend kubectl completions with kubecolor.
 	# https://kubecolor.github.io/setup/shells/bash
