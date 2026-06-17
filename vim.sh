@@ -71,7 +71,7 @@ case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 esac
 
 current=$(maybe lua-language-server --version ||:)
-version='3.16.4' # https://github.com/folke/lazydev.nvim/issues/136
+version='3.18.2'
 
 case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 	case "${OS[distribution]}" in
@@ -86,9 +86,9 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 			build="${build/86_/}"
 
 			case "${build}" in
-				'darwin-arm64') checksum='sha256:54eb1c78408922ff7db997be2939a8f873e5d9d8975d2e075305511626b45021' ;;
-				'linux-arm64')  checksum='sha256:43c0ea3634258280ca635e0494e8f75e6a8b0e59e993d530824d97b3a6c695f1' ;;
-				'linux-x64')    checksum='sha256:93d9f29fb4e4e98bddf329223a90387cc1e84057902f9455d56fdb98e4e89560' ;;
+				'darwin-arm64') checksum='sha256:cec99d70b1f612acec4a10a79a03664e3aa0c229d4d8a586cb3f928ec37d509e' ;;
+				'linux-arm64')  checksum='sha256:273af33f26f4a1143f27c96d9f9e1188aba619c71e0807042134f66b4bd27f24' ;;
+				'linux-x64')    checksum='sha256:ca71415dd19f19e30aaa35a4915aefca9fdb5fec31b98331cc3d77f778d539c5' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
