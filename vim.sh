@@ -8,7 +8,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 current=$(maybe nvim --version ||:)
-version='0.12.2'
+version='0.12.3'
 
 case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 	case "${OS[distribution]}" in
@@ -20,8 +20,8 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 			build="${build/aarch/arm}"
 
 			case "${build}" in
-				'linux-arm64')  checksum='sha256:ea5bbff4a53176e7677feb59e4246111cadd9eff1ff49613da71ed725a936dcd' ;;
-				'linux-x86_64') checksum='sha256:f9f1901144dc1b0715a1f5178b596d7cdbb22c0f027383bb430862d59377b59f' ;;
+				'linux-arm64')  checksum='sha256:d39dea9d81767676cbc0804788a78426210d5042efc250ea0ffae4b9fd6b58ee' ;;
+				'linux-x86_64') checksum='sha256:5709e7f3653c9ccc96bb78e79ae1ad3b1191f34d12075f27c469f702f301a2e8' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -36,7 +36,7 @@ esac
 
 current=$(maybe ltex-ls-plus --version 2> /dev/null ||:)
 current=$(maybe jq -r '.["ltex-ls"]' <<< "${current}" ||:)
-version='18.6.1'
+version='18.7.0'
 
 case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 	case "${OS[distribution]}" in
@@ -47,8 +47,8 @@ case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
 			build="${build/86_/}"
 
 			case "${build}" in
-				'linux-aarch64') checksum='sha256:fe8f92e8b341fee667faa891e31bea38fee7237c1181e99ae09db24bf9a22766' ;;
-				'linux-x64')     checksum='sha256:32ca6ac29fcfa58bf037cc4f1c8609fe72f690597a25faa1dbcf4909b73aec63' ;;
+				'linux-aarch64') checksum='sha256:3a92a4dd22ea87ff5d4de4891581ff41bacc7210256ebe9d0e496f1da8382f54' ;;
+				'linux-x64')     checksum='sha256:1e16df6c578dc76ff97d644445d126ba6fba5c2e8e174178ab86372652fd7612' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
