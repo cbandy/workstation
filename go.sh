@@ -6,7 +6,7 @@ shopt -s -o errexit nounset
 PATH="${HOME}/.local/go/bin:${PATH}"
 
 current=$(maybe go version ||:)
-version='1.25.7'
+version='1.26.4'
 
 case "${current}" in *"go${version} ${OS[kernel],,}"*) ;; *)
 	case "${OS[distribution]}" in
@@ -14,12 +14,14 @@ case "${current}" in *"go${version} ${OS[kernel],,}"*) ;; *)
 		'debian'|'macOS'|'ubuntu')
 			# https://go.dev/dl
 			build="${OS[kernel],,}-${OS[machine]}"
+			build="${build/aarch/arm}"
 			build="${build/x86_/amd}"
 
 			case "${build}" in
-				'darwin-amd64') checksum='sha256:bf5050a2152f4053837b886e8d9640c829dbacbc3370f913351eb0904cb706f5' ;;
-				'darwin-arm64') checksum='sha256:ff18369ffad05c57d5bed888b660b31385f3c913670a83ef557cdfd98ea9ae1b' ;;
-				'linux-amd64')  checksum='sha256:12e6d6a191091ae27dc31f6efc630e3a3b8ba409baf3573d955b196fdf086005' ;;
+				'darwin-amd64') checksum='sha256:05dc9b5f9997744520aaebb3d5deaa7c755371aebbfb7f97c2511a9f3367538d' ;;
+				'darwin-arm64') checksum='sha256:b62ad2b6d7d2464f12a5bcad7ff47f19d08325773b5efd21610e445a05a9bf53' ;;
+				'linux-amd64')  checksum='sha256:1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f' ;;
+				'linux-arm64')  checksum='sha256:ef758ae7c6cf9267c9c0ef080b8965f453d89ab2d25d9eb22de4405925238768' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
