@@ -1,0 +1,47 @@
+# ~/.gemini/config/config.json
+
+userSettings:
+  themeMode: THEME_MODE_DARK
+
+  # Paths must be absolute, so `~` is replaced during the conversion to JSON.
+  # Paths cannot use globs in the sandbox.
+  #
+  # Permissions are also "Shared with Antigravity" CLI `agy`.
+  #
+  # https://antigravity.google/docs/cli/permissions
+  # https://antigravity.google/docs/cli/sandbox
+  enableTerminalSandbox: true
+  globalPermissionGrants:
+    # Permissions are evaluated in order by their action: Deny → Ask → Allow
+    # Keep keys in that order so this file reads top-down: first match wins
+    deny:
+      - command(curl)
+      - command(wget)
+      - read_file(~/.agents/.checkouts/)
+      - read_file(~/.ssh/)
+
+    ask:
+      - command(cargo update)
+      - command(mv)
+      - command(rm)
+
+    allow:
+      - command((cat|cut|df|find|grep|head|jq|ls|rg|sort|tail|uniq))
+      - command(cargo (build|check|clean|fetch|fix|fmt|nextest|test))
+      - command(cargo (clippy|info|metadata|report|tree))
+      - command(cargo deny (check|list))
+      - command(git (diff|log|mv|show|status))
+      - command(go (build|clean|doc|fmt|generate|test|vet))
+
+      # Extracted source code from package managers
+      - read_file(~/.cargo/registry/src/) # Rust/Cargo: https://doc.rust-lang.org/cargo/guide/cargo-home.html
+      - read_file(~/.pgrx/)               # Postgres
+      - read_file(~/go/pkg/mod/)          # Go: https://go.dev/ref/mod#module-cache
+
+      # Package documentation sites
+      - read_url(doc.rust-lang.org/*)
+      - read_url(docs.rs/*)
+      - read_url(pkg.go.dev/*)
+
+      - unsandboxed(cargo check)
+      - write_file(/dev/null)
