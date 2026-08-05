@@ -9,7 +9,7 @@ def merge(a;b):
 ;
 
 def transform:
-  if (type == "string") and ((env.HOME // "") != "") then gsub("\\(~/"; "(\(env.HOME)/")
+  if (type == "string") and ((env.HOME // "") != "") then gsub("(?<p>^|[(])~/"; "\(.p)\(env.HOME)/")
   elif (type == "array") then map(transform)
   elif (type == "object") then map_values(transform)
   else . end

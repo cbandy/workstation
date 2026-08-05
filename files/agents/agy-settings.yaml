@@ -4,15 +4,18 @@
 
 allowNonWorkspaceAccess: true
 colorScheme: dark
+enableBusinessLogin: false
 enableTelemetry: false
 enforceHttpsUrls: true
 notifications: true
+remoteControlEnabled: true
 showFeedbackSurvey: false
 verbosity: low
 
 # https://antigravity.google/docs/cli/statusline
 statusLine:
-  enabled: true
+  command: ~/.gemini/antigravity-cli/bin/statusline.jq
+  type: command
 
 # https://antigravity.google/docs/cli/title
 title: {}

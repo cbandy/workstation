@@ -30,6 +30,7 @@ userSettings:
       - command(cargo (build|check|clean|fetch|fix|fmt|nextest|test))
       - command(cargo (clippy|info|metadata|report|tree))
       - command(cargo deny (check|list))
+      - command(cargo pgrx test)
       - command(git (diff|log|mv|show|status))
       - command(go (build|clean|doc|fmt|generate|test|vet))
 
@@ -43,5 +44,5 @@ userSettings:
       - read_url(docs.rs/*)
       - read_url(pkg.go.dev/*)
 
-      - unsandboxed(cargo check)
+      - unsandboxed(cargo (check|fmt))
       - write_file(/dev/null)

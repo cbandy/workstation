@@ -7,10 +7,12 @@ PATH="${HOME}/.local/bin:${PATH}"
 
 gojq='github.com/itchyny/gojq/cmd/gojq@latest'
 
-mkdir "${HOME}/.gemini/antigravity-cli" -p
+mkdir "${HOME}/.gemini/antigravity-cli/bin" -p
 touch "${HOME}/.gemini/antigravity-cli/settings.json"
 mkdir "${HOME}/.gemini/config" -p
 touch "${HOME}/.gemini/config/config.json"
+
+install_file "${HOME}/.gemini/antigravity-cli/bin/statusline.jq" 'files/agents/agy-statusline.jq'
 
 value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
 	"${HOME}/.gemini/config/config.json" 'files/agents/antigravity-config.yaml')
