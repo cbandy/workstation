@@ -1,0 +1,112 @@
+# ~/.claude/settings.json: https://code.claude.com/docs/en/settings
+# $schema: https://json.schemastore.org/claude-code-settings.json
+
+env:
+  CLAUDE_CODE_ENABLE_TELEMETRY: '0'
+
+# https://code.claude.com/docs/en/discover-plugins
+enabledPlugins:
+  clangd-lsp@claude-plugins-official: true
+  claude-security@claude-plugins-official: true
+  gopls-lsp@claude-plugins-official: true
+  lua-lsp@claude-plugins-official: true
+  ruby-lsp@claude-plugins-official: true
+  rust-analyzer-lsp@claude-plugins-official: true
+  security-guidance@claude-plugins-official: true
+
+# https://code.claude.com/docs/en/permissions
+permissions:
+  # Permissions are evaluated in order by their action: Deny → Ask → Allow
+  # Keep keys in that order so this file reads top-down: first match wins
+  deny:
+    - Bash(curl *)
+    - Bash(wget *)
+    - Read(~/.agents/.checkouts/**)
+    - Read(~/.ssh/**)
+
+  ask:
+    - Bash(cargo update *)
+    - Bash(mv *)
+    - Bash(rm *)
+
+  allow:
+    # https://code.claude.com/docs/en/sub-agents
+    - Agent(Explore)
+    - Agent(Plan)
+
+    - Bash(cat *)
+    - Bash(cut *)
+    - Bash(df *)
+    - Bash(find *)
+    - Bash(grep *)
+    - Bash(head *)
+    - Bash(jq *)
+    - Bash(ls *)
+    - Bash(nm *)
+    - Bash(rg *)
+    - Bash(sed -n *)
+    - Bash(sort *)
+    - Bash(tail *)
+    - Bash(uniq *)
+
+    - Bash(cargo bench *)
+    - Bash(cargo build *)
+    - Bash(cargo check *)
+    - Bash(cargo clean *)
+    - Bash(cargo clippy *)
+    - Bash(cargo deny check *)
+    - Bash(cargo deny list *)
+    - Bash(cargo fetch *)
+    - Bash(cargo fix *)
+    - Bash(cargo fmt *)
+    - Bash(cargo info *)
+    - Bash(cargo metadata *)
+    - Bash(cargo nextest *)
+    - Bash(cargo pgrx test *)
+    - Bash(cargo report *)
+    - Bash(cargo test *)
+    - Bash(cargo tree *)
+
+    - Bash(gh issue list *)
+    - Bash(gh issue status *)
+    - Bash(gh issue view *)
+    - Bash(gh pr list *)
+    - Bash(gh pr status *)
+    - Bash(gh pr view *)
+    - Bash(gh project list *)
+    - Bash(gh project view *)
+    - Bash(gh release list *)
+    - Bash(gh release view *)
+
+    - Bash(git diff *)
+    - Bash(git log *)
+    - Bash(git mv *)
+    - Bash(git show *)
+    - Bash(git status *)
+
+    - Bash(go build *)
+    - Bash(go clean *)
+    - Bash(go doc *)
+    - Bash(go fmt *)
+    - Bash(go generate *)
+    - Bash(go test *)
+    - Bash(go vet *)
+
+    # Extracted source code from package managers
+    - Read(~/.cargo/registry/src/**)
+    - Read(~/.pgrx/*/src/**)
+    - Read(~/go/pkg/mod/**)
+
+    # System headers
+    - Read(~/.local/homebrew/include/**)
+    - Read(/usr/include/**)
+
+    # Package documentation sites
+    - WebFetch(domain:doc.rust-lang.org)
+    - WebFetch(domain:docs.rs)
+    - WebFetch(domain:pkg.go.dev)
+
+    - Edit(/dev/null)
+
+# https://code.claude.com/docs/en/sandboxing
+sandbox: {}
