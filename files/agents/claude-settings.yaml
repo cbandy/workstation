@@ -110,3 +110,7 @@ permissions:
 
 # https://code.claude.com/docs/en/sandboxing
 sandbox: {}
+
+spinnerVerbs:
+  mode: replace
+  verbs: [Spending]
