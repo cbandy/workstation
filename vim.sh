@@ -128,6 +128,6 @@ esac
 mkdir -p "${HOME}/.config"
 
 [[ -d "${HOME}/.config/nvim" ]] || git clone 'https://github.com/cbandy/vim-config.git' "${HOME}/.config/nvim"
-[[ -d "${HOME}/.config/vim" ]] || ( cd "${HOME}/.config" && ln -s 'nvim' 'vim' )
+[[ -d "${HOME}/.config/vim" ]] || (cd "${HOME}/.config" && symlink vim 'nvim')
 
 ( cd "${HOME}/.config/nvim" && ./lua/plugins.lua '+PlugUpgrade' '+PlugInstall' '+qa' )

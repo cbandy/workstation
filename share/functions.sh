@@ -171,6 +171,15 @@ silent() {
 	"$@" &> /dev/null
 }
 
+symlink() {
+	local -r target="$1" content="$2"
+
+	case "${OS[distribution]}" in
+		'macOS') ln -fhs "${content}" "${target}" ;;
+		*) ln -fns "${content}" "${target}" ;;
+	esac
+}
+
 uninstall_packages() {
 	case "${OS[distribution]}" in
 		'macOS')

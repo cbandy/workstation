@@ -20,7 +20,7 @@ fi
 #
 # https://github.com/sharkdp/bat#installation
 silent command -pv bat batcat &&
-	ln -fs "$(command -pv bat batcat ||:)" "${HOME}/.local/bin/bat"
+	symlink "${HOME}/.local/bin/bat" "$(command -pv bat batcat ||:)"
 
 mkdir -p   "${HOME}/.config/bat/themes"
 local_file "${HOME}/.config/bat/config" 'files/bat/config'

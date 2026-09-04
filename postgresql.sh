@@ -15,7 +15,7 @@ then
 			install_packages "postgresql@${version%.*}"
 
 			# Postgres binaries are not on PATH because the formula is "keg-only".
-			ln -sf "${HOME}/.local/homebrew/opt/postgresql@${version%.*}/bin/psql" "${HOME}/.local/bin/psql"
+			symlink "${HOME}/.local/bin/psql" "${HOME}/.local/homebrew/opt/postgresql@${version%.*}/bin/psql"
 			;;
 		'debian'|'ubuntu')
 			checksum='sha256:0144068502a1eddd2a0280ede10ef607d1ec592ce819940991203941564e8e76'

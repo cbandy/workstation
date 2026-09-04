@@ -22,10 +22,10 @@ then
 	install_file "${HOME}/.local/bin/minikube" "/tmp/minikube-${version}"
 fi
 
-# Download a client if there isn't one already
+# Use the minikube built-in client if there isn't one already
 if ! silent command -v kubectl
 then
-	(cd "${HOME}/.local/bin" && ln -s minikube kubectl)
+	(cd "${HOME}/.local/bin" && symlink kubectl minikube)
 	kubectl version --client
 fi
 
@@ -46,7 +46,8 @@ then
 
 # minikube works on RHEL with rootless Podman (with some adjustments)
 # https://minikube.sigs.k8s.io/docs/drivers/podman
-elif [[ "${OS[distribution]}" == 'rhel' ]]; then
+elif [[ "${OS[distribution]}" == 'rhel' ]]
+then
 	silent minikube config set driver podman
 	silent minikube config set rootless true
 

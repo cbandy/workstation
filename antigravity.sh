@@ -25,7 +25,7 @@ value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
 # Link Antigravity "shared" skills
 (
 	mkdir -p "${HOME}/.agents/skills" || return
-	cd "${HOME}/.gemini" && ln -fs '../.agents/skills' 'skills'
+	cd "${HOME}/.gemini" && symlink skills '../.agents/skills'
 )
 
 
@@ -55,7 +55,7 @@ echo "✨ AIHero.dev Skills"
 
 	for directory in "${directories[@]}"
 	do [[ -d "${repository}/${directory}" ]] || continue
-		cd "${HOME}/.agents/skills" && ln -fs "../${repository#*/.agents/}/${directory}" "${directory##*/}"
+		cd "${HOME}/.agents/skills" && symlink "${directory##*/}" "../${repository#*/.agents/}/${directory}"
 	done
 
 	rm -f "${HOME}/.agents/skills/ask-matt"*
