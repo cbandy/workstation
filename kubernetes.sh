@@ -79,5 +79,5 @@ then
 	tar  --file "/tmp/kubecolor-${version}.tar" --extract --directory "${HOME}/.local/bin" kubecolor
 fi
 
-mkdir -p "${HOME}/.local/share/bash-completion/completions"
+directory  "${HOME}/.local/share/bash-completion/completions"
 local_file "${HOME}/.local/share/bash-completion/completions/kubecolor" 'files/kubernetes/kubecolor-completion.sh'

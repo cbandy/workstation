@@ -18,8 +18,8 @@ case "${1-}" in
 	*)
 esac
 
-mkdir -p "${HOME}/.config/direnv" "${HOME}/.local/bin"
-
+directory  "${HOME}/.local/bin"
+directory  "${HOME}/.config/direnv"
 local_file "${HOME}/.config/direnv/direnvrc" 'files/direnv/direnvrc'
 local_file "${HOME}/.config/interactive" 'files/shell/interactive'
 local_file "${HOME}/.bash_profile" 'files/shell/bash_profile'

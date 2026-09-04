@@ -13,7 +13,7 @@ else
 	# Use a transparent background to avoid the square-in-circle nonsense.
 	#
 	# https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/garcon/#fetching-icons
-	mkdir -p "${HOME}/.local/share/icons/hicolor/256x256/apps"
+	directory "${HOME}/.local/share/icons/hicolor/256x256/apps"
 	rsvg-convert --height=256 --width=256 --keep-aspect-ratio --background-color='rgba(0,0,0,0)' \
 		'files/obsidian/obsidian-logo-gradient.svg' > \
 		"${HOME}/.local/share/icons/hicolor/256x256/apps/obsidian.png"
@@ -22,7 +22,7 @@ else
 	#
 	# https://specifications.freedesktop.org/desktop-entry-spec
 	# https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/garcon/#installed-applications
-	mkdir -p "${HOME}/.local/share/applications"
+	directory  "${HOME}/.local/share/applications"
 	local_file "${HOME}/.local/share/applications/obsidian.desktop" 'files/obsidian/obsidian.desktop'
 
 	echo

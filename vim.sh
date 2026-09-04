@@ -125,7 +125,7 @@ case "${current}" in "${version}") ;; *) echo "✨ YAML language server"
 esac
 
 
-mkdir -p "${HOME}/.config"
+directory "${HOME}/.config"
 
 [[ -d "${HOME}/.config/nvim" ]] || git clone 'https://github.com/cbandy/vim-config.git' "${HOME}/.config/nvim"
 [[ -d "${HOME}/.config/vim" ]] || (cd "${HOME}/.config" && symlink vim 'nvim')

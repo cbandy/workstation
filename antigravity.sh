@@ -7,12 +7,9 @@ PATH="${HOME}/.local/bin:${PATH}"
 
 gojq='github.com/itchyny/gojq/cmd/gojq@latest'
 
-mkdir "${HOME}/.gemini/antigravity-cli/bin" -p
-touch "${HOME}/.gemini/antigravity-cli/settings.json"
-mkdir "${HOME}/.gemini/config" -p
-touch "${HOME}/.gemini/config/config.json"
-
 install_file "${HOME}/.gemini/antigravity-cli/bin/statusline.jq" 'files/agents/agy-statusline.jq'
+ensure_file  "${HOME}/.gemini/antigravity-cli/settings.json"
+ensure_file  "${HOME}/.gemini/config/config.json"
 
 value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
 	"${HOME}/.gemini/config/config.json" 'files/agents/antigravity-config.yaml')
@@ -24,7 +21,7 @@ value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
 
 # Link Antigravity "shared" skills
 (
-	mkdir -p "${HOME}/.agents/skills" || return
+	directory "${HOME}/.agents/skills" || return
 	cd "${HOME}/.gemini" && symlink skills '../.agents/skills'
 )
 
@@ -40,9 +37,9 @@ echo "✨ AIHero.dev Skills"
 
 	if [[ ! -d "${repository}" ]]
 	then
-		mkdir -p "${repository%/*}"
-		git   -C "${repository%/*}" clone --no-checkout "${project}" "${repository##*/}" &&
-		git   -C "${repository}" sparse-checkout init --cone
+		directory "${repository%/*}"
+		git    -C "${repository%/*}" clone --no-checkout "${project}" "${repository##*/}" &&
+		git    -C "${repository}" sparse-checkout init --cone
 	fi
 
 	git -C "${repository}" sparse-checkout set "${directories[@]}"

@@ -42,7 +42,7 @@ esac
 
 if [[ "$("${stat[@]}" "${HOME}/.pgpass" 2> /dev/null ||:)" != *?00 ]]
 then
-	touch       "${HOME}/.pgpass"
+	ensure_file "${HOME}/.pgpass"
 	chmod 'go=' "${HOME}/.pgpass"
 fi
 

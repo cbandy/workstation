@@ -5,7 +5,7 @@
 shopt -s -o errexit nounset
 PATH="${HOME}/.local/bin:${PATH}"
 
-mkdir -p "${HOME}/.local/bin"
+directory "${HOME}/.local/bin"
 
 if ! silent command -v bat
 then
@@ -22,7 +22,7 @@ fi
 silent command -pv bat batcat &&
 	symlink "${HOME}/.local/bin/bat" "$(command -pv bat batcat ||:)"
 
-mkdir -p   "${HOME}/.config/bat/themes"
+directory  "${HOME}/.config/bat/themes"
 local_file "${HOME}/.config/bat/config" 'files/bat/config'
 local_file "${HOME}/.config/bat/themes/base16-tomorrow-night.tmTheme" \
 	'files/themes/base16-tomorrow-night.tmTheme'

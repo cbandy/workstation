@@ -1,6 +1,16 @@
 #!/dev/null/bash
 # shellcheck disable=SC1091
 
+directory() {
+	[[ -d "${1:?}" ]] || mkdir -p "${1:?}"
+}
+
+ensure_file() {
+	local -r target="${1:?}"
+	directory "${target%/*}" || return
+	[[ -f "${target}" ]] || cat /dev/null >> "${target}"
+}
+
 error() {
 	>&2 echo "$@"
 	return 1
@@ -62,7 +72,7 @@ install_file() {
 	[[ -d "${target}" ]] && error "install: cannot overwrite directory '${target}' with non-directory"
 
 	# macOS install lacks -D
-	mkdir -p "${target%/*}"
+	directory "${target%/*}"
 
 	echo "Installing ${target}"
 	install "${origin}" "${target}"
