@@ -8,7 +8,7 @@ PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
 current=$(maybe nvim --version ||:)
-version='0.12.3'
+version='0.12.5'
 
 case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 	case "${OS[distribution]}" in
@@ -20,8 +20,8 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 			build="${build/aarch/arm}"
 
 			case "${build}" in
-				'linux-arm64')  checksum='sha256:d39dea9d81767676cbc0804788a78426210d5042efc250ea0ffae4b9fd6b58ee' ;;
-				'linux-x86_64') checksum='sha256:5709e7f3653c9ccc96bb78e79ae1ad3b1191f34d12075f27c469f702f301a2e8' ;;
+				'linux-arm64')  checksum='sha256:4ba6c8f5df71e414367b4778ac4e0744f57b0a5dbefc2eccdc55caf0a32f766a' ;;
+				'linux-x86_64') checksum='sha256:d429822f6994770e3bb10330e0baf21e72b0afe66e0507cb3c631c1c65f4bf41' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -34,44 +34,37 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 	esac
 esac
 
-current=$(maybe ltex-ls-plus --version 2> /dev/null ||:)
-current=$(maybe jq -r '.["ltex-ls"]' <<< "${current}" ||:)
-version='18.7.0'
+current=$(maybe harper-ls --version ||:)
+version='2.9.1'
 
-case "${current}" in "${version}") ;; *) echo "✨ LTeX+ language server"
+case "${current}" in *" ${version}") ;; *) echo "✨ Harper language server"
 	case "${OS[distribution]}" in
-		'macOS') install_packages 'ltex-ls-plus' ;;
+		'macOS') install_packages 'harper' ;;
 		*)
-			project='https://github.com/ltex-plus/ltex-ls-plus'
-			build="${OS[kernel],,}-${OS[machine]}"
-			build="${build/86_/}"
+			project='https://github.com/Automattic/harper'
+			build="$(ldd --version 2>&1 ||:)"
+			[[ "${build}" == *musl* ]] && build='musl'
+			[[ "${build}" != *musl* ]] && build='gnu'
+			build="${OS[machine]}-unknown-${OS[kernel],,}-${build}"
 
 			case "${build}" in
-				'linux-aarch64') checksum='sha256:3a92a4dd22ea87ff5d4de4891581ff41bacc7210256ebe9d0e496f1da8382f54' ;;
-				'linux-x64')     checksum='sha256:1e16df6c578dc76ff97d644445d126ba6fba5c2e8e174178ab86372652fd7612' ;;
+				'aarch64-unknown-linux-gnu') checksum='sha256:09ec00f1feff1b920f62e70c271ee455329927a4246db8cd1930c9ab607378c4' ;;
+				'x86_64-unknown-linux-gnu')  checksum='sha256:4e82093e118ea086115d611e67256e7e1e2748977b5ba723e29c7690365b3433' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
-			remote_file "/tmp/ltex-ls-plus-${version}.tar" \
-				"${project}/releases/download/${version}/ltex-ls-plus-${version}-${build}.tar.gz" \
+			remote_file "/tmp/harper-ls-${version}.tar" \
+				"${project}/releases/download/v${version}/harper-ls-${build}.tar.gz" \
 				"${checksum}"
 
-			(
-				members=$(tar --list --file "/tmp/ltex-ls-plus-${version}.tar")
-				[[ "${members%%$'\n'*}" == './' ]] || error 'Expected a ./ in the archive!'
-
-				tar --file "/tmp/ltex-ls-plus-${version}.tar" --extract --directory '/tmp' --strip-components=1
-				set -x && [[ -x "/tmp/ltex-ls-plus-${version}/bin/ltex-ls-plus" ]]
-			)
-
-			( [[ ! -d "${HOME}/.local/ltex-ls-plus" ]] || rm -rf "${HOME}/.local/ltex-ls-plus" ) &&
-				mv "/tmp/ltex-ls-plus-${version}" "${HOME}/.local/ltex-ls-plus"
+			tar --file "/tmp/harper-ls-${version}.tar" --extract --directory '/tmp'
+			install_file "${HOME}/.local/bin/harper-ls" '/tmp/harper-ls'
 			;;
 	esac
 esac
 
 current=$(maybe lua-language-server --version ||:)
-version='3.18.2'
+version='3.19.1'
 
 case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 	case "${OS[distribution]}" in
@@ -86,9 +79,9 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 			build="${build/86_/}"
 
 			case "${build}" in
-				'darwin-arm64') checksum='sha256:cec99d70b1f612acec4a10a79a03664e3aa0c229d4d8a586cb3f928ec37d509e' ;;
-				'linux-arm64')  checksum='sha256:273af33f26f4a1143f27c96d9f9e1188aba619c71e0807042134f66b4bd27f24' ;;
-				'linux-x64')    checksum='sha256:ca71415dd19f19e30aaa35a4915aefca9fdb5fec31b98331cc3d77f778d539c5' ;;
+				'darwin-arm64') checksum='sha256:0bc077f4447f076b4c92c14e9fd303f5b569eda2ec74b4dca2b55f75fae2e90c' ;;
+				'linux-arm64')  checksum='sha256:abd2572e8fc929dc838a81ffb8473c5bce0bf39bfe8edb4b120b3b623176ce83' ;;
+				'linux-x64')    checksum='sha256:e9235d2d72ef55bc41cf8c99cda2ed64777682024b4bb81f5dea425060c5cbb8' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -109,7 +102,7 @@ case "${current}" in "${version}") ;; *) echo "✨ Lua language server"
 esac
 
 current=$(maybe tree-sitter --version ||:)
-version='0.26.9'
+version='0.27.0'
 
 case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 	case "${OS[distribution]}" in
@@ -122,7 +115,7 @@ case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 esac
 
 current=$(maybe yaml-language-server --version ||:)
-version='1.23.0'
+version='1.24.0'
 
 case "${current}" in "${version}") ;; *) echo "✨ YAML language server"
 	case "${OS[distribution]}" in
