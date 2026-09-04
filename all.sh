@@ -9,7 +9,6 @@ export PATH="${HOME}/.local/bin:${HOME}/.local/homebrew/bin${PATH+:${PATH}}"
 ./shell.sh
 
 ./bat.sh
-./docker.sh
 ./gcloud.sh
 ./git.sh
 ./go.sh
