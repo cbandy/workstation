@@ -6,6 +6,73 @@ PATH="${HOME}/.local/bin:${PATH}"
 
 gojq='github.com/itchyny/gojq/cmd/gojq@latest'
 
+case "${1:-}:${OS[distribution]:?}" in
+	'agy:debian'|'agy:ubuntu')
+		echo '✨ Antigravity CLI'
+
+		build="${OS[kernel],,}_${OS[machine]}"
+		build="${build/aarch/arm}"
+		build="${build/x86_/amd}"
+
+		current=$(maybe agy --version ||:)
+		build=$(curl -fsSL "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/${build}.json")
+		build=$(<<< "${build}" go run "${gojq}" -r '.url, "sha512:\(.sha512)", .version')
+		read -rd $'\1' build checksum version <<< "${build}"$'\1'
+
+		if [[ -z "${current}" || "${current}" != "${version}" ]]
+		then
+			remote_file "/tmp/antigravity-${version}.tar" "${build}" "${checksum}"
+			tar  --file "/tmp/antigravity-${version}.tar" --extract --directory '/tmp'
+			install_file "${HOME}/.local/bin/agy" '/tmp/antigravity'
+		fi
+		;;
+
+	'antigravity:debian'|'antigravity:ubuntu')
+		echo '✨ Antigravity Desktop'
+
+		build="${OS[machine]}-${OS[kernel],,}"
+		build="${build/aarch64/arm}"
+		build="${build/86_/}"
+
+		current=$(file_checksum "${HOME}/.local/bin/antigravity" sha512 ||:)
+		build=$(curl -fsSL "https://antigravity-hub-auto-updater-974169037036.us-central1.run.app/manifest/latest-${build}.yml")
+		build=$(<<< "${build}" go run "${gojq}" -r --yaml-input '(.files[] | select(.url | test("(?i)[.]AppImage$")) | (.url, .sha512)), .version')
+		read -rd $'\1' build checksum version <<< "${build}"$'\1'
+
+		checksum=$(<<< "${checksum}" base64 -d | od -Anv -tx1 ||:)
+		checksum="sha512:${checksum//[[:space:]]/}"
+
+		if [[ -z "${current}" || "${current}" != "${checksum}" ]]
+		then
+			remote_file "/tmp/antigravity-${version}" "${build}" "${checksum}"
+			install_file "${HOME}/.local/bin/antigravity" "/tmp/antigravity-${version}"
+		fi
+
+		local_file "${HOME}/.local/share/applications/antigravity.desktop" files/agents/antigravity.desktop
+		if [[ ! -f "${HOME}/.local/share/icons/hicolor/256x256/apps/antigravity.png" ]] && silent command -v gm
+		then # https://antigravity.google/press
+			curl -fsSL 'https://antigravity.google/assets/image/brand/antigravity-icon__full-color.png' ||
+				gm convert - -resize 256x256 "${HOME}/.local/share/icons/hicolor/256x256/apps/antigravity.png"
+		fi
+		;;
+
+	'claude:debian'|'claude:ubuntu')
+		echo '✨ Claude Code'
+
+		install_package_repository 'https://downloads.claude.ai/keys/claude-code.asc' \
+			'sha256:bd70a5e4a268002704024ceba7f8446024114e94f3f0bdd11c23a9e592be81c6' \
+		<<-APT
+			Types: deb
+			URIs: https://downloads.claude.ai/claude-code/apt/stable
+			Suites: stable
+			Components: main
+		APT
+
+		install_packages 'claude-code'
+		;;
+	*)
+esac
+
 if silent command -v agy
 then
 	install_file "${HOME}/.gemini/antigravity-cli/bin/statusline.jq" 'files/agents/agy-statusline.jq'

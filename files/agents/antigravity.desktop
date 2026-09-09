@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=Antigravity
+Exec=.local/bin/antigravity
+Icon=antigravity
+StartupWMClass=Antigravity
+MimeType=x-scheme-handler/antigravity
