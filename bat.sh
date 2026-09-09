@@ -5,22 +5,21 @@
 shopt -s -o errexit nounset
 PATH="${HOME}/.local/bin:${PATH}"
 
-directory "${HOME}/.local/bin"
-
 if ! silent command -v bat
 then
 	case "${OS[distribution]}" in
 		'debian'|'fedora'|'macOS'|'rhel'|'ubuntu') install_packages 'bat' ;;
 		*) error "missing package for ${OS[distribution]}" ;;
 	esac
-fi
 
-# Debian packages deliver the executable as 'batcat'. Regardless, create
-# a local link named 'bat' to whichever `command -p` finds on the system PATH.
-#
-# https://github.com/sharkdp/bat#installation
-silent command -pv bat batcat &&
-	symlink "${HOME}/.local/bin/bat" "$(command -pv bat batcat ||:)"
+	# Debian packages deliver the executable as 'batcat'.
+	# https://github.com/sharkdp/bat#installation
+	if silent command -v batcat
+	then
+		directory "${HOME}/.local/bin"
+		symlink "${HOME}/.local/bin/bat" "$(command -v batcat ||:)"
+	fi
+fi
 
 directory  "${HOME}/.config/bat/themes"
 local_file "${HOME}/.config/bat/config" 'files/bat/config'
