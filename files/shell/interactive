@@ -16,7 +16,6 @@ PATH=$(IFS=: && set -- \
 "${PATH}" && echo "$*")
 
 export KUBECOLOR_CONFIG="${HOME}/.config/kubecolor.yaml"
-export PYTHONUSERBASE="${HOME}/.local"
 
 if [ -z "$(command -v pbcopy ||:)" ]
 then

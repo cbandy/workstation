@@ -39,11 +39,13 @@ select(.model? and .quota?) |
  cyan:    "\u001b[36m", bright_cyan:    "\u001b[96m",
  white:   "\u001b[37m", bright_white:   "\u001b[97m",
 } as $ANSI |
+{ "low": $ANSI.green, "medium": $ANSI.yellow, "high": $ANSI.bright_red } as $EFFORT_COLORS |
+{ "accept-edits": $ANSI.bright_green, "plan": $ANSI.bright_blue } as $MODE_COLORS |
 {
- idle:     "\($ANSI.bright_green   + $ANSI.bold)● READY\($ANSI.reset)",
- thinking: "\($ANSI.bright_yellow  + $ANSI.bold)THINKING\($ANSI.reset)",
- working:  "\($ANSI.bright_cyan    + $ANSI.bold)WORKING\($ANSI.reset)",
- tool_use: "\($ANSI.bright_magenta + $ANSI.bold)🔧 TOOL\($ANSI.reset)",
+ "idle":     [$ANSI.bright_green,   "● READY" ],
+ "thinking": [$ANSI.bright_yellow,  "THINKING"],
+ "working":  [$ANSI.bright_cyan,    "WORKING" ],
+ "tool_use": [$ANSI.bright_magenta, "🔧 TOOL" ],
 } as $STATES |
 "·░▒▓█" as $PROGRESS |
 "\($ANSI.gray) │ \($ANSI.reset)" as $BAR |
@@ -51,10 +53,13 @@ select(.model? and .quota?) |
 "\($ANSI.gray) ╱ \($ANSI.reset)" as $SLASH |
 
 ((.workspace.project_dir // "") | if startswith(env.HOME) then "~" + ltrimstr(env.HOME) else . end) as $project |
-($STATES[.agent_state?] // ($ANSI.white + $ANSI.bold + "⏳ " + .agent_state + $ANSI.reset)) as $agent_state |
+($STATES[.agent_state][0]? // $ANSI.white) as $agent_state_color | ($STATES[.agent_state][1]? // "⏳ \(.agent_state)") as $agent_state |
+($MODE_COLORS[.cycle_mode]? // $ANSI.white) as $cycle_mode_color | (.cycle_mode? // null) as $cycle_mode |
+($EFFORT_COLORS[.model.effort]? // null) as $model_effort_color |
 ((.context_window.remaining_percentage // 0) | floor / 100) as $context_remaining |
 (.subagents? | if type == "array" then length else 0 end) as $agent_count |
 (.model.display_name // "") as $model_name |
+(.model.effort? // null) as $model_effort |
 (.terminal_width // 80) as $terminal_width |
 (.task_count // 0) as $task_count |
 (
@@ -75,7 +80,10 @@ select(.model? and .quota?) |
 (
  " " +
  "\($ANSI.dim + $project + $ANSI.reset)" + $BAR +
- "\($ANSI.bright_magenta + $ANSI.italic + $model_name + $ANSI.reset)" + $BAR + $agent_state + $BAR +
- "\($ANSI.dim + "C:" + $ANSI.reset) \((.context_window.remaining_percentage // 0) | floor)%" + $BAR +
- "\($ANSI.dim + "Q:" + $ANSI.reset) \($quota.daily * 100 | floor)%" + $DOT + "\($quota.weekly * 100 | floor)%" + $DOT + "\($quota.timeout | duration(1))"
+ "\($ANSI.bright_magenta + $ANSI.italic + $model_name + $ANSI.reset)" +
+ if $model_effort and ($model_name | test($model_effort; "i") | not) then "\($DOT + $model_effort_color + $model_effort + $ANSI.reset)" else null end + $BAR +
+ "\($agent_state_color + $ANSI.bold + $agent_state + $ANSI.reset)" + $BAR +
+ "\($ANSI.dim + "C:" + $ANSI.reset) \($context_remaining * 100 | floor)%" + $BAR +
+ "\($ANSI.dim + "Q:" + $ANSI.reset) \($quota.daily * 100 | floor)%" + $DOT + "\($quota.weekly * 100 | floor)%" + $DOT + "\($quota.timeout | duration(1))" +
+ if $cycle_mode then "\($BAR + $cycle_mode_color + $cycle_mode + $ANSI.reset)" else null end
 )

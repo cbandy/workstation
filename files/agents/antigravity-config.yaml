@@ -16,6 +16,7 @@ userSettings:
     # Keep keys in that order so this file reads top-down: first match wins
     deny:
       - command(curl)
+      - command(sudo)
       - command(wget)
       - read_file(~/.agents/.checkouts/)
       - read_file(~/.ssh/)
@@ -29,6 +30,7 @@ userSettings:
       - command(cat)
       - command(cut)
       - command(df)
+      - command(du)
       - command(find)
       - command(grep)
       - command(head)
@@ -99,5 +101,6 @@ userSettings:
       - read_url(pkg.go.dev/*)
 
       - unsandboxed(cargo check)
+      - unsandboxed(cargo clean)
       - unsandboxed(cargo fmt)
       - write_file(/dev/null)
