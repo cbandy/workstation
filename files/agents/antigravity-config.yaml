@@ -31,6 +31,7 @@ userSettings:
       - command(cut)
       - command(df)
       - command(du)
+      - command(echo)
       - command(find)
       - command(grep)
       - command(head)

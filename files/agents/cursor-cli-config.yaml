@@ -1,0 +1,126 @@
+# ~/.cursor/cli-config.json: https://cursor.com/docs/cli/reference/configuration
+
+approvalMode: allowlist
+attribution:
+  attributeCommitsToAgent: false
+  attributePRsToAgent: false
+network:
+  useHttp1ForAgent: false
+
+# https://cursor.com/docs/cli/reference/permissions
+permissions:
+  # Deny rules take precedence over allow rules.
+  # Keep keys in that order so this file reads top-down: first match wins
+  deny:
+    - Shell(curl)
+    - Shell(sudo)
+    - Shell(wget)
+    - Read(~/.agents/.checkouts/**)
+    - Read(~/.ssh/**)
+
+  allow:
+    - Shell(cat:*)
+    - Shell(cut:*)
+    - Shell(df:*)
+    - Shell(du:*)
+    - Shell(echo:*)
+    - Shell(find:*)
+    - Shell(grep:*)
+    - Shell(head:*)
+    - Shell(jq:*)
+    - Shell(ls:*)
+    - Shell(nm:*)
+    - Shell(rg:*)
+    - Shell(sed:-n *)
+    - Shell(sort:*)
+    - Shell(tail:*)
+    - Shell(uniq:*)
+
+    - Shell(cargo:bench)
+    - Shell(cargo:bench *)
+    - Shell(cargo:build)
+    - Shell(cargo:build *)
+    - Shell(cargo:check)
+    - Shell(cargo:check *)
+    - Shell(cargo:clean)
+    - Shell(cargo:clean *)
+    - Shell(cargo:clippy)
+    - Shell(cargo:clippy *)
+    - Shell(cargo:deny check)
+    - Shell(cargo:deny check *)
+    - Shell(cargo:deny list)
+    - Shell(cargo:deny list *)
+    - Shell(cargo:fetch)
+    - Shell(cargo:fetch *)
+    - Shell(cargo:fix)
+    - Shell(cargo:fix *)
+    - Shell(cargo:fmt)
+    - Shell(cargo:fmt *)
+    - Shell(cargo:info)
+    - Shell(cargo:info *)
+    - Shell(cargo:metadata)
+    - Shell(cargo:metadata *)
+    - Shell(cargo:nextest)
+    - Shell(cargo:nextest *)
+    - Shell(cargo:pgrx test)
+    - Shell(cargo:pgrx test *)
+    - Shell(cargo:report)
+    - Shell(cargo:report *)
+    - Shell(cargo:test)
+    - Shell(cargo:test *)
+    - Shell(cargo:tree)
+    - Shell(cargo:tree *)
+
+    - Shell(gh:issue list *)
+    - Shell(gh:issue status *)
+    - Shell(gh:issue view *)
+    - Shell(gh:pr list *)
+    - Shell(gh:pr status *)
+    - Shell(gh:pr view *)
+    - Shell(gh:project list)
+    - Shell(gh:project list *)
+    - Shell(gh:project view)
+    - Shell(gh:project view *)
+    - Shell(gh:release list *)
+    - Shell(gh:release view *)
+
+    - Shell(git:diff)
+    - Shell(git:diff *)
+    - Shell(git:log)
+    - Shell(git:log *)
+    - Shell(git:mv *)
+    - Shell(git:show)
+    - Shell(git:show *)
+    - Shell(git:status)
+    - Shell(git:status *)
+
+    - Shell(go:build)
+    - Shell(go:build *)
+    - Shell(go:clean)
+    - Shell(go:clean *)
+    - Shell(go:doc)
+    - Shell(go:doc *)
+    - Shell(go:fmt)
+    - Shell(go:fmt *)
+    - Shell(go:generate)
+    - Shell(go:generate *)
+    - Shell(go:test)
+    - Shell(go:test *)
+    - Shell(go:vet)
+    - Shell(go:vet *)
+
+    # Extracted source code from package managers
+    - Read(~/.cargo/registry/src/**)
+    - Read(~/.pgrx/*/src/**)
+    - Read(~/go/pkg/mod/**)
+
+    # System headers
+    - Read(~/.local/homebrew/include/**)
+    - Read(/usr/include/**)
+
+    # Package documentation sites
+    - WebFetch(doc.rust-lang.org)
+    - WebFetch(docs.rs)
+    - WebFetch(pkg.go.dev)
+
+    - Write(/dev/null)

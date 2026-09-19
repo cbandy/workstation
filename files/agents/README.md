@@ -3,11 +3,13 @@ AI development environments have shifted away from a single, messy monolithic fi
 The focus has turned to isolating human-readable engineering guidelines from rigid machine permissions.
 Some cross-tool standardizations are beginning to emerge.
 
+- https://agentskills.io
+
 # Project Root (main)
 
 | Files             | Tools |
 |-------------------|-------|
-| `AGENTS.md`       | **Antigravity** (Google)<br>**Codex** (OpenAI)<br>**Jules** (Google)<br>**Kiro** (AWS)
+| `AGENTS.md`       | **Antigravity** (Google)<br>**Codex** (OpenAI)<br>**Jules** (Google)<br>**Kiro** (AWS)<br>**Open Interpreter**
 | `CLAUDE.md`       | **Claude Code** (Anthropic)
 | `.windsurfrules`  | **Windsurf** (Codeium)
 |      *None*       | **Gemini** (Code Assist)
@@ -16,7 +18,7 @@ Some cross-tool standardizations are beginning to emerge.
 
 | Files             | Formats | Tools |
 |-------------------|---------|-------|
-| `.agents/rules`<br>`.agents/workflows`<br>`.agents/skils` | Markdown               | **Antigravity** (Google)
+| `.agents/rules`<br>`.agents/workflows`<br>`.agents/skills` | Markdown              | **Antigravity** (Google)
 | `.claude/settings.json`<br>`.claude/skills`      | Markdown, JSON for config       | **Claude Code** (Anthropic)
 | `.codex/rules`                                   | Starlark to restrict commands   | **Codex** (OpenAI)
 | `.cursor/rules`                                  | Markdown with YAML frontmatter  | **Cursor**

@@ -108,6 +108,17 @@ then
 	)
 fi
 
+if silent command -v cursor-agent
+then
+	ensure_file "${HOME}/.cursor/cli-config.json"
+
+	value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
+		"${HOME}/.cursor/cli-config.json" 'files/agents/cursor-cli-config.yaml')
+	> "${HOME}/.cursor/cli-config.json" cat <<< "${value}"
+
+	# Cursor already looks in ~/.agents/skills
+fi
+
 echo "✨ AIHero.dev Skills"
 (
 	project='https://github.com/mattpocock/skills.git' branch='main'
