@@ -37,6 +37,8 @@ permissions:
     - Agent(Explore)
     - Agent(Plan)
 
+    - Edit(/dev/null)
+    - Bash(awk *)
     - Bash(cat *)
     - Bash(cut *)
     - Bash(df *)
@@ -53,6 +55,8 @@ permissions:
     - Bash(sort *)
     - Bash(tail *)
     - Bash(uniq *)
+    - Bash(wc *)
+    - Bash(which *)
 
     - Bash(cargo bench *)
     - Bash(cargo build *)
@@ -75,6 +79,8 @@ permissions:
     - Bash(gh issue list *)
     - Bash(gh issue status *)
     - Bash(gh issue view *)
+    - Bash(gh pr checks *)
+    - Bash(gh pr diff *)
     - Bash(gh pr list *)
     - Bash(gh pr status *)
     - Bash(gh pr view *)
@@ -84,6 +90,7 @@ permissions:
     - Bash(gh release view *)
 
     - Bash(git diff *)
+    - Bash(git grep *)
     - Bash(git log *)
     - Bash(git mv *)
     - Bash(git show *)
@@ -110,8 +117,6 @@ permissions:
     - WebFetch(domain:doc.rust-lang.org)
     - WebFetch(domain:docs.rs)
     - WebFetch(domain:pkg.go.dev)
-
-    - Edit(/dev/null)
 
 # https://code.claude.com/docs/en/sandboxing
 sandbox: {}

@@ -27,6 +27,8 @@ userSettings:
       - command(rm)
 
     allow:
+      - write_file(/dev/null)
+      - command(awk)
       - command(cat)
       - command(cut)
       - command(df)
@@ -43,6 +45,8 @@ userSettings:
       - command(sort)
       - command(tail)
       - command(uniq)
+      - command(wc)
+      - command(which)
 
       - command(cargo bench)
       - command(cargo build)
@@ -65,6 +69,8 @@ userSettings:
       - command(gh issue list)
       - command(gh issue status)
       - command(gh issue view)
+      - command(gh pr checks)
+      - command(gh pr diff)
       - command(gh pr list)
       - command(gh pr status)
       - command(gh pr view)
@@ -74,6 +80,7 @@ userSettings:
       - command(gh release view)
 
       - command(git diff)
+      - command(git grep)
       - command(git log)
       - command(git mv)
       - command(git show)
@@ -101,7 +108,5 @@ userSettings:
       - read_url(docs.rs/*)
       - read_url(pkg.go.dev/*)
 
-      - unsandboxed(cargo check)
-      - unsandboxed(cargo clean)
-      - unsandboxed(cargo fmt)
-      - write_file(/dev/null)
+      # Agent documentation
+      - read_url(antigravity.google/docs/*)

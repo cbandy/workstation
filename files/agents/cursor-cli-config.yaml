@@ -19,6 +19,8 @@ permissions:
     - Read(~/.ssh/**)
 
   allow:
+    - Write(/dev/null)
+    - Shell(awk:*)
     - Shell(cat:*)
     - Shell(cut:*)
     - Shell(df:*)
@@ -35,6 +37,8 @@ permissions:
     - Shell(sort:*)
     - Shell(tail:*)
     - Shell(uniq:*)
+    - Shell(wc:*)
+    - Shell(which:*)
 
     - Shell(cargo:bench)
     - Shell(cargo:bench *)
@@ -74,6 +78,8 @@ permissions:
     - Shell(gh:issue list *)
     - Shell(gh:issue status *)
     - Shell(gh:issue view *)
+    - Shell(gh:pr checks *)
+    - Shell(gh:pr diff *)
     - Shell(gh:pr list *)
     - Shell(gh:pr status *)
     - Shell(gh:pr view *)
@@ -86,6 +92,7 @@ permissions:
 
     - Shell(git:diff)
     - Shell(git:diff *)
+    - Shell(git:grep *)
     - Shell(git:log)
     - Shell(git:log *)
     - Shell(git:mv *)
@@ -122,5 +129,3 @@ permissions:
     - WebFetch(doc.rust-lang.org)
     - WebFetch(docs.rs)
     - WebFetch(pkg.go.dev)
-
-    - Write(/dev/null)
