@@ -54,6 +54,7 @@ permissions:
     - Bash(sed -n *)
     - Bash(sort *)
     - Bash(tail *)
+    - Bash(true)
     - Bash(uniq *)
     - Bash(wc *)
     - Bash(which *)
@@ -90,11 +91,15 @@ permissions:
     - Bash(gh release view *)
 
     - Bash(git diff *)
+    - Bash(git fetch *)
     - Bash(git grep *)
     - Bash(git log *)
     - Bash(git mv *)
+    - Bash(git rev-parse *)
     - Bash(git show *)
     - Bash(git status *)
+    - Bash(git worktree add *)
+    - Bash(git worktree list *)
 
     - Bash(go build *)
     - Bash(go clean *)

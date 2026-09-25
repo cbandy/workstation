@@ -44,6 +44,7 @@ userSettings:
       - command(sed -n)
       - command(sort)
       - command(tail)
+      - command(true)
       - command(uniq)
       - command(wc)
       - command(which)
@@ -80,11 +81,15 @@ userSettings:
       - command(gh release view)
 
       - command(git diff)
+      - command(git fetch)
       - command(git grep)
       - command(git log)
       - command(git mv)
+      - command(git rev-parse)
       - command(git show)
       - command(git status)
+      - command(git worktree add)
+      - command(git worktree list)
 
       - command(go build)
       - command(go clean)
