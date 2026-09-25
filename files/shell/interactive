@@ -53,10 +53,15 @@ fi
 	*)
 esac
 
-#shellcheck disable=SC2034  # MACHINE is used by scripts that source this one
-case "$([ -r /sys/class/dmi/id/bios_vendor ] && cat /sys/class/dmi/id/bios_vendor)" in
+#shellcheck disable=SC2034 ## MACHINE is used by scripts that source this one
+[ -r /sys/class/dmi/id/bios_vendor ] && case "$(cat /sys/class/dmi/id/bios_vendor)" in
 	'Amazon'*) MACHINE='amazon' ;;
-	'Google'|'google') MACHINE='google' ;;
+	'Google'|'google') MACHINE='google'
+		# https://docs.cloud.google.com/compute/docs/metadata/querying-metadata
+		[ -z "${XDG_RUNTIME_DIR}" ] || [ -r "${XDG_RUNTIME_DIR}/gce-instance-metadata.json" ] ||
+			curl -fqsSH 'Metadata-Flavor: Google' > "${XDG_RUNTIME_DIR}/gce-instance-metadata.json" \
+			'http://metadata.google.internal/computeMetadata/v1/instance/?recursive=true' 2> /dev/null
+		;;
 	'crosvm') MACHINE='crostini'
 		# The Crostini terminal supports truecolor but does not export COLORTERM.
 		# https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
