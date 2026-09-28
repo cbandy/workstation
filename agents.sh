@@ -151,3 +151,17 @@ echo "✨ AIHero.dev Skills"
 	rm -f "${HOME}/.agents/skills/ask-matt"*
 	rm -f "${HOME}/.agents/skills/setup-matt"*
 )
+
+echo "✨ Local Skills"
+(
+	root="$(pwd)"
+	directories=(
+		'files/agents/skills/journal'
+		'files/agents/skills/reflect'
+	)
+
+	for directory in "${directories[@]}"
+	do [[ -d "${root}/${directory}" ]] || continue
+		cd "${HOME}/.agents/skills" && symlink "${directory##*/}" "${root}/${directory}"
+	done
+)
