@@ -35,7 +35,7 @@ esac
 for i in \
 	/etc/bashrc \
 	"${HOME}/.local/homebrew/etc/profile.d/bash_completion.sh" \
-	/usr/*/git*/**/completion/git-*prompt* \
+	{/usr,~/.nix-profile}/*/git*/**/completion/git-*prompt* \
 	;
 do [[ -r "${i}" ]] && . "${i}"
 done
@@ -53,7 +53,7 @@ eval "$(cat \
 	fi
 ) ||:)"
 
-# shellcheck disable=SC2034  # The GIT_PS1 variables are used by __git_ps1
+# shellcheck disable=SC2034 ## The GIT_PS1 variables are used by __git_ps1
 if &> /dev/null command -v __git_ps1
 then
 	GIT_PS1_SHOWCOLORHINTS=1
