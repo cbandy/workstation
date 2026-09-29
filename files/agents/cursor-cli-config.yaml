@@ -13,6 +13,8 @@ permissions:
   # Keep keys in that order so this file reads top-down: first match wins
   deny:
     - Shell(curl)
+    - Shell(nc)
+    - Shell(ssh)
     - Shell(sudo)
     - Shell(wget)
     - Read(~/.agents/.checkouts/**)
@@ -98,11 +100,17 @@ permissions:
     - Shell(git:log)
     - Shell(git:log *)
     - Shell(git:mv *)
-    - Shell(git:rev-parse *)
     - Shell(git:show)
     - Shell(git:show *)
     - Shell(git:status)
     - Shell(git:status *)
+
+    - Shell(git:branch --list *)
+    - Shell(git:check-ignore *)
+    - Shell(git:--no-pager diff *)
+    - Shell(git:diff-tree *)
+    - Shell(git:merge-base *)
+    - Shell(git:rev-parse *)
     - Shell(git:worktree add *)
     - Shell(git:worktree list)
     - Shell(git:worktree list *)

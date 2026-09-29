@@ -16,6 +16,8 @@ userSettings:
     # Keep keys in that order so this file reads top-down: first match wins
     deny:
       - command(curl)
+      - command(nc)
+      - command(ssh)
       - command(sudo)
       - command(wget)
       - read_file(~/.agents/.checkouts/)
@@ -85,9 +87,15 @@ userSettings:
       - command(git grep)
       - command(git log)
       - command(git mv)
-      - command(git rev-parse)
       - command(git show)
       - command(git status)
+
+      - command(git branch --list)
+      - command(git check-ignore)
+      - command(git --no-pager diff)
+      - command(git diff-tree)
+      - command(git merge-base)
+      - command(git rev-parse)
       - command(git worktree add)
       - command(git worktree list)
 
