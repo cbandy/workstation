@@ -65,15 +65,13 @@ select(.model? and .quota?) |
 (
  if (.model.id // "") | startswith("Gemini") then
  {
-  daily: (.quota["gemini-5h"].remaining_fraction),
-  weekly: (.quota["gemini-weekly"].remaining_fraction),
-  timeout: (.quota | [to_entries[] | select(.key | startswith("gemini-")) | .value.reset_in_seconds] | min),
+  hourly: (.quota["gemini-5h"]     | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
+  weekly: (.quota["gemini-weekly"] | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
  }
  else
  {
-  daily: (.quota["3p-5h"].remaining_fraction),
-  weekly: (.quota["3p-weekly"].remaining_fraction),
-  timeout: (.quota | [to_entries[] | select(.key | startswith("3p-")) | .value.reset_in_seconds] | min),
+  hourly: (.quota["3p-5h"]     | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
+  weekly: (.quota["3p-weekly"] | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
  }
  end
 ) as $quota |
@@ -83,7 +81,8 @@ select(.model? and .quota?) |
  "\($ANSI.bright_magenta + $ANSI.italic + $model_name + $ANSI.reset)" +
  if $model_effort and ($model_name | test($model_effort; "i") | not) then "\($DOT + $model_effort_color + $model_effort + $ANSI.reset)" else null end + $BAR +
  "\($agent_state_color + $ANSI.bold + $agent_state + $ANSI.reset)" + $BAR +
- "\($ANSI.dim + "C:" + $ANSI.reset) \($context_remaining * 100 | floor)%" + $BAR +
- "\($ANSI.dim + "Q:" + $ANSI.reset) \($quota.daily * 100 | floor)%" + $DOT + "\($quota.weekly * 100 | floor)%" + $DOT + "\($quota.timeout | duration(1))" +
+ "\(  $ANSI.dim)C↘ \($ANSI.reset)\($context_remaining * 100 | floor)%" +
+ "  \($ANSI.dim)\($quota.hourly.timeout | select(. != 0) | "\(duration(1))·")D↘ \($ANSI.reset)\($quota.hourly.remaining * 100 | floor)%" +
+ "  \($ANSI.dim)\($quota.weekly.timeout | select(. != 0) | "\(duration(1))·")W↘ \($ANSI.reset)\($quota.weekly.remaining * 100 | floor)%" +
  if $cycle_mode then "\($BAR + $cycle_mode_color + $cycle_mode + $ANSI.reset)" else null end
 )
