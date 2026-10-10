@@ -23,6 +23,9 @@ permissions:
   deny:
     - Bash(curl *)
     - Bash(nc *)
+    - Bash(rtk curl *)
+    - Bash(rtk telemetry *)
+    - Bash(rtk wget *)
     - Bash(ssh *)
     - Bash(sudo *)
     - Bash(wget *)

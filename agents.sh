@@ -73,8 +73,32 @@ case "${1:-}:${OS[distribution]:?}" in
 	*)
 esac
 
+current=$(maybe rtk --version ||:)
+version='0.51.0'
+
+case "${current}" in "rtk ${version}") ;; *)
+	case "${OS[distribution]}" in
+		'macOS') install_packages 'rtk' ;;
+		*)
+			project='https://github.com/rtk-ai/rtk'
+			[[ "${OS[machine]}" == *aarch* ]] && build="${OS[machine]}-unknown-${OS[kernel],,}-gnu"
+			[[ "${OS[machine]}" != *aarch* ]] && build="${OS[machine]}-unknown-${OS[kernel],,}-musl"
+			build="rtk-${build}.tar.gz"
+
+			value=$(curl -fsSH 'Accept: application/vnd.github+json' "${project/github.com/api.github.com/repos}/releases/latest")
+			value=$(<<< "${value}" go run "${gojq}" -r ".tag_name, (.assets[] | select(.name == \"${build}\") | (.browser_download_url, .digest))")
+			read -rd $'\1' version build checksum <<< "${value}"$'\1'
+
+			remote_file "/tmp/rtk-${version}.tar" "${build}" "${checksum}"
+			tar  --file "/tmp/rtk-${version}.tar" --extract --directory '/tmp' 'rtk'
+			install_file "${HOME}/.local/bin/rtk" '/tmp/rtk'
+	esac
+esac
+
 if silent command -v agy
 then
+	echo "🔧 Antigravity CLI"
+
 	install_file "${HOME}/.gemini/antigravity-cli/bin/statusline.jq" 'files/agents/agy-statusline.jq'
 	ensure_file  "${HOME}/.gemini/antigravity-cli/settings.json"
 	ensure_file  "${HOME}/.gemini/config/config.json"
@@ -92,10 +116,14 @@ then
 		directory "${HOME}/.agents/skills" || return
 		cd "${HOME}/.gemini" && symlink skills '../.agents/skills'
 	)
+
+	silent command -v rtk && rtk init --global --agent antigravity
 fi
 
 if silent command -v claude
 then
+	echo "🔧 Claude Code"
+
 	ensure_file "${HOME}/.claude/settings.json"
 
 	value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
