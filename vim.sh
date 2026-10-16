@@ -7,8 +7,10 @@ PATH="${HOME}/.local/ltex-ls-plus/bin:${PATH}"
 PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
+install_packages 'lsof'
+
 current=$(maybe nvim --version ||:)
-version='0.12.5'
+version='0.12.6'
 
 case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 	case "${OS[distribution]}" in
@@ -20,8 +22,8 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 			build="${build/aarch/arm}"
 
 			case "${build}" in
-				'linux-arm64')  checksum='sha256:4ba6c8f5df71e414367b4778ac4e0744f57b0a5dbefc2eccdc55caf0a32f766a' ;;
-				'linux-x86_64') checksum='sha256:d429822f6994770e3bb10330e0baf21e72b0afe66e0507cb3c631c1c65f4bf41' ;;
+				'linux-arm64')  checksum='sha256:8efcec73cea1cebcd3a19da0bc782c0c6d95da7ae6006902a9d93b5ac9efe1c2' ;;
+				'linux-x86_64') checksum='sha256:b644d034746aed32f4e918be9fc6147408ce4ecd360fedd7130da543c35f29fb' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -35,7 +37,7 @@ case "${current%%$'\n'*}" in *"v${version}") ;; *) echo "✨ Neovim"
 esac
 
 current=$(maybe harper-ls --version ||:)
-version='2.9.1'
+version='2.12.0'
 
 case "${current}" in *" ${version}") ;; *) echo "✨ Harper language server"
 	case "${OS[distribution]}" in
@@ -48,8 +50,8 @@ case "${current}" in *" ${version}") ;; *) echo "✨ Harper language server"
 			build="${OS[machine]}-unknown-${OS[kernel],,}-${build}"
 
 			case "${build}" in
-				'aarch64-unknown-linux-gnu') checksum='sha256:09ec00f1feff1b920f62e70c271ee455329927a4246db8cd1930c9ab607378c4' ;;
-				'x86_64-unknown-linux-gnu')  checksum='sha256:4e82093e118ea086115d611e67256e7e1e2748977b5ba723e29c7690365b3433' ;;
+				'aarch64-unknown-linux-gnu') checksum='sha256:707ff8fb54bd53980253625f43f47c531f28cf8035fe4697be5177bed7eda454' ;;
+				'x86_64-unknown-linux-gnu')  checksum='sha256:da87a01c49e535d6d6157f388ffc87edd9d4065fe04cc13b7a10b227defb1ba7' ;;
 				*) error "missing checksum for ${build}" ;;
 			esac
 
@@ -119,7 +121,7 @@ esac
 tree-sitter init-config
 
 current=$(maybe yaml-language-server --version ||:)
-version='1.24.0'
+version='2.0.0'
 
 case "${current}" in "${version}") ;; *) echo "✨ YAML language server"
 	case "${OS[distribution]}" in
