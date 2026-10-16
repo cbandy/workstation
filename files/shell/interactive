@@ -2,7 +2,7 @@
 # shellcheck source=/dev/null
 
 export EDITOR='nvim'
-export LANG='en_US.UTF-8'
+export LANG='C.UTF-8'
 export LESS='-R'
 
 # Local frameworks are usually newer than those installed by package managers; search them first.

@@ -30,7 +30,10 @@ uninstall_packages 'command-not-found' 'command-not-found-data'
 
 packages=()
 
+silent command -v shellcheck || packages+=('shellcheck') # https://github.com/koalaman/shellcheck
 silent command -v curl   || packages+=('curl')    # https://curl.se    → https://github.com/curl/curl
+silent command -v direnv || packages+=('direnv')  # https://direnv.net → https://github.com/direnv/direnv
+silent command -v fzf    || packages+=('fzf')     # https://github.com/junegunn/fzf
 silent command -v htop   || packages+=('htop')    # https://htop.dev   → https://github.com/htop-dev/htop
 silent command -v jq     || packages+=('jq')      # https://jqlang.org → https://github.com/jqlang/jq
 silent command -v make   || packages+=('make')
@@ -38,90 +41,11 @@ silent command -v rg     || packages+=('ripgrep') # https://github.com/BurntSush
 silent command -v tree   || packages+=('tree')
 silent command -v zip    || packages+=('zip')
 
-case "${OS[distribution]}" in
-	'debian'|'fedora'|'macOS'|'ubuntu')
-		silent command -v direnv || packages+=('direnv') ;; # https://direnv.net → https://github.com/direnv/direnv
-	*)
-esac
+silent command -v fd || # https://github.com/sharkdp/fd
+	case "${OS[distribution]}" in
+		'debian'|'ubuntu') packages+=('fd-find') ;;
+		'fedora') packages+=('rust-fd-find') ;;
+		'macOS') packages+=('fd') ;;
+	esac
 
 [[ "${#packages[@]}" -eq 0 ]] || install_packages "${packages[@]}"
-
-current=$(maybe shellcheck --version ||:)
-version='0.11.0'
-
-case "${current}" in *"version: ${version}"*) ;; *)
-	case "${OS[distribution]}" in
-		'fedora'|'macOS') install_packages 'shellcheck' ;;
-		*)
-			project='https://github.com/koalaman/shellcheck'
-			build="${OS[kernel],,}.${OS[machine]}"
-
-			case "${build}" in
-				'linux.aarch64') checksum='sha256:12b331c1d2db6b9eb13cfca64306b1b157a86eb69db83023e261eaa7e7c14588' ;;
-				'linux.x86_64')  checksum='sha256:8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198' ;;
-				*) error "unexpected: ${build}" ;;
-			esac
-
-			remote_file "/tmp/shellcheck-${version}.tar" \
-				"${project}/releases/download/v${version}/shellcheck-v${version}.${build}.tar.xz" \
-				"${checksum}"
-
-			tar --file "/tmp/shellcheck-${version}.tar" --extract --directory '/tmp'
-			install_file "${HOME}/.local/bin/shellcheck" "/tmp/shellcheck-v${version}/shellcheck"
-	esac
-esac
-
-current=$(maybe fd --version ||:)
-version='10.4.2'
-
-case "${current}" in "fd ${version}") ;; *)
-	case "${OS[distribution]}" in
-		'macOS') install_packages 'fd' ;;
-		*)
-			project='https://github.com/sharkdp/fd'
-			build=$(ldd --version 2>&1 ||:)
-			[[ "${build}" == *musl* ]] && build='unknown-linux-musl'
-			[[ "${build}" != *musl* ]] && build='unknown-linux-gnu'
-			build="${OS[machine]}-${build}"
-
-			case "${build}" in
-				'aarch64-unknown-linux-gnu') checksum='sha256:6c51f7c5446b3338b1e401ff15dc194c590bb2fa64fd43ff3278300f073adec5' ;;
-				'x86_64-unknown-linux-gnu')  checksum='sha256:def59805cd14b5651b68990855f426ad087f3b96881296d963910431ba3143c8' ;;
-				*) error "unexpected: ${build}" ;;
-			esac
-
-			remote_file "/tmp/fd-${version}.tar" \
-				"${project}/releases/download/v${version}/fd-v${version}-${build}.tar.gz" \
-				"${checksum}"
-
-			tar --file "/tmp/fd-${version}.tar" --extract --directory '/tmp'
-			install_file "${HOME}/.local/bin/fd" "/tmp/fd-v${version}-${build}/fd"
-	esac
-esac
-
-current=$(maybe fzf --version ||:)
-version='0.73.1'
-
-case "${current}" in "${version} "*) ;; *)
-	case "${OS[distribution]}" in
-		'macOS') install_packages 'fzf' ;;
-		*)
-			project='https://github.com/junegunn/fzf'
-			build="${OS[kernel],,}_${OS[machine]}"
-			build="${build/aarch/arm}"
-			build="${build/x86_/amd}"
-
-			case "${build}" in
-				'linux_amd64') checksum='sha256:f3252c2c366bc1700d3c85781ec8c9695998927ac127870eb049ceea2d540f8a' ;;
-				'linux_arm64') checksum='sha256:a408b0b6c08d486307b8f1554f967b8b50ee1b3ea8b4035e3161bab31fdfc28d' ;;
-				*) error "unexpected: ${build}" ;;
-			esac
-
-			remote_file "/tmp/fzf-${version}.tar" \
-				"${project}/releases/download/v${version}/fzf-${version}-${build}.tar.gz" \
-				"${checksum}"
-
-			tar --file "/tmp/fzf-${version}.tar" --extract --directory '/tmp'
-			install_file "${HOME}/.local/bin/fzf" '/tmp/fzf'
-	esac
-esac

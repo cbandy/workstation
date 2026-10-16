@@ -6,7 +6,7 @@ shopt -s -o errexit nounset
 PATH="${HOME}/.cargo/bin:${HOME}/.local/bin:${PATH}"
 
 current=$(maybe rustup --version ||:)
-version='1.28.2'
+version='1.29.1'
 
 case "${current}" in "rustup ${version}"*) ;; *)
 	case "${OS[distribution]}" in

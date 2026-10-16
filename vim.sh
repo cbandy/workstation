@@ -107,12 +107,16 @@ version='0.27.0'
 case "${current}" in "tree-sitter ${version}"*) ;; *) echo "✨ Tree-sitter"
 	case "${OS[distribution]}" in
 		'macOS'|'rocky') install_packages 'tree-sitter-cli' ;;
+		'debian'|'ubuntu') install_packages 'build-essential' ;;&
 		*)
 			maybe cargo install "tree-sitter-cli@${version}" --locked || error "requires 'cargo' on ${OS[distribution]}"
 			rm -f "${HOME}/.local/bin/tree-sitter"
 			;;
 	esac
 esac
+
+[[ ! -f "${HOME}/.config/tree-sitter/config.json" ]] || rm "${HOME}/.config/tree-sitter/config.json"
+tree-sitter init-config
 
 current=$(maybe yaml-language-server --version ||:)
 version='1.24.0'
