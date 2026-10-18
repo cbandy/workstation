@@ -2,7 +2,7 @@
 . share/functions.sh
 
 shopt -s -o errexit nounset
-PATH="${HOME}/.local/bin:${PATH}"
+PATH="${HOME}/.cargo/bin:${HOME}/.local/bin:${PATH}"
 
 gojq='github.com/itchyny/gojq/cmd/gojq@latest'
 
@@ -74,7 +74,7 @@ case "${1:-}:${OS[distribution]:?}" in
 esac
 
 current=$(maybe rtk --version ||:)
-version='0.51.0'
+version='1.0.1'
 
 case "${current}" in "rtk ${version}") ;; *)
 	case "${OS[distribution]}" in
@@ -89,9 +89,10 @@ case "${current}" in "rtk ${version}") ;; *)
 			value=$(<<< "${value}" go run "${gojq}" -r ".tag_name, (.assets[] | select(.name == \"${build}\") | (.browser_download_url, .digest))")
 			read -rd $'\1' version build checksum <<< "${value}"$'\1'
 
+			# ~/.local/bin is empty inside the Antigravity sandbox.
 			remote_file "/tmp/rtk-${version}.tar" "${build}" "${checksum}"
 			tar  --file "/tmp/rtk-${version}.tar" --extract --directory '/tmp' 'rtk'
-			install_file "${HOME}/.local/bin/rtk" '/tmp/rtk'
+			install_file "${HOME}/.cargo/bin/rtk" '/tmp/rtk'
 	esac
 esac
 
