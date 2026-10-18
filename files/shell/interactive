@@ -17,6 +17,10 @@ PATH=$(IFS=: && set -- \
 
 export KUBECOLOR_CONFIG="${HOME}/.config/kubecolor.yaml"
 
+if [ -z "${NERD_FONT+defined}" ] && [ -n "$(command -v fc-list ||:)" ]
+then NERD_FONT=$(fc-list :style=Regular family | grep -q 'Nerd Font Mono' && echo 1) && export NERD_FONT
+fi
+
 if [ -z "$(command -v pbcopy ||:)" ]
 then
 	if [ -n "${WAYLAND_DISPLAY}" ] && [ -n "$(command -v wl-copy ||:)" ]
@@ -65,6 +69,9 @@ esac
 	'crosvm') MACHINE='crostini'
 		# The Crostini terminal supports truecolor but does not export COLORTERM.
 		# https://chromium.googlesource.com/apps/libapps/+/HEAD/hterm/js/hterm_preference_manager.js
+		#
+		# This is also true of Googlebook `com.android.virtualization.terminal`.
+		# https://android.googlesource.com/platform/packages/modules/Virtualization/+/HEAD/android/TerminalApp
 		export COLORTERM='truecolor'
 		;;
 	*)
