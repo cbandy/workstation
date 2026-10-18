@@ -36,10 +36,12 @@ esac
 
 # https://github.com/pgcentralfoundation/pgrx#system-requirements
 case "${OS[distribution]}" in
-	'debian'|'ubuntu') install_packages 'libclang-dev' ;;
+	'debian'|'ubuntu') install_packages 'bison' 'flex' 'libclang-dev' 'libreadline-dev' 'libicu-dev' 'pkgconf' 'zlib1g-dev' ;;
 	'fedora'|'rhel') install_packages 'clang' ;;
 	*) ;;
 esac
 
 rustup component add rust-analyzer
 rustup update
+
+# cargo install --locked cargo-deny cargo-nextest cargo-pgrx

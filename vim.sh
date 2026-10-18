@@ -7,7 +7,8 @@ PATH="${HOME}/.local/ltex-ls-plus/bin:${PATH}"
 PATH="${HOME}/.local/luals/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 
-install_packages 'lsof'
+install_packages 'lsof' 'pipx'
+silent command -v tombi || pipx install 'tombi'
 
 current=$(maybe nvim --version ||:)
 version='0.12.6'
@@ -129,7 +130,6 @@ case "${current}" in "${version}") ;; *) echo "✨ YAML language server"
 		*) maybe npm install --global --omit=dev "yaml-language-server@${version}" ;;
 	esac
 esac
-
 
 directory "${HOME}/.config"
 
