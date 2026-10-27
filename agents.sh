@@ -137,6 +137,24 @@ then
 	)
 fi
 
+if silent command -v cortex
+then
+	echo "🔧 Cortex Code"
+
+	ensure_file "${HOME}/.snowflake/cortex/settings.json"
+	ensure_file "${HOME}/.snowflake/cortex/skills.json"
+
+	value=$(go run "${gojq}" -sf 'files/agents/config.jq' --yaml-input \
+		"${HOME}/.snowflake/cortex/settings.json" 'files/agents/cortex-settings.yaml')
+	> "${HOME}/.snowflake/cortex/settings.json" cat <<< "${value}"
+
+	value=$(go run "${gojq}" -sf 'files/agents/config.jq' \
+		"${HOME}/.snowflake/cortex/skills.json" - <<< '{"local":[]}')
+	value=$(go run "${gojq}" --arg skills "${HOME}/.agents/skills" \
+		"if .local | any(.path == \$skills) then . else .local += [{ path: \$skills }] end" - <<< "${value}")
+	> "${HOME}/.snowflake/cortex/skills.json" cat <<< "${value}"
+fi
+
 if silent command -v cursor-agent
 then
 	ensure_file "${HOME}/.cursor/cli-config.json"

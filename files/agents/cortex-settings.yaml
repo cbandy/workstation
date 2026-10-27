@@ -1,0 +1,133 @@
+# ~/.snowflake/cortex/settings.json
+# https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code
+
+# https://docs.snowflake.com/en/user-guide/cortex-code/code-mode
+agentMode: standard
+theme: dark
+
+# MCP permissions are spelled `mcp__{server}__{tool}` without brackets.
+# Omitting `__{tool}` implies `__*`; every tool provided by the server.
+#
+# A pattern ending with `:*` uses prefix matching.
+permissions:
+  # Deny rules take precedence over allow rules.
+  # Keep keys in that order so this file reads top-down: first match wins
+  deny:
+    - Bash(curl:*)
+    - Bash(nc:*)
+    - Bash(rtk curl:*)
+    - Bash(rtk telemetry:*)
+    - Bash(rtk wget:*)
+    - Bash(ssh:*)
+    - Bash(sudo:*)
+    - Bash(wget:*)
+    - Edit(~/.ssh*)
+    - Glob(* in ~/.ssh*)
+    - Grep(* in ~/.ssh*)
+    - Read(~/.agents/.checkouts*)
+    - Read(~/.ssh*)
+    - Write(~/.ssh*)
+
+  ask:
+    - NotebookEdit
+    - NotebookExecute
+    - ProgrammaticToolCalling
+    - Skill
+    - SQL
+    - TaskMutation
+    - WebSearch
+
+  allow:
+    - Write(/dev/null)
+    - Bash(awk:*)
+    - Bash(cat:*)
+    - Bash(cut:*)
+    - Bash(df:*)
+    - Bash(du:*)
+    - Bash(echo:*)
+    - Bash(find:*)
+    - Bash(grep:*)
+    - Bash(head:*)
+    - Bash(jq:*)
+    - Bash(ls:*)
+    - Bash(nl:*)
+    - Bash(nm:*)
+    - Bash(rg:*)
+    - Bash(sed -n:*)
+    - Bash(sort:*)
+    - Bash(tail:*)
+    - Bash(true)
+    - Bash(uniq:*)
+    - Bash(wc:*)
+    - Bash(which:*)
+
+    - Bash(cargo bench:*)
+    - Bash(cargo build:*)
+    - Bash(cargo check:*)
+    - Bash(cargo clean:*)
+    - Bash(cargo clippy:*)
+    - Bash(cargo deny check:*)
+    - Bash(cargo deny list:*)
+    - Bash(cargo fetch:*)
+    - Bash(cargo fix:*)
+    - Bash(cargo fmt:*)
+    - Bash(cargo info:*)
+    - Bash(cargo metadata:*)
+    - Bash(cargo nextest:*)
+    - Bash(cargo pgrx test:*)
+    - Bash(cargo report:*)
+    - Bash(cargo test:*)
+    - Bash(cargo tree:*)
+
+    - Bash(gh issue list:*)
+    - Bash(gh issue status:*)
+    - Bash(gh issue view:*)
+    - Bash(gh pr checks:*)
+    - Bash(gh pr diff:*)
+    - Bash(gh pr list:*)
+    - Bash(gh pr status:*)
+    - Bash(gh pr view:*)
+    - Bash(gh project list:*)
+    - Bash(gh project view:*)
+    - Bash(gh release list:*)
+    - Bash(gh release view:*)
+
+    - Bash(git diff:*)
+    - Bash(git fetch:*)
+    - Bash(git grep:*)
+    - Bash(git log:*)
+    - Bash(git mv:*)
+    - Bash(git show:*)
+    - Bash(git status:*)
+
+    - Bash(git branch --list:*)
+    - Bash(git check-ignore:*)
+    - Bash(git --no-pager diff:*)
+    - Bash(git diff-tree:*)
+    - Bash(git ls-files:*)
+    - Bash(git merge-base:*)
+    - Bash(git rev-parse:*)
+    - Bash(git worktree add:*)
+    - Bash(git worktree list:*)
+
+    - Bash(go build:*)
+    - Bash(go clean:*)
+    - Bash(go doc:*)
+    - Bash(go fmt:*)
+    - Bash(go generate:*)
+    - Bash(go test:*)
+    - Bash(go vet:*)
+
+    # Extracted source code from package managers
+    - Read(~/.cargo/registry/src/*)
+    - Read(~/.pgrx/*/src/*)
+    - Read(~/go/pkg/mod/*)
+
+    # System headers
+    - Read(~/.local/homebrew/include/*)
+    - Read(/usr/include/*)
+
+    # Package documentation sites
+    - WebFetch(doc.rust-lang.org)
+    - WebFetch(docs.rs)
+    - WebFetch(pkg.go.dev)
