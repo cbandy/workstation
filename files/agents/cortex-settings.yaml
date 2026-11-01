@@ -43,6 +43,7 @@ permissions:
     - Bash(cat:*)
     - Bash(cut:*)
     - Bash(df:*)
+    - Bash(diff:*)
     - Bash(du:*)
     - Bash(echo:*)
     - Bash(find:*)

@@ -39,13 +39,23 @@ select(.model? and .quota?) |
  cyan:    "\u001b[36m", bright_cyan:    "\u001b[96m",
  white:   "\u001b[37m", bright_white:   "\u001b[97m",
 } as $ANSI |
-{ "low": $ANSI.green, "medium": $ANSI.yellow, "high": $ANSI.bright_red } as $EFFORT_COLORS |
-{ "accept-edits": $ANSI.bright_green, "plan": $ANSI.bright_blue } as $MODE_COLORS |
 {
- "idle":     [$ANSI.bright_green,   "● READY" ],
- "thinking": [$ANSI.bright_yellow,  "THINKING"],
- "working":  [$ANSI.bright_cyan,    "WORKING" ],
- "tool_use": [$ANSI.bright_magenta, "🔧 TOOL" ],
+ dark_orange: "\u001b[38;2;255;140;0m",
+ orange:      "\u001b[38;2;255;165;0m",
+ orange_red:  "\u001b[38;2;255;69;0m",
+} as $RGB |
+{
+ "low": $ANSI.green, "medium": $ANSI.yellow, "high": $ANSI.bright_red,
+} as $EFFORT_COLORS |
+{
+ "accept-edits": $ANSI.bright_green, "plan": $ANSI.bright_blue, "auto": $RGB.orange,
+} as $MODE_COLORS |
+{
+ "error":     [$ANSI.bright_red,     "‼ ERROR"],
+ "idle":      [$ANSI.bright_green,   "● ready"],
+ "reviewing": [$ANSI.bright_yellow,  "⌛ need review"],
+ "tool_use":  [$ANSI.bright_magenta, "🔧 tool"],
+ "working":   [$ANSI.bright_cyan,    "working"],
 } as $STATES |
 "·░▒▓█" as $PROGRESS |
 "\($ANSI.gray) │ \($ANSI.reset)" as $BAR |
@@ -63,7 +73,13 @@ select(.model? and .quota?) |
 (.terminal_width // 80) as $terminal_width |
 (.task_count // 0) as $task_count |
 (
- if (.model.id // "") | startswith("Gemini") then
+ (.model.id // "" | ascii_downcase) as $model |
+ if $model | contains("argon") then
+ {
+  hourly: null,
+  weekly: (.quota["gemini-argon-wtu-weekly"] | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
+ }
+ elif $model | contains("gemini") then
  {
   hourly: (.quota["gemini-5h"]     | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
   weekly: (.quota["gemini-weekly"] | { remaining: .remaining_fraction, timeout: .reset_in_seconds }),
@@ -82,7 +98,7 @@ select(.model? and .quota?) |
  if $model_effort and ($model_name | test($model_effort; "i") | not) then "\($DOT + $model_effort_color + $model_effort + $ANSI.reset)" else null end + $BAR +
  "\($agent_state_color + $ANSI.bold + $agent_state + $ANSI.reset)" + $BAR +
  "\(  $ANSI.dim)C↘ \($ANSI.reset)\($context_remaining * 100 | floor)%" +
- "  \($ANSI.dim)\($quota.hourly.timeout | select(. != 0) | "\(duration(1))·")D↘ \($ANSI.reset)\($quota.hourly.remaining * 100 | floor)%" +
- "  \($ANSI.dim)\($quota.weekly.timeout | select(. != 0) | "\(duration(1))·")W↘ \($ANSI.reset)\($quota.weekly.remaining * 100 | floor)%" +
+ if $quota.hourly then "  \($ANSI.dim)\($quota.hourly.timeout | select(. != 0) | "\(duration(1))·")D↘ \($ANSI.reset)\($quota.hourly.remaining * 100 | floor)%" else null end +
+ if $quota.weekly then "  \($ANSI.dim)\($quota.weekly.timeout | select(. != 0) | "\(duration(1))·")W↘ \($ANSI.reset)\($quota.weekly.remaining * 100 | floor)%" else null end +
  if $cycle_mode then "\($BAR + $cycle_mode_color + $cycle_mode + $ANSI.reset)" else null end
 )

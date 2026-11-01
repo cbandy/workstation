@@ -29,6 +29,7 @@ permissions:
     - Shell(cat:*)
     - Shell(cut:*)
     - Shell(df:*)
+    - Shell(diff:*)
     - Shell(du:*)
     - Shell(echo:*)
     - Shell(find:*)

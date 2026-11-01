@@ -37,6 +37,7 @@ userSettings:
       - command(cat)
       - command(cut)
       - command(df)
+      - command(diff)
       - command(du)
       - command(echo)
       - command(find)

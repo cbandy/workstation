@@ -74,7 +74,7 @@ case "${1:-}:${OS[distribution]:?}" in
 esac
 
 current=$(maybe rtk --version ||:)
-version='1.0.1'
+version='1.1.0'
 
 case "${current}" in "rtk ${version}") ;; *)
 	case "${OS[distribution]}" in
