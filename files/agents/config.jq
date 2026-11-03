@@ -1,6 +1,9 @@
 def merge(a;b):
   if (a| type == "object") and (b| type == "object")
-  then reduce (b| keys[]) as $k (a; .[$k] = merge(.[$k]; b[$k]))
+  then reduce (b| keys[]) as $k (a;
+   if $k == "args" and (b[$k]| type == "array")
+   then .[$k] = b[$k] # replace rather than merge/sort
+   else .[$k] = merge(.[$k]; b[$k]) end)
 
   elif (a| type == "array") and (b| type == "array")
   then (a + b) | unique
