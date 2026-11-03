@@ -205,6 +205,7 @@ echo "✨ Local Skills"
 	directories=(
 		'files/agents/skills/journal'
 		'files/agents/skills/reflect'
+		'files/agents/skills/slack-formatted-send'
 	)
 
 	for directory in "${directories[@]}"
